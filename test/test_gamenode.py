@@ -23,13 +23,16 @@ class TestGameNode(unittest.TestCase):
             gn_obj = gamenode.GameNode()
             gn_obj.print_board()
             actual_print = out.getvalue().strip()
-            expected_print = ("000   \n"
-                              "   000   \n"
-                              "0000000\n"
-                              "0000000\n"
-                              "0000000\n"
-                              "   000   \n"
-                              "   000")
+            expected_print = ("0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0\n"
+                              "0  0  0  0  0  0  0  0  0  0")
             self.assertEqual(actual_print, expected_print)
 
     def test_print_middle_rows_without_seperator(self):
