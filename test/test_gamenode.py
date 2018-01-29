@@ -2,6 +2,7 @@
 
 import unittest
 
+from src import coordinate
 from src import gamenode
 from test import helper
 
@@ -34,3 +35,14 @@ class TestGameNode(unittest.TestCase):
                               "0  0  0  0  0  0  0  0  0  0\n"
                               "0  0  0  0  0  0  0  0  0  0")
             self.assertEqual(actual_print, expected_print)
+
+    def test_getState(self):
+        gn_obj = gamenode.GameNode()
+        self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)), 0)
+
+    def test_setState(self):
+        gn_obj = gamenode.GameNode()
+        testCoordinate = coordinate.Coordinate(5, 1)
+        testValue = 5
+        gn_obj.setState(testCoordinate, testValue)
+        self.assertEqual(gn_obj.getState(testCoordinate), testValue)
