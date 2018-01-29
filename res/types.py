@@ -5,18 +5,18 @@ PLAYER_A_KING = 3
 PLAYER_B_REGULAR = 4
 PLAYER_B_KING = 5
 
-def getPieceAbbreviation(inputType):
-    if int(inputType)==OFF_BOARD:
+def getPieceAbbreviation(value):
+    if int(value)==OFF_BOARD:
         return '   '
-    elif int(inputType)==EMPTY:
+    elif int(value)==EMPTY:
         return '|||'
-    if int(inputType)==PLAYER_A_REGULAR:
+    if int(value)==PLAYER_A_REGULAR:
         return '|a|'
-    if int(inputType)==PLAYER_A_KING:
+    if int(value)==PLAYER_A_KING:
         return '|A|'
-    if int(inputType)==PLAYER_B_REGULAR:
+    if int(value)==PLAYER_B_REGULAR:
         return '|b|'
-    if int(inputType)==PLAYER_B_KING:
+    if int(value)==PLAYER_B_KING:
         return '|B|'
     else:
-        return None
+        raise TypeError(("Invalid piece value = {0}").format(value))

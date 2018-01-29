@@ -36,6 +36,12 @@ class TestTypes(unittest.TestCase):
         self.assertEqual("|B|",
                          types.getPieceAbbreviation(types.PLAYER_B_KING))
 
+    def test_getPieceAbbreviation_not_a_piece(self):
+        "Correctly convert a type to a character for display"
+        self.assertRaises(TypeError,
+                          types.getPieceAbbreviation,
+                          7)
+
     def test_getPieceAbbreviation_invalid(self):
         "Correctly convert a type to a character for display"
         self.assertRaises(ValueError,
