@@ -24,12 +24,18 @@ class TestHelper(unittest.TestCase):
 
     def test_checkIfCoordinateIsValid_bad_x(self):
         """ Check that checkIfCoordinateIsValid is False """
-        self.assertFalse(helper.checkIfCoordinateIsValid(9, 6))
+        self.assertRaises(ValueError,
+                          helper.checkIfCoordinateIsValid,
+                          9, 6)
 
     def test_checkIfCoordinateIsValid_bad_y(self):
         """ Check that checkIfCoordinateIsValid is False """
-        self.assertFalse(helper.checkIfCoordinateIsValid(4, 1))
+        self.assertRaises(ValueError,
+                          helper.checkIfCoordinateIsValid,
+                          4, 1)
 
     def test_checkIfCoordinateIsValid_bad_outside(self):
         """ Check that checkIfCoordinateIsValid is False """
-        self.assertFalse(helper.checkIfCoordinateIsValid(40, 30))
+        self.assertRaises(ValueError,
+                          helper.checkIfCoordinateIsValid,
+                          40, 30)

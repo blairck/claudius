@@ -17,4 +17,8 @@ def checkIfCoordinateIsValid(x, y):
     elif y in even_values:
         if x in even_values:
             valid = True
-    return valid
+    if valid:
+        return True
+    else:
+        raise ValueError(("Coordinate is not on the board: "
+                         "({0}, {1})").format(x, y))
