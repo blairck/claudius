@@ -21,4 +21,4 @@ def checkIfCoordinateIsValid(x, y):
         return True
     else:
         raise ValueError(("Coordinate is not on the board: "
-                         "({0}, {1})").format(x, y))
+                          "({0}, {1})").format(x, y))

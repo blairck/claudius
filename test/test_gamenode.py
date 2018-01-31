@@ -2,9 +2,9 @@
 
 import unittest
 
+from test import helper
 from src import coordinate
 from src import gamenode
-from test import helper
 
 class TestGameNode(unittest.TestCase):
     """ Tests for the GameNode module """
@@ -37,10 +37,12 @@ class TestGameNode(unittest.TestCase):
             self.assertEqual(actual_print, expected_print)
 
     def test_getState(self):
+        """ Check getting the board state at a Coordinate """
         gn_obj = gamenode.GameNode()
         self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)), 0)
 
     def test_setState(self):
+        """ Test setting the board state at a Coordinate with a value """
         gn_obj = gamenode.GameNode()
         testCoordinate = coordinate.Coordinate(5, 1)
         testValue = 5

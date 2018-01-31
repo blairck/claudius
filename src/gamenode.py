@@ -18,6 +18,7 @@ class GameNode(object):
         self.score = None # bool
 
     def print_board(self):
+        """ Prints a simplified representation of the board """
         y_indices = list(range(10))
         y_indices.reverse()
         for y in y_indices:
