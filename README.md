@@ -33,3 +33,12 @@ pip install -r requirements.txt
 ```
 make tests
 ```
+
+### Status ###
+Functions to be ported and tested, organized by component
+* AI                            0/6
+* Connection                    0/5
+* GameNode                      4/4
+* HistoryNode                   0/11
+* Rules                         0/14
+* TOTAL                         4/40
