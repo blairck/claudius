@@ -13,7 +13,7 @@ class TestGameNode(unittest.TestCase):
         """ Test a known default instantiation """
         gn_obj = gamenode.GameNode()
         result = gn_obj.gameState[0][0]
-        self.assertEqual(result, 0)
+        self.assertEqual(result, 1)
         self.assertFalse(gn_obj.leafP)
         self.assertFalse(gn_obj.rootP)
         self.assertFalse(gn_obj.score)
@@ -23,23 +23,25 @@ class TestGameNode(unittest.TestCase):
         with helper.captured_output() as out:
             gn_obj = gamenode.GameNode()
             gn_obj.print_board()
-            actual_print = out.getvalue().strip()
-            expected_print = ("0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0\n"
-                              "0  0  0  0  0  0  0  0  0  0")
+            actual_print = out.getvalue()
+            expected_print = ("0     |||   |||   |||   |||   |||\n"
+                              "9  |||   |||   |||   |||   |||   \n"
+                              "8     |||   |||   |||   |||   |||\n"
+                              "7  |||   |||   |||   |||   |||   \n"
+                              "6     |||   |||   |||   |||   |||\n"
+                              "5  |||   |||   |||   |||   |||   \n"
+                              "4     |||   |||   |||   |||   |||\n"
+                              "3  |||   |||   |||   |||   |||   \n"
+                              "2     |||   |||   |||   |||   |||\n"
+                              "1  |||   |||   |||   |||   |||   \n"
+                              "\n"
+                              "    1  2  3  4  5  6  7  8  9  0\n")
             self.assertEqual(actual_print, expected_print)
 
     def test_getState(self):
         """ Check getting the board state at a Coordinate """
         gn_obj = gamenode.GameNode()
-        self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)), 0)
+        self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)), 1)
 
     def test_setState(self):
         """ Test setting the board state at a Coordinate with a value """
