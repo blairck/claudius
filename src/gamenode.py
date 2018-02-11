@@ -1,6 +1,6 @@
 """ The basic state of the game board """
 
-from res import types
+from res.types import getPieceAbbreviation
 
 class GameNode(object):
     """ Class that stores the basic state of the game board """
@@ -31,32 +31,31 @@ class GameNode(object):
     def print_board(self):
         """ Prints the board in a way that is easy to understand """
         line = "0  {0}{1}{2}{3}{4}{5}{6}{7}{8}{9}"
-        print(line.format(types.getPieceAbbreviation(self.gameState[0][9]),
-                          types.getPieceAbbreviation(self.gameState[1][9]),
-                          types.getPieceAbbreviation(self.gameState[2][9]),
-                          types.getPieceAbbreviation(self.gameState[3][9]),
-                          types.getPieceAbbreviation(self.gameState[4][9]),
-                          types.getPieceAbbreviation(self.gameState[5][9]),
-                          types.getPieceAbbreviation(self.gameState[6][9]),
-                          types.getPieceAbbreviation(self.gameState[7][9]),
-                          types.getPieceAbbreviation(self.gameState[8][9]),
-                          types.getPieceAbbreviation(self.gameState[9][9]),))
+        print(line.format(getPieceAbbreviation(self.gameState[0][9]),
+                          getPieceAbbreviation(self.gameState[1][9]),
+                          getPieceAbbreviation(self.gameState[2][9]),
+                          getPieceAbbreviation(self.gameState[3][9]),
+                          getPieceAbbreviation(self.gameState[4][9]),
+                          getPieceAbbreviation(self.gameState[5][9]),
+                          getPieceAbbreviation(self.gameState[6][9]),
+                          getPieceAbbreviation(self.gameState[7][9]),
+                          getPieceAbbreviation(self.gameState[8][9]),
+                          getPieceAbbreviation(self.gameState[9][9]),))
         y_indices = list(range(9))
         y_indices.reverse()
         for y in y_indices:
             line = "{0}  {1}{2}{3}{4}{5}{6}{7}{8}{9}{10}"
-            print(line.format(
-                  y + 1,
-                  types.getPieceAbbreviation(self.gameState[0][y]),
-                  types.getPieceAbbreviation(self.gameState[1][y]),
-                  types.getPieceAbbreviation(self.gameState[2][y]),
-                  types.getPieceAbbreviation(self.gameState[3][y]),
-                  types.getPieceAbbreviation(self.gameState[4][y]),
-                  types.getPieceAbbreviation(self.gameState[5][y]),
-                  types.getPieceAbbreviation(self.gameState[6][y]),
-                  types.getPieceAbbreviation(self.gameState[7][y]),
-                  types.getPieceAbbreviation(self.gameState[8][y]),
-                  types.getPieceAbbreviation(self.gameState[9][y]),))
+            print(line.format(y + 1,
+                              getPieceAbbreviation(self.gameState[0][y]),
+                              getPieceAbbreviation(self.gameState[1][y]),
+                              getPieceAbbreviation(self.gameState[2][y]),
+                              getPieceAbbreviation(self.gameState[3][y]),
+                              getPieceAbbreviation(self.gameState[4][y]),
+                              getPieceAbbreviation(self.gameState[5][y]),
+                              getPieceAbbreviation(self.gameState[6][y]),
+                              getPieceAbbreviation(self.gameState[7][y]),
+                              getPieceAbbreviation(self.gameState[8][y]),
+                              getPieceAbbreviation(self.gameState[9][y]),))
         print("\n    1  2  3  4  5  6  7  8  9  0")
 
     def setState(self, coordinate_arg, value):
