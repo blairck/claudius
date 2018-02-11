@@ -48,3 +48,16 @@ class TestGameNode(unittest.TestCase):
         testValue = 5
         gn_obj.setState(testCoordinate, testValue)
         self.assertEqual(gn_obj.getState(testCoordinate), testValue)
+
+    def test_eq_same(self):
+        """ Check equality function compares boards as equal """
+        gn_obj_1 = gamenode.GameNode()
+        gn_obj_2 = gamenode.GameNode()
+        self.assertTrue(gn_obj_1 == gn_obj_2)
+
+    def test_eq_not_same(self):
+        """ Check equality function compares boards as not equal """
+        gn_obj_1 = gamenode.GameNode()
+        gn_obj_1.gameState[4][1] = 3
+        gn_obj_2 = gamenode.GameNode()
+        self.assertTrue(gn_obj_1 != gn_obj_2)

@@ -16,6 +16,15 @@ class GameNode(object):
         self.leafP = None # float
         self.rootP = None # bool
         self.score = None # bool
+        self.isCapture = False
+        self.winningState = False
+
+    def __eq__(self, other):
+        for i in range(0, 10):
+            for j in range(0, 10):
+                if self.gameState[i][j] != other.gameState[i][j]:
+                    return False
+        return True
 
     def print_board(self):
         """ Prints a simplified representation of the board """
