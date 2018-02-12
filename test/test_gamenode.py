@@ -3,6 +3,7 @@
 import unittest
 
 from test import helper
+from res import types
 from src import coordinate
 from src import gamenode
 
@@ -13,7 +14,7 @@ class TestGameNode(unittest.TestCase):
         """ Test a known default instantiation """
         gn_obj = gamenode.GameNode()
         result = gn_obj.gameState[0][0]
-        self.assertEqual(result, 1)
+        self.assertEqual(result, types.EMPTY)
         self.assertFalse(gn_obj.leafP)
         self.assertFalse(gn_obj.rootP)
         self.assertFalse(gn_obj.score)
@@ -41,15 +42,16 @@ class TestGameNode(unittest.TestCase):
     def test_getState(self):
         """ Check getting the board state at a Coordinate """
         gn_obj = gamenode.GameNode()
-        self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)), 1)
+        self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)),
+                         types.EMPTY)
 
     def test_setState(self):
         """ Test setting the board state at a Coordinate with a value """
         gn_obj = gamenode.GameNode()
         testCoordinate = coordinate.Coordinate(5, 1)
-        testValue = 5
+        testValue = types.PLAYER_A_KING
         gn_obj.setState(testCoordinate, testValue)
-        self.assertEqual(gn_obj.getState(testCoordinate), testValue)
+        self.assertEqual(gn_obj.getState(testCoordinate), types.PLAYER_A_KING)
 
     def test_eq_same(self):
         """ Check equality function compares boards as equal """
@@ -60,7 +62,7 @@ class TestGameNode(unittest.TestCase):
     def test_eq_not_same(self):
         """ Check equality function compares boards as not equal """
         gn_obj_1 = gamenode.GameNode()
-        gn_obj_1.gameState[4][1] = 3
+        gn_obj_1.setState(coordinate.Coordinate(5, 3), types.PLAYER_A_KING)
         gn_obj_2 = gamenode.GameNode()
         self.assertTrue(gn_obj_1 != gn_obj_2)
 
