@@ -63,3 +63,8 @@ class TestGameNode(unittest.TestCase):
         gn_obj_1.gameState[4][1] = 3
         gn_obj_2 = gamenode.GameNode()
         self.assertTrue(gn_obj_1 != gn_obj_2)
+
+    def test_playerWins(self):
+        """ Check if a player has won the game """
+        gn_obj = gamenode.GameNode()
+        self.assertRaises(NotImplementedError, gn_obj.playerWins)

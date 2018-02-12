@@ -69,3 +69,7 @@ class GameNode(object):
         x = coordinate_arg.get_x_array()
         y = coordinate_arg.get_y_array()
         return self.gameState[x][y]
+
+    def playerWins(self):
+        """ Determines if a player has won and returns which one """
+        raise NotImplementedError
