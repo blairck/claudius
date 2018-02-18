@@ -36,10 +36,36 @@ def createStartingPosition():
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
     game = createStartingPosition()
+    firstTurn = True
+    USER_IS_PLAYER_A = True
+
+    #aiObject = ai.AI()
+    if USER_IS_PLAYER_A:
+        computersTurn = True
+    else:
+        computersTurn = False
 
     while(True):
-        game.print_board()
-        print("---------------------------------")
+        if not firstTurn:
+            game.print_board()
+            print("---------------------------")
+        elif firstTurn and USER_IS_PLAYER_A:
+            game.print_board()
+            print("---------------------------")
 
+        # if aPlayerHasWon(game):
+        #     break
+        # elif determineDraw(game, aiObject):
+        #     break
+
+        if computersTurn:
+            # game = aiObject.iterativeDeepeningSearch(game,
+            #                                          USER_IS_PLAYER_A,
+            #                                          SEARCHPLY)
+            computersTurn = False
+
+        game.print_board()
+
+        #legalMoves = aiObject.getAllMovesForPlayer(game, not USER_IS_PLAYER_A)
         while(True):
             userInput = input('Enter a move: ')
