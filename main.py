@@ -48,10 +48,10 @@ if __name__ == '__main__':
     while(True):
         if not firstTurn:
             game.print_board()
-            print("---------------------------")
+            print("---------------------------------")
         elif firstTurn and USER_IS_PLAYER_A:
             game.print_board()
-            print("---------------------------")
+            print("---------------------------------")
 
         # if aPlayerHasWon(game):
         #     break
