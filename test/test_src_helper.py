@@ -20,7 +20,7 @@ class TestHelper(unittest.TestCase):
 
     def test_checkIfCoordinateIsValid_good_y(self):
         """ Check that checkIfCoordinateIsValid is False """
-        self.assertTrue(helper.checkIfCoordinateIsValid(6, 0))
+        self.assertTrue(helper.checkIfCoordinateIsValid(6, 10))
 
     def test_checkIfCoordinateIsValid_bad_x(self):
         """ Check that checkIfCoordinateIsValid is False """
