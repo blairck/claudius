@@ -21,10 +21,6 @@ class AI(object):
             moves.extend(self.getMovesForRegularPiece(theGame,
                          location,
                          userIsPlayerA))
-        if not gooseP:
-            captureMoves = list(filter(lambda x: x.isCapture, moves))
-            if len(captureMoves) > 0:
-                return captureMoves
         return moves
 
     def getMovesForRegularPiece(self, theGame, pieceLocation, userIsPlayerA):
@@ -32,27 +28,53 @@ class AI(object):
         moveList = []
         xBoard = pieceLocation.get_x_board()
         yBoard = pieceLocation.get_y_board()
+        pieceDestinationLeft = None
+        pieceDestinationRight = None
 
-        if userIsPlayerA:
-            if theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR:
-                pieceType = theGame.getState(pieceLocation)
-                pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                           yBoard + 1)
-                pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                            yBoard + 1)
+        if (userIsPlayerA and
+            theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
+            # Player A moves in positive Y increments
+            moveDirection = 1
+            pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
+                                                       yBoard + moveDirection)
+            pieceDestinationRight = getCoordinateHelper(xBoard + 1,
+                                                        yBoard + moveDirection)
+        elif (not userIsPlayerA and
+              theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
+            # Player B moves in negative Y increments
+            moveDirection = -1
+            pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
+                                                       yBoard + moveDirection)
+            pieceDestinationRight = getCoordinateHelper(xBoard + 1,
+                                                        yBoard + moveDirection)
 
-                if pieceDestinationLeft:
-                    moveResult = transferNode(theGame)
-                    moveResult.setState(pieceDestinationLeft, pieceType)
-                    moveResult.setState(pieceLocation, types.EMPTY)
-                    moveList.append(moveResult)
-                if pieceDestinationRight:
-                    moveResult = transferNode(theGame)
-                    moveResult.setState(pieceDestinationRight, pieceType)
-                    moveResult.setState(pieceLocation, types.EMPTY)
-                    moveList.append(moveResult)
-
+        if (pieceDestinationLeft and
+            destinationIsEmpty(theGame, pieceDestinationLeft)):
+                moveList.append(makePieceMove(theGame,
+                                              pieceDestinationLeft,
+                                              pieceLocation))
+        if (pieceDestinationRight and
+            destinationIsEmpty(theGame, pieceDestinationRight)):
+                moveList.append(makePieceMove(theGame,
+                                              pieceDestinationRight,
+                                              pieceLocation))
         return moveList
+
+def destinationIsEmpty(theGame, pieceDestination):
+    """ Returns True or False depending on whether destination is empty """
+    if theGame.getState(pieceDestination) is types.EMPTY:
+        return True
+    else:
+        return False
+
+def makePieceMove(theGame, pieceDestination, pieceLocation):
+    """ Takes a piece location and destination and updates game state to move
+    piece from pieceLocation to pieceDestination """
+    pieceType = theGame.getState(pieceLocation)
+    moveResult = transferNode(theGame)
+    moveResult.setState(pieceDestination, pieceType)
+    moveResult.setState(pieceLocation, types.EMPTY)
+    return moveResult
 
 def getTupleOfAllCoordinates():
     """ Gets a tuple of all legal Coordinates on the board """
