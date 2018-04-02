@@ -1,7 +1,6 @@
 """ Tests for the AI module """
 
 import unittest
-from unittest.mock import patch
 
 # pylint: disable=import-error
 import main
@@ -9,62 +8,68 @@ from res import types
 from src import ai
 from src import coordinate
 from src import gamenode
-from test import helper
 
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
 
     def test_getTupleOfAllCoordinates(self):
+        """ Check that all the legal coordinates are generated """
         actualResult = len(ai.getTupleOfAllCoordinates())
         expectedResult = 50
-        self.assertEquals(actualResult, expectedResult)
+        self.assertEqual(actualResult, expectedResult)
 
     def test_getMovesForRegularPiece_2_moves(self):
+        """ Test that regular piece has to possible moves """
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                        pieceLocation,
-                                                        True)
+                                                  pieceLocation,
+                                                  True)
         expectedResultLength = 2
-        self.assertEquals(len(actualResult), expectedResultLength)
+        self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_getMovesForRegularPiece_1_move(self):
+        """ Test regular piece on the edge of the board, which has 1 move """
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                        pieceLocation,
-                                                        True)
+                                                  pieceLocation,
+                                                  True)
         expectedResultLength = 1
-        self.assertEquals(len(actualResult), expectedResultLength)
+        self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_getMovesForRegularPiece_0_moves(self):
+        """ Test regular piece that is completely blocked from moving """
         gnObject = main.createStartingPosition()
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                        pieceLocation,
-                                                        True)
+                                                  pieceLocation,
+                                                  True)
         expectedResultLength = 0
-        self.assertEquals(len(actualResult), expectedResultLength)
+        self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_destinationIsEmpty_true(self):
+        """ Test when destination is Empty """
         gnObject = gamenode.GameNode()
         pieceDestination = coordinate.Coordinate(4, 6)
         actualResult = ai.destinationIsEmpty(gnObject, pieceDestination)
         expectedResult = True
-        self.assertEquals(actualResult, expectedResult)
+        self.assertEqual(actualResult, expectedResult)
 
     def test_destinationIsEmpty_false(self):
+        """ Test when destination is not Empty """
         gnObject = gamenode.GameNode()
         pieceDestination = coordinate.Coordinate(9, 3)
         gnObject.setState(pieceDestination, types.PLAYER_A_REGULAR)
         actualResult = ai.destinationIsEmpty(gnObject, pieceDestination)
         expectedResult = False
-        self.assertEquals(actualResult, expectedResult)
+        self.assertEqual(actualResult, expectedResult)
 
     def test_makePieceMove_good(self):
+        """ Test executing a happy-path piece move """
         # Given
         gnObject = gamenode.GameNode()
         pieceDestination = coordinate.Coordinate(9, 3)
@@ -81,23 +86,27 @@ class TestAI(unittest.TestCase):
         actualResultDestinationType = actualResult.getState(pieceDestination)
         expectedResultLocationType = types.EMPTY
         expectedResultDestinationType = types.PLAYER_A_REGULAR
-        self.assertEquals(actualResultLocationType, expectedResultLocationType)
-        self.assertEquals(actualResultDestinationType,
-                          expectedResultDestinationType)
+        self.assertEqual(actualResultLocationType, expectedResultLocationType)
+        self.assertEqual(actualResultDestinationType,
+                         expectedResultDestinationType)
 
     def test_getAllMovesForPlayer_isPlayerA(self):
+        """ Test getting all moves for player A """
         gnObject = main.createStartingPosition()
         actualResult = ai.getAllMovesForPlayer(gnObject, True)
         expectedResultLength = 9
-        self.assertEquals(len(actualResult), expectedResultLength)
+        self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_getAllMovesForPlayer_isPlayerB(self):
+        """ Test getting all moves for player B """
         gnObject = main.createStartingPosition()
         actualResult = ai.getAllMovesForPlayer(gnObject, False)
         expectedResultLength = 9
-        self.assertEquals(len(actualResult), expectedResultLength)
+        self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_getAllMovesForPlayer_1_move_2_players(self):
+        """ Test getting moves for a particular player when both players have
+        legal moves """
         # Given
         gnObject = gamenode.GameNode()
         pieceLocationA = coordinate.Coordinate(6, 2)
@@ -112,4 +121,4 @@ class TestAI(unittest.TestCase):
 
         # Then
         expectedResultLength = 2
-        self.assertEquals(len(actualResult), expectedResultLength)
+        self.assertEqual(len(actualResult), expectedResultLength)
