@@ -1,71 +1,59 @@
 """ This module contains the AI search algorithm """
 
-from random import shuffle
-
 # pylint: disable=import-error
 from res import types
 from src import coordinate
 from src import gamenode
 
-class AI(object):
-    """ Class that stores the AI algorithm """
-    def __init__(self):
-        self.weightA = 1.0
-        self.weightB = 1.0
-        self.moveCount = 0
+def getAllMovesForPlayer(theGame, userIsPlayerA):
+    """GooseP == True means it's the Goose player's turn. Otherwise fox"""
+    moves = []
+    for location in getTupleOfAllCoordinates():
+        moves.extend(getMovesForRegularPiece(theGame,
+                                             location,
+                                             userIsPlayerA))
+    return moves
 
-    def getAllMovesForPlayer(self, theGame, userIsPlayerA):
-        """GooseP == True means it's the Goose player's turn. Otherwise fox"""
-        moves = []
-        for location in getTupleOfAllCoordinates():
-            moves.extend(self.getMovesForRegularPiece(theGame,
-                         location,
-                         userIsPlayerA))
-        return moves
+def getMovesForRegularPiece(theGame, pieceLocation, userIsPlayerA):
+    """ This returns a GameNode for every legal move of a given piece """
+    moveList = []
+    xBoard = pieceLocation.get_x_board()
+    yBoard = pieceLocation.get_y_board()
+    pieceDestinationLeft = None
+    pieceDestinationRight = None
 
-    def getMovesForRegularPiece(self, theGame, pieceLocation, userIsPlayerA):
-        """ This returns a GameNode for every legal move of a given piece """
-        moveList = []
-        xBoard = pieceLocation.get_x_board()
-        yBoard = pieceLocation.get_y_board()
-        pieceDestinationLeft = None
-        pieceDestinationRight = None
-
-        if (userIsPlayerA and
+    if (userIsPlayerA and
             theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
-            # Player A moves in positive Y increments
-            moveDirection = 1
-            pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                       yBoard + moveDirection)
-            pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                        yBoard + moveDirection)
-        elif (not userIsPlayerA and
-              theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
-            # Player B moves in negative Y increments
-            moveDirection = -1
-            pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                       yBoard + moveDirection)
-            pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                        yBoard + moveDirection)
+        # Player A moves in positive Y increments
+        moveDirection = 1
+        pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
+                                                   yBoard + moveDirection)
+        pieceDestinationRight = getCoordinateHelper(xBoard + 1,
+                                                    yBoard + moveDirection)
+    elif (not userIsPlayerA and
+          theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
+        # Player B moves in negative Y increments
+        moveDirection = -1
+        pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
+                                                   yBoard + moveDirection)
+        pieceDestinationRight = getCoordinateHelper(xBoard + 1,
+                                                    yBoard + moveDirection)
 
-        if (pieceDestinationLeft and
+    if (pieceDestinationLeft and
             destinationIsEmpty(theGame, pieceDestinationLeft)):
-                moveList.append(makePieceMove(theGame,
-                                              pieceDestinationLeft,
-                                              pieceLocation))
-        if (pieceDestinationRight and
+        moveList.append(makePieceMove(theGame,
+                                      pieceDestinationLeft,
+                                      pieceLocation))
+    if (pieceDestinationRight and
             destinationIsEmpty(theGame, pieceDestinationRight)):
-                moveList.append(makePieceMove(theGame,
-                                              pieceDestinationRight,
-                                              pieceLocation))
-        return moveList
+        moveList.append(makePieceMove(theGame,
+                                      pieceDestinationRight,
+                                      pieceLocation))
+    return moveList
 
 def destinationIsEmpty(theGame, pieceDestination):
     """ Returns True or False depending on whether destination is empty """
-    if theGame.getState(pieceDestination) is types.EMPTY:
-        return True
-    else:
-        return False
+    return bool(theGame.getState(pieceDestination) is types.EMPTY)
 
 def makePieceMove(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and destination and updates game state to move

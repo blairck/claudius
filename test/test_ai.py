@@ -20,33 +20,30 @@ class TestAI(unittest.TestCase):
         self.assertEquals(actualResult, expectedResult)
 
     def test_getMovesForRegularPiece_2_moves(self):
-        aiObject = ai.AI()
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = aiObject.getMovesForRegularPiece(gnObject,
+        actualResult = ai.getMovesForRegularPiece(gnObject,
                                                         pieceLocation,
                                                         True)
         expectedResultLength = 2
         self.assertEquals(len(actualResult), expectedResultLength)
 
     def test_getMovesForRegularPiece_1_move(self):
-        aiObject = ai.AI()
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = aiObject.getMovesForRegularPiece(gnObject,
+        actualResult = ai.getMovesForRegularPiece(gnObject,
                                                         pieceLocation,
                                                         True)
         expectedResultLength = 1
         self.assertEquals(len(actualResult), expectedResultLength)
 
     def test_getMovesForRegularPiece_0_moves(self):
-        aiObject = ai.AI()
         gnObject = main.createStartingPosition()
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = aiObject.getMovesForRegularPiece(gnObject,
+        actualResult = ai.getMovesForRegularPiece(gnObject,
                                                         pieceLocation,
                                                         True)
         expectedResultLength = 0
@@ -89,22 +86,19 @@ class TestAI(unittest.TestCase):
                           expectedResultDestinationType)
 
     def test_getAllMovesForPlayer_isPlayerA(self):
-        aiObject = ai.AI()
         gnObject = main.createStartingPosition()
-        actualResult = aiObject.getAllMovesForPlayer(gnObject, True)
+        actualResult = ai.getAllMovesForPlayer(gnObject, True)
         expectedResultLength = 9
         self.assertEquals(len(actualResult), expectedResultLength)
 
     def test_getAllMovesForPlayer_isPlayerB(self):
-        aiObject = ai.AI()
         gnObject = main.createStartingPosition()
-        actualResult = aiObject.getAllMovesForPlayer(gnObject, False)
+        actualResult = ai.getAllMovesForPlayer(gnObject, False)
         expectedResultLength = 9
         self.assertEquals(len(actualResult), expectedResultLength)
 
     def test_getAllMovesForPlayer_1_move_2_players(self):
         # Given
-        aiObject = ai.AI()
         gnObject = gamenode.GameNode()
         pieceLocationA = coordinate.Coordinate(6, 2)
         gnObject.setState(pieceLocationA, types.PLAYER_A_REGULAR)
@@ -112,7 +106,7 @@ class TestAI(unittest.TestCase):
         gnObject.setState(pieceLocationB, types.PLAYER_B_REGULAR)
 
         # When
-        actualResult = aiObject.getAllMovesForPlayer(gnObject, False)
+        actualResult = ai.getAllMovesForPlayer(gnObject, False)
         for item in actualResult:
             item.print_board()
 
