@@ -1,6 +1,8 @@
 from res import types
+from src import ai
 from src import coordinate
 from src import gamenode
+from src import interface
 
 def aPlayerHasWon(game):
     """ Check game state to see if a player has won """
@@ -37,10 +39,9 @@ if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
     game = createStartingPosition()
     firstTurn = True
-    USER_IS_PLAYER_A = True
+    COMP_IS_PLAYER_A = True
 
-    #aiObject = ai.AI()
-    if USER_IS_PLAYER_A:
+    if COMP_IS_PLAYER_A:
         computersTurn = True
     else:
         computersTurn = False
@@ -49,23 +50,29 @@ if __name__ == '__main__':
         if not firstTurn:
             game.print_board()
             print("---------------------------------")
-        elif firstTurn and USER_IS_PLAYER_A:
+        elif firstTurn and COMP_IS_PLAYER_A:
             game.print_board()
             print("---------------------------------")
 
-        # if aPlayerHasWon(game):
-        #     break
-        # elif determineDraw(game, aiObject):
-        #     break
-
         if computersTurn:
-            # game = aiObject.iterativeDeepeningSearch(game,
-            #                                          USER_IS_PLAYER_A,
-            #                                          SEARCHPLY)
+            game = ai.randomSearch(game, COMP_IS_PLAYER_A)
             computersTurn = False
 
         game.print_board()
 
-        #legalMoves = aiObject.getAllMovesForPlayer(game, not USER_IS_PLAYER_A)
+        legalMoves = ai.getAllMovesForPlayer(game, not COMP_IS_PLAYER_A)
         while(True):
             userInput = input('Enter a move: ')
+            result = interface.getPositionFromListOfMoves(game,
+                                                          legalMoves,
+                                                          str(userInput),
+                                                          not COMP_IS_PLAYER_A)
+            if len(result) != 1:
+                print("Unknown or invalid move, please try again")
+                continue
+            else:
+                game = result[0]
+                computersTurn = True
+                break
+
+        firstTurn = False
