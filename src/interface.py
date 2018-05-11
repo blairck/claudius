@@ -47,26 +47,30 @@ def matchMultipleCoordinatesToMoves(theMoves,
     theMoves = matchSingleCoordinateToMoves(theMoves, lastCoordinate, gooseP)
     return theMoves
 
-def isCoordinateMatch(theMove, userCoordinate, gooseP):
-    """ Returns true or false if the user coordinate matches theMove """
-    destinationType = theMove.getState(userCoordinate)
-    if gooseP and destinationType not in (types.OFF_BOARD, types.EMPTY):
-        return True
-    return False
-
 def getCoordinatesFromUserInput(userInput):
     """ Parses string of user input to get coordinates """
     result = []
     userInput = ''.join(c for c in userInput if c.isdigit())
     inputLength = len(userInput)
+    #print(userInput)
     if inputLength < 2 or inputLength % 2 == 1:
         return []
     try:
-        result.append(coordinate.Coordinate(int(userInput[0]),
-                                            int(userInput[1])))
+        result.append(coordinate.Coordinate(
+                      userInputCharacterFor10thAxis(userInput[0]),
+                      userInputCharacterFor10thAxis(userInput[1])))
+
         for i in range(2, inputLength, 2):
-            result.append(coordinate.Coordinate(int(userInput[i]),
-                                                int(userInput[i+1])))
+            result.append(coordinate.Coordinate(
+                          userInputCharacterFor10thAxis(userInput[i]),
+                          userInputCharacterFor10thAxis(userInput[i+1])))
     except ValueError:
         return []
     return result
+
+def userInputCharacterFor10thAxis(userInputCharacter):
+    """ Maps the chacter '0' to 10th axis for user's input """
+    if userInputCharacter is "0":
+        return 10
+    else:
+        return int(userInputCharacter)
