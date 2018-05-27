@@ -3,6 +3,7 @@
 # pylint: disable=import-error
 from res import types
 from src import coordinate
+from src import rules
 
 def getPositionFromListOfMoves(theGame, theMoves, userInput, gooseP):
     """ Gets a position with userInput from a list of legal moves (theMoves).
