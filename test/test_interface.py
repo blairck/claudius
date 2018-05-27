@@ -13,9 +13,6 @@ from test import helper
 class TestInterface(unittest.TestCase):
     """ Integration Tests for the Interface module """
 
-    # pylint: disable=too-many-public-methods
-    # Never too many tests
-
     def test_getCoordinatesFromUserInput_good(self):
         """ Get coordinates from good input """
         actualValue = interface.getCoordinatesFromUserInput('33')[0]
@@ -64,12 +61,12 @@ class TestInterface(unittest.TestCase):
         actualValue = interface.getCoordinatesFromUserInput('3459')
         self.assertEqual(len(actualValue), 0)
 
-    def test_userInputCharacterFor10thAxis(self):
+    def test_userInputCharacterFor10thAxis_10th_axis(self):
         """ Parse an input for 10th axis """
         actualValue = interface.userInputCharacterFor10thAxis("0")
         self.assertEqual(actualValue, 10)
 
-    def test_userInputCharacterFor10thAxis(self):
+    def test_userInputCharacterFor10thAxis_other_axis(self):
         """ Parse an input for 10th axis """
         actualValue = interface.userInputCharacterFor10thAxis("6")
         self.assertEqual(actualValue, 6)
