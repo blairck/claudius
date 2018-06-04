@@ -45,7 +45,7 @@ if __name__ == '__main__':
             result = interface.getPositionFromListOfMoves(game,
                                                           legalMoves,
                                                           str(userInput),
-                                                          not COMP_IS_PLAYER_A)
+                                                          COMP_IS_PLAYER_A)
             if len(result) != 1:
                 print("Unknown or invalid move, please try again")
                 continue
