@@ -7,11 +7,64 @@ from unittest.mock import patch
 from res import types
 from src import ai
 from src import coordinate
+from src import gamenode
 from src import interface
 from test import helper
 
 class TestInterface(unittest.TestCase):
     """ Integration Tests for the Interface module """
+
+    def test_matchMultipleCoordinatesToMoves_playerB_unambiguous(self):
+        """ Match multi-coordinate goose input to move """
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
+        listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
+        coordinates = interface.getCoordinatesFromUserInput("3746")
+        actualValue = interface.matchMultipleCoordinatesToMoves(listOfMoves,
+                                                                coordinates,
+                                                                userIsPlayerB)
+        self.assertEqual(len(actualValue), 1)
+
+    def test_isCoordinateMatch_player_A_good(self):
+        """ Test coordinate match with user as player A """
+        userIsPlayerB = False
+        gnObject = gamenode.GameNode()
+        testCoordinate = coordinate.Coordinate(3, 7)
+        gnObject.setState(testCoordinate, types.PLAYER_A_REGULAR)
+        self.assertTrue(interface.isCoordinateMatch(gnObject,
+                                                    testCoordinate,
+                                                    userIsPlayerB))
+
+    def test_isCoordinateMatch_player_A_no_match(self):
+        """ Test coordinate no match with user as player A """
+        userIsPlayerB = False
+        gnObject = gamenode.GameNode()
+        testCoordinate = coordinate.Coordinate(3, 7)
+        self.assertFalse(interface.isCoordinateMatch(gnObject,
+                                                    testCoordinate,
+                                                    userIsPlayerB))
+
+    def test_isCoordinateMatch_player_B_good(self):
+        """ Test coordinate match with user as player B """
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        testCoordinate = coordinate.Coordinate(3, 7)
+        gnObject.setState(testCoordinate, types.PLAYER_B_REGULAR)
+        self.assertTrue(interface.isCoordinateMatch(gnObject,
+                                                    testCoordinate,
+                                                    userIsPlayerB))
+
+    def test_isCoordinateMatch_player_B_wrong_piece(self):
+        """ Test coordinate match with user as player B but destination does
+        not match"""
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        testCoordinate = coordinate.Coordinate(3, 7)
+        gnObject.setState(testCoordinate, types.PLAYER_A_REGULAR)
+        self.assertFalse(interface.isCoordinateMatch(gnObject,
+                                                    testCoordinate,
+                                                    userIsPlayerB))
 
     def test_getCoordinatesFromUserInput_good(self):
         """ Get coordinates from good input """

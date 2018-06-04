@@ -29,24 +29,29 @@ def matchMultipleCoordinatesToMoves(theMoves,
             lambda x, inputCoordinate=i:
             x.getState(userCoordinates[inputCoordinate]) == types.EMPTY,
             theMoves))
-        connected = rules.Rules().findConnectionP(userCoordinates[i],
-                                                  userCoordinates[i+1])
-        if not gooseP and not connected:
-            startX = userCoordinates[i].get_x_board()
-            startY = userCoordinates[i].get_y_board()
-            endX = userCoordinates[i+1].get_x_board()
-            endY = userCoordinates[i+1].get_y_board()
-            captureStartX = int(startX + (endX - startX)/2)
-            captureStartY = int(startY + (endY - startY)/2)
-            captureCoordinate = coordinate.Coordinate(captureStartX,
-                                                      captureStartY)
-            theMoves = list(filter(
-                lambda x, capture=captureCoordinate:
-                x.getState(capture) == types.EMPTY,
-                theMoves))
     lastCoordinate = userCoordinates.pop()
-    theMoves = matchSingleCoordinateToMoves(theMoves, lastCoordinate, gooseP)
+    theMoves = matchSingleCoordinateToMoves(theMoves,
+                                            lastCoordinate,
+                                            userIsPlayerB)
     return theMoves
+
+def matchSingleCoordinateToMoves(theMoves, userCoordinate, userIsPlayerB):
+    """ Match user input when there's only one legal move """
+    result = list(filter(lambda x: isCoordinateMatch(x,
+                                                     userCoordinate,
+                                                     userIsPlayerB),
+                         theMoves))
+    return result
+
+def isCoordinateMatch(theMove, userCoordinate, userIsPlayerB):
+    """ Returns true or false if the user coordinate matches theMove """
+    destinationType = theMove.getState(userCoordinate)
+    if userIsPlayerB and destinationType is types.PLAYER_B_REGULAR:
+        return True
+    elif not userIsPlayerB and destinationType is types.PLAYER_A_REGULAR:
+        return True
+    else:
+        return False
 
 def getCoordinatesFromUserInput(userInput):
     """ Parses string of user input to get coordinates """
