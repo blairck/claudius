@@ -14,7 +14,9 @@ def determineDraw(game, ai):
 
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
-    game = createStartingPosition()
+    game = gamenode.GameNode()
+    game.createStartingPosition()
+
     firstTurn = True
     COMP_IS_PLAYER_A = True
 
