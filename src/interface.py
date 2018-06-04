@@ -5,7 +5,7 @@ from res import types
 from src import coordinate
 from src import rules
 
-def getPositionFromListOfMoves(theGame, theMoves, userInput, gooseP):
+def getPositionFromListOfMoves(theGame, theMoves, userInput, userIsPlayerB):
     """ Gets a position with userInput from a list of legal moves (theMoves).
     Returns empty list if none found or ambiguous"""
     userCoordinates = getCoordinatesFromUserInput(userInput)
@@ -13,13 +13,13 @@ def getPositionFromListOfMoves(theGame, theMoves, userInput, gooseP):
           theGame.getState(userCoordinates[0]) != types.EMPTY):
         return matchMultipleCoordinatesToMoves(theMoves,
                                                userCoordinates,
-                                               gooseP)
+                                               userIsPlayerB)
     else:
         return []
 
 def matchMultipleCoordinatesToMoves(theMoves,
                                     userCoordinates,
-                                    gooseP):
+                                    userIsPlayerB):
     """ Match user input when there are multiple legal moves. This function
     iterates over each coordinate that the user inputted. It filters theMoves
     list with the coordinates. If it is a Fox turn, then it will also filter
