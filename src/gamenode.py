@@ -77,6 +77,7 @@ class GameNode(object):
         raise NotImplementedError
 
     def createStartingPosition(self):
+        """ Set up gamenode with the regular starting position """
         odd_piece_rows = (1, 3, 5, 7, 9)
         even_piece_rows = (2, 4, 6, 8, 10)
 

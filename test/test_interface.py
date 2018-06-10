@@ -1,7 +1,6 @@
 """ Tests for the AI module """
 
 import unittest
-from unittest.mock import patch
 
 # pylint: disable=import-error
 from res import types
@@ -9,7 +8,6 @@ from src import ai
 from src import coordinate
 from src import gamenode
 from src import interface
-from test import helper
 
 class TestInterface(unittest.TestCase):
     """ Integration Tests for the Interface module """
@@ -42,8 +40,8 @@ class TestInterface(unittest.TestCase):
         gnObject = gamenode.GameNode()
         testCoordinate = coordinate.Coordinate(3, 7)
         self.assertFalse(interface.isCoordinateMatch(gnObject,
-                                                    testCoordinate,
-                                                    userIsPlayerB))
+                                                     testCoordinate,
+                                                     userIsPlayerB))
 
     def test_isCoordinateMatch_player_B_good(self):
         """ Test coordinate match with user as player B """
@@ -63,8 +61,8 @@ class TestInterface(unittest.TestCase):
         testCoordinate = coordinate.Coordinate(3, 7)
         gnObject.setState(testCoordinate, types.PLAYER_A_REGULAR)
         self.assertFalse(interface.isCoordinateMatch(gnObject,
-                                                    testCoordinate,
-                                                    userIsPlayerB))
+                                                     testCoordinate,
+                                                     userIsPlayerB))
 
     def test_getCoordinatesFromUserInput_good(self):
         """ Get coordinates from good input """
@@ -126,6 +124,7 @@ class TestInterface(unittest.TestCase):
 
     # Helper validation functions
     def assertCoordinatesMatch(self, actualCoordinate, expectedCoordinate):
+        """ Verify that coordinate objects are the same """
         self.assertEqual(actualCoordinate.get_x_board(),
                          expectedCoordinate.get_x_board())
         self.assertEqual(actualCoordinate.get_y_board(),

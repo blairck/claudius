@@ -3,27 +3,23 @@
 # pylint: disable=import-error
 from res import types
 from src import coordinate
-from src import rules
 
 def getPositionFromListOfMoves(theGame, theMoves, userInput, userIsPlayerB):
     """ Gets a position with userInput from a list of legal moves (theMoves).
     Returns empty list if none found or ambiguous"""
     userCoordinates = getCoordinatesFromUserInput(userInput)
     if (len(userCoordinates) > 1 and
-          theGame.getState(userCoordinates[0]) != types.EMPTY):
+            theGame.getState(userCoordinates[0]) != types.EMPTY):
         return matchMultipleCoordinatesToMoves(theMoves,
                                                userCoordinates,
                                                userIsPlayerB)
-    else:
-        return []
+    return []
 
 def matchMultipleCoordinatesToMoves(theMoves,
                                     userCoordinates,
                                     userIsPlayerB):
     """ Match user input when there are multiple legal moves. This function
-    iterates over each coordinate that the user inputted. It filters theMoves
-    list with the coordinates. If it is a Fox turn, then it will also filter
-    based on captured spaces"""
+    iterates over each coordinate that the user inputted."""
     for i in range(len(userCoordinates) - 1):
         theMoves = list(filter(
             lambda x, inputCoordinate=i:
@@ -50,8 +46,7 @@ def isCoordinateMatch(theMove, userCoordinate, userIsPlayerB):
         return True
     elif not userIsPlayerB and destinationType is types.PLAYER_A_REGULAR:
         return True
-    else:
-        return False
+    return False
 
 def getCoordinatesFromUserInput(userInput):
     """ Parses string of user input to get coordinates """
@@ -63,20 +58,19 @@ def getCoordinatesFromUserInput(userInput):
         return []
     try:
         result.append(coordinate.Coordinate(
-                      userInputCharacterFor10thAxis(userInput[0]),
-                      userInputCharacterFor10thAxis(userInput[1])))
+            userInputCharacterFor10thAxis(userInput[0]),
+            userInputCharacterFor10thAxis(userInput[1])))
 
         for i in range(2, inputLength, 2):
             result.append(coordinate.Coordinate(
-                          userInputCharacterFor10thAxis(userInput[i]),
-                          userInputCharacterFor10thAxis(userInput[i+1])))
+                userInputCharacterFor10thAxis(userInput[i]),
+                userInputCharacterFor10thAxis(userInput[i+1])))
     except ValueError:
         return []
     return result
 
 def userInputCharacterFor10thAxis(userInputCharacter):
     """ Maps the chacter '0' to 10th axis for user's input """
-    if userInputCharacter is "0":
+    if userInputCharacter == "0":
         return 10
-    else:
-        return int(userInputCharacter)
+    return int(userInputCharacter)

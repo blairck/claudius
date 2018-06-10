@@ -3,7 +3,6 @@
 import unittest
 
 # pylint: disable=import-error
-import main
 from res import types
 from src import ai
 from src import coordinate

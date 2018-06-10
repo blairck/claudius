@@ -1,13 +1,14 @@
 """ This module contains the AI search algorithm """
 
+from random import shuffle
+
 # pylint: disable=import-error
 from res import types
 from src import coordinate
 from src import gamenode
 
-from random import shuffle
-
 def randomSearch(theGame, userIsPlayerA):
+    """ Randomly pick a move from player's legal moves """
     moves = getAllMovesForPlayer(theGame, userIsPlayerA)
     shuffle(moves)
     return moves[0]
