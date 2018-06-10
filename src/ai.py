@@ -1,12 +1,20 @@
 """ This module contains the AI search algorithm """
 
+from random import shuffle
+
 # pylint: disable=import-error
 from res import types
 from src import coordinate
 from src import gamenode
 
+def randomSearch(theGame, userIsPlayerA):
+    """ Randomly pick a move from player's legal moves """
+    moves = getAllMovesForPlayer(theGame, userIsPlayerA)
+    shuffle(moves)
+    return moves[0]
+
 def getAllMovesForPlayer(theGame, userIsPlayerA):
-    """GooseP == True means it's the Goose player's turn. Otherwise fox"""
+    """userIsPlayerA == True means it's the player A's turn. Otherwise B"""
     moves = []
     for location in getTupleOfAllCoordinates():
         moves.extend(getMovesForRegularPiece(theGame,

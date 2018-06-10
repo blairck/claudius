@@ -12,18 +12,18 @@ class TestGameNode(unittest.TestCase):
 
     def test_default_instantiation(self):
         """ Test a known default instantiation """
-        gn_obj = gamenode.GameNode()
-        result = gn_obj.gameState[0][0]
+        gnObject = gamenode.GameNode()
+        result = gnObject.gameState[0][0]
         self.assertEqual(result, types.EMPTY)
-        self.assertFalse(gn_obj.leafP)
-        self.assertFalse(gn_obj.rootP)
-        self.assertFalse(gn_obj.score)
+        self.assertFalse(gnObject.leafP)
+        self.assertFalse(gnObject.rootP)
+        self.assertFalse(gnObject.score)
 
     def test_print_board(self):
         """Check that print_board works"""
         with helper.captured_output() as out:
-            gn_obj = gamenode.GameNode()
-            gn_obj.print_board()
+            gnObject = gamenode.GameNode()
+            gnObject.print_board()
             actual_print = out.getvalue()
             expected_print = ("0     |||   |||   |||   |||   |||\n"
                               "9  |||   |||   |||   |||   |||   \n"
@@ -41,32 +41,44 @@ class TestGameNode(unittest.TestCase):
 
     def test_getState(self):
         """ Check getting the board state at a Coordinate """
-        gn_obj = gamenode.GameNode()
-        self.assertEqual(gn_obj.getState(coordinate.Coordinate(3, 3)),
+        gnObject = gamenode.GameNode()
+        self.assertEqual(gnObject.getState(coordinate.Coordinate(3, 3)),
                          types.EMPTY)
 
     def test_setState(self):
         """ Test setting the board state at a Coordinate with a value """
-        gn_obj = gamenode.GameNode()
+        gnObject = gamenode.GameNode()
         testCoordinate = coordinate.Coordinate(5, 1)
         testValue = types.PLAYER_A_KING
-        gn_obj.setState(testCoordinate, testValue)
-        self.assertEqual(gn_obj.getState(testCoordinate), types.PLAYER_A_KING)
+        gnObject.setState(testCoordinate, testValue)
+        self.assertEqual(gnObject.getState(testCoordinate),
+                         types.PLAYER_A_KING)
 
     def test_eq_same(self):
         """ Check equality function compares boards as equal """
-        gn_obj_1 = gamenode.GameNode()
-        gn_obj_2 = gamenode.GameNode()
-        self.assertTrue(gn_obj_1 == gn_obj_2)
+        gnObject1 = gamenode.GameNode()
+        gnObject2 = gamenode.GameNode()
+        self.assertTrue(gnObject1 == gnObject2)
 
     def test_eq_not_same(self):
         """ Check equality function compares boards as not equal """
-        gn_obj_1 = gamenode.GameNode()
-        gn_obj_1.setState(coordinate.Coordinate(5, 3), types.PLAYER_A_KING)
-        gn_obj_2 = gamenode.GameNode()
-        self.assertTrue(gn_obj_1 != gn_obj_2)
+        gnObject1 = gamenode.GameNode()
+        gnObject1.setState(coordinate.Coordinate(5, 3), types.PLAYER_A_KING)
+        gnObject2 = gamenode.GameNode()
+        self.assertTrue(gnObject1 != gnObject2)
 
     def test_playerWins(self):
         """ Check if a player has won the game """
-        gn_obj = gamenode.GameNode()
-        self.assertRaises(NotImplementedError, gn_obj.playerWins)
+        gnObject = gamenode.GameNode()
+        self.assertRaises(NotImplementedError, gnObject.playerWins)
+
+    def test_createStartingPosition(self):
+        """ Check that the starting position is set correctly """
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
+        self.assertEqual(gnObject.getState(coordinate.Coordinate(2, 2)),
+                         types.PLAYER_A_REGULAR)
+        self.assertEqual(gnObject.getState(coordinate.Coordinate(6, 10)),
+                         types.PLAYER_B_REGULAR)
+        self.assertEqual(gnObject.getState(coordinate.Coordinate(9, 5)),
+                         types.EMPTY)

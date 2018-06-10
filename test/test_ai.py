@@ -3,7 +3,6 @@
 import unittest
 
 # pylint: disable=import-error
-import main
 from res import types
 from src import ai
 from src import coordinate
@@ -42,7 +41,8 @@ class TestAI(unittest.TestCase):
 
     def test_getMovesForRegularPiece_0_moves(self):
         """ Test regular piece that is completely blocked from moving """
-        gnObject = main.createStartingPosition()
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getMovesForRegularPiece(gnObject,
@@ -92,14 +92,16 @@ class TestAI(unittest.TestCase):
 
     def test_getAllMovesForPlayer_isPlayerA(self):
         """ Test getting all moves for player A """
-        gnObject = main.createStartingPosition()
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
         actualResult = ai.getAllMovesForPlayer(gnObject, True)
         expectedResultLength = 9
         self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_getAllMovesForPlayer_isPlayerB(self):
         """ Test getting all moves for player B """
-        gnObject = main.createStartingPosition()
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
         actualResult = ai.getAllMovesForPlayer(gnObject, False)
         expectedResultLength = 9
         self.assertEqual(len(actualResult), expectedResultLength)

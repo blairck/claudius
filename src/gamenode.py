@@ -1,6 +1,8 @@
 """ The basic state of the game board """
 
+from res import types
 from res.types import getPieceAbbreviation
+from src import coordinate
 
 class GameNode(object):
     """ Class that stores the basic state of the game board """
@@ -73,3 +75,28 @@ class GameNode(object):
     def playerWins(self):
         """ Determines if a player has won and returns which one """
         raise NotImplementedError
+
+    def createStartingPosition(self):
+        """ Set up gamenode with the regular starting position """
+        odd_piece_rows = (1, 3, 5, 7, 9)
+        even_piece_rows = (2, 4, 6, 8, 10)
+
+        for y in (1, 3):
+            for x in odd_piece_rows:
+                self.setState(coordinate.Coordinate(x, y),
+                              types.PLAYER_A_REGULAR)
+
+        for y in (7, 9):
+            for x in odd_piece_rows:
+                self.setState(coordinate.Coordinate(x, y),
+                              types.PLAYER_B_REGULAR)
+
+        for y in (2, 4):
+            for x in even_piece_rows:
+                self.setState(coordinate.Coordinate(x, y),
+                              types.PLAYER_A_REGULAR)
+
+        for y in (8, 10):
+            for x in even_piece_rows:
+                self.setState(coordinate.Coordinate(x, y),
+                              types.PLAYER_B_REGULAR)
