@@ -9,17 +9,17 @@ def getPieceAbbreviation(value):
     if int(value)==OFF_BOARD:
         return '   '
     elif int(value)==EMPTY:
-        return '|||'
-    if int(value)==PLAYER_A_REGULAR:
+        return '| |'
+    elif int(value)==PLAYER_A_REGULAR:
         return '|a|'
-    if int(value)==PLAYER_A_KING:
+    elif int(value)==PLAYER_A_KING:
         return '|A|'
-    if int(value)==PLAYER_B_REGULAR:
+    elif int(value)==PLAYER_B_REGULAR:
         return '|b|'
-    if int(value)==PLAYER_B_KING:
+    elif int(value)==PLAYER_B_KING:
         return '|B|'
     else:
-        raise TypeError(("Invalid piece value = {0}").format(value))
+        raise TypeError(("Invalid piece int = {0}").format(value))
 
 def getPieceIntValueFromChar(value):
     if value==' ':
