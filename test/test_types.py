@@ -14,7 +14,7 @@ class TestTypes(unittest.TestCase):
 
     def test_getPieceAbbreviation_EMPTY(self):
         "Correctly convert a type to a character for display"
-        self.assertEqual("|||", types.getPieceAbbreviation(types.EMPTY))
+        self.assertEqual("| |", types.getPieceAbbreviation(types.EMPTY))
 
     def test_getPieceAbbreviation_PLAYER_A_REGULAR(self):
         "Correctly convert a type to a character for display"
