@@ -17,5 +17,5 @@ status: tests lint
 
 tests:
 	#Just run unit tests and display code coverage result
-	$(ENVIRONMENT)/bin/coverage run test/run_tests.py --include src/*,test/*
-	$(ENVIRONMENT)/bin/coverage report -m --skip-covered --include src/*,test/*
+	$(ENVIRONMENT)/bin/coverage run test/run_tests.py --include src/*,test/*,res/*
+	$(ENVIRONMENT)/bin/coverage report -m --skip-covered --include src/*,test/*,res/*
