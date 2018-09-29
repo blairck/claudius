@@ -20,3 +20,20 @@ def getPieceAbbreviation(value):
         return '|B|'
     else:
         raise TypeError(("Invalid piece value = {0}").format(value))
+
+def getPieceIntValueFromChar(value):
+    if value==' ':
+        # A space is actually ambiguous between OFF_BOARD and EMPTY. This 
+        # method is used in board_setter so in that case, just returning EMPTY
+        # makes the most sense
+        return EMPTY
+    elif value=='a':
+        return PLAYER_A_REGULAR
+    elif value=='A':
+        return PLAYER_A_KING
+    elif value=='b':
+        return PLAYER_B_REGULAR
+    elif value=='B':
+        return PLAYER_B_KING
+    else:
+        raise TypeError(("Invalid piece char = {0}").format(value))

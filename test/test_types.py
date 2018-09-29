@@ -47,3 +47,18 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError,
                           types.getPieceAbbreviation,
                           'abcd')
+
+    def test_getPieceIntValueFromChar_PLAYER_A_REGULAR(self):
+        "Correctly convert a piece char to int"
+        self.assertEqual(types.PLAYER_A_REGULAR,
+                         types.getPieceIntValueFromChar('a'))
+
+    def test_getPieceIntValueFromChar_EMPTY(self):
+        "Correctly convert a piece char to int"
+        self.assertEqual(types.EMPTY, types.getPieceIntValueFromChar(' '))
+
+    def test_getPieceIntValueFromChar_invalid(self):
+        "Raise TypeError when char isn't a valid piece"
+        self.assertRaises(TypeError,
+                          types.getPieceIntValueFromChar,
+                          'q')
