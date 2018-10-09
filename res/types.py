@@ -7,17 +7,17 @@ PLAYER_B_KING = 5
 
 def getPieceAbbreviation(value):
     if int(value)==OFF_BOARD:
-        return '   '
+        return "   "
     elif int(value)==EMPTY:
-        return '| |'
+        return " . "
     elif int(value)==PLAYER_A_REGULAR:
-        return '|a|'
+        return " a "
     elif int(value)==PLAYER_A_KING:
-        return '|A|'
+        return " A "
     elif int(value)==PLAYER_B_REGULAR:
-        return '|b|'
+        return " b "
     elif int(value)==PLAYER_B_KING:
-        return '|B|'
+        return " B "
     else:
         raise TypeError(("Invalid piece int = {0}").format(value))
 

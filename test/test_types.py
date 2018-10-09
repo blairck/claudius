@@ -14,26 +14,26 @@ class TestTypes(unittest.TestCase):
 
     def test_getPieceAbbreviation_EMPTY(self):
         "Correctly convert a type to a character for display"
-        self.assertEqual("| |", types.getPieceAbbreviation(types.EMPTY))
+        self.assertEqual(" . ", types.getPieceAbbreviation(types.EMPTY))
 
     def test_getPieceAbbreviation_PLAYER_A_REGULAR(self):
         "Correctly convert a type to a character for display"
-        self.assertEqual("|a|",
+        self.assertEqual(" a ",
                          types.getPieceAbbreviation(types.PLAYER_A_REGULAR))
 
     def test_getPieceAbbreviation_PLAYER_A_KING(self):
         "Correctly convert a type to a character for display"
-        self.assertEqual("|A|",
+        self.assertEqual(" A ",
                          types.getPieceAbbreviation(types.PLAYER_A_KING))
 
     def test_getPieceAbbreviation_PLAYER_B_REGULAR(self):
         "Correctly convert a type to a character for display"
-        self.assertEqual("|b|",
+        self.assertEqual(" b ",
                          types.getPieceAbbreviation(types.PLAYER_B_REGULAR))
 
     def test_getPieceAbbreviation_PLAYER_B_KING(self):
         "Correctly convert a type to a character for display"
-        self.assertEqual("|B|",
+        self.assertEqual(" B ",
                          types.getPieceAbbreviation(types.PLAYER_B_KING))
 
     def test_getPieceAbbreviation_not_a_piece(self):
