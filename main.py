@@ -28,10 +28,10 @@ if __name__ == '__main__':
     while(True):
         if not firstTurn:
             game.print_board()
-            print("---------------------------------")
+            print("--------------------------------")
         elif firstTurn and COMP_IS_PLAYER_A:
             game.print_board()
-            print("---------------------------------")
+            print("--------------------------------")
 
         if computersTurn:
             game = ai.randomSearch(game, COMP_IS_PLAYER_A)
