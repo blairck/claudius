@@ -23,9 +23,8 @@ def getPieceAbbreviation(value):
 
 def getPieceIntValueFromChar(value):
     if value==' ':
-        # A space is actually ambiguous between OFF_BOARD and EMPTY. This 
-        # method is used in board_setter so in that case, just returning EMPTY
-        # makes the most sense
+        return OFF_BOARD
+    elif value=='.':
         return EMPTY
     elif value=='a':
         return PLAYER_A_REGULAR

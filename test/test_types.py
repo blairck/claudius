@@ -55,7 +55,7 @@ class TestTypes(unittest.TestCase):
 
     def test_getPieceIntValueFromChar_EMPTY(self):
         "Correctly convert a piece char to int"
-        self.assertEqual(types.EMPTY, types.getPieceIntValueFromChar(' '))
+        self.assertEqual(types.EMPTY, types.getPieceIntValueFromChar('.'))
 
     def test_getPieceIntValueFromChar_invalid(self):
         "Raise TypeError when char isn't a valid piece"
