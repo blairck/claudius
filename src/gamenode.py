@@ -32,8 +32,8 @@ class GameNode(object):
 
     def print_board(self):
         """ Prints the board in a way that is easy to understand """
-        print("   1  2  3  4  5  6  7  8  9  0")
-        line = "0 {0}{1}{2}{3}{4}{5}{6}{7}{8}{9} 0"
+        print("  1  2  3  4  5  6  7  8  9  0")
+        line = "0{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}0"
         print(line.format(getPieceAbbreviation(self.gameState[0][9]),
                           getPieceAbbreviation(self.gameState[1][9]),
                           getPieceAbbreviation(self.gameState[2][9]),
@@ -47,7 +47,7 @@ class GameNode(object):
         y_indices = list(range(9))
         y_indices.reverse()
         for y in y_indices:
-            line = "{0} {1}{2}{3}{4}{5}{6}{7}{8}{9}{10} {0}"
+            line = "{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{0}"
             print(line.format(y + 1,
                               getPieceAbbreviation(self.gameState[0][y]),
                               getPieceAbbreviation(self.gameState[1][y]),
@@ -59,7 +59,7 @@ class GameNode(object):
                               getPieceAbbreviation(self.gameState[7][y]),
                               getPieceAbbreviation(self.gameState[8][y]),
                               getPieceAbbreviation(self.gameState[9][y]),))
-        print("   1  2  3  4  5  6  7  8  9  0")
+        print("  1  2  3  4  5  6  7  8  9  0")
 
     def setState(self, coordinate_arg, value):
         """ Modify value at a specific board location. """
