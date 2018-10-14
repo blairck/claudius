@@ -7,22 +7,22 @@ from res import types
 from src import coordinate
 from src import gamenode
 
-def randomSearch(theGame, userIsPlayerA):
+def randomSearch(theGame, playerAToPlay):
     """ Randomly pick a move from player's legal moves """
-    moves = getAllMovesForPlayer(theGame, userIsPlayerA)
+    moves = getAllMovesForPlayer(theGame, playerAToPlay)
     shuffle(moves)
     return moves[0]
 
-def getAllMovesForPlayer(theGame, userIsPlayerA):
-    """userIsPlayerA == True means it's the player A's turn. Otherwise B"""
+def getAllMovesForPlayer(theGame, playerAToPlay):
+    """playerAToPlay == True means it's the player A's turn. Otherwise B"""
     moves = []
     for location in getTupleOfAllCoordinates():
         moves.extend(getMovesForRegularPiece(theGame,
                                              location,
-                                             userIsPlayerA))
+                                             playerAToPlay))
     return moves
 
-def getMovesForRegularPiece(theGame, pieceLocation, userIsPlayerA):
+def getMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     """ This returns a GameNode for every legal move of a given piece """
     moveList = []
     xBoard = pieceLocation.get_x_board()
@@ -30,7 +30,7 @@ def getMovesForRegularPiece(theGame, pieceLocation, userIsPlayerA):
     pieceDestinationLeft = None
     pieceDestinationRight = None
 
-    if (userIsPlayerA and
+    if (playerAToPlay and
             theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
         # Player A moves in positive Y increments
         moveDirection = 1
@@ -38,7 +38,7 @@ def getMovesForRegularPiece(theGame, pieceLocation, userIsPlayerA):
                                                    yBoard + moveDirection)
         pieceDestinationRight = getCoordinateHelper(xBoard + 1,
                                                     yBoard + moveDirection)
-    elif (not userIsPlayerA and
+    elif (not playerAToPlay and
           theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
         # Player B moves in negative Y increments
         moveDirection = -1
