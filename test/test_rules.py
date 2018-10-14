@@ -3,6 +3,7 @@
 import unittest
 
 # pylint: disable=import-error
+import helper
 from res import types
 from src import coordinate
 from src import gamenode
@@ -102,27 +103,60 @@ class TestRules(unittest.TestCase):
         expected_result = True
         self.assertEqual(actual_result, expected_result)
 
-    def test_findXCoordinateFromDirection_left(self):
+    def test_findXDeltaFromDirection_left(self):
         """ Get the delta X from a left direction """
-        actual_result = rules.findXCoordinateFromDirection(8)
+        actual_result = rules.findXDeltaFromDirection(8)
         expected_result = -2
         self.assertEqual(actual_result, expected_result)
 
-    def test_findXCoordinateFromDirection_bad(self):
+    def test_findXDeltaFromDirection_bad(self):
         """ Handle a bad direction """
         self.assertRaises(ValueError,
-                          rules.findXCoordinateFromDirection,
+                          rules.findXDeltaFromDirection,
                           80)
 
-    def test_findYCoordinateFromDirection_down(self):
+    def test_findYDeltaFromDirection_down(self):
         """ Get the delta Y from a left direction """
-        actual_result = rules.findYCoordinateFromDirection(4)
+        actual_result = rules.findYDeltaFromDirection(4)
         expected_result = -2
         self.assertEqual(actual_result, expected_result)
 
-    def test_findYCoordinateFromDirection_bad(self):
+    def test_findYDeltaFromDirection_bad(self):
         """ Handle a bad direction """
         self.assertRaises(ValueError,
-                          rules.findYCoordinateFromDirection,
+                          rules.findYDeltaFromDirection,
                           80)
+
+    def test_isACaptureP_good(self):
+        board_description = [
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 .     .     .     .     .    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     .     .     .    7",
+            "6    .     A     b     .     . 6",
+            "5 .     .     a     .     .    5",
+            "4    .     a     B     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",]
+        board = helper.parse_board_input(board_description)
+        self.assertTrue(rules.isACaptureP(board,
+                                          coordinate.Coordinate(5, 5),
+                                          2,
+                                          True))
+        self.assertTrue(rules.isACaptureP(board,
+                                          coordinate.Coordinate(5, 5),
+                                          4,
+                                          True))
+        self.assertFalse(rules.isACaptureP(board,
+                                          coordinate.Coordinate(5, 5),
+                                          6,
+                                          True))
+        self.assertFalse(rules.isACaptureP(board,
+                                          coordinate.Coordinate(5, 5),
+                                          8,
+                                          True))
+
 

@@ -2,6 +2,7 @@
 
 # pylint: disable=import-error
 from res import types
+from src import coordinate
 
 def legalMoveP(theGame, startCoordinate, endCoordinate):
     """"Tests whether a start coordinate and end coordinate constitute a
@@ -35,8 +36,8 @@ def findConnectionP(startCoordinate, endCoordinate):
         return True
     return False
 
-def findXCoordinateFromDirection(direction):
-    """ Returns delta X, when given a direction value """
+def findXDeltaFromDirection(direction):
+    """ Returns delta X for jumping, when given a direction value """
     if direction in (2, 4):
         return 2
     elif direction in (6, 8):
@@ -45,8 +46,8 @@ def findXCoordinateFromDirection(direction):
         error_template = "Unexpected direction value of: {0}"
         raise ValueError(error_template.format(direction))
 
-def findYCoordinateFromDirection(direction):
-    """ Returns delta Y, when given a direction value """
+def findYDeltaFromDirection(direction):
+    """ Returns delta Y for jumping, when given a direction value """
     if direction in (8, 2):
         return 2
     elif direction in (4, 6):
@@ -54,3 +55,43 @@ def findYCoordinateFromDirection(direction):
     else:
         error_template = "Unexpected direction value of: {0}"
         raise ValueError(error_template.format(direction))
+
+def isACaptureP(theGame,
+                startCoordinate,
+                direction,
+                playerAToPlay):
+    """Returns True if there's a capture, given a start coordinate and
+    a direction, otherwise returns False"""
+    startX = startCoordinate.get_x_board()
+    startY = startCoordinate.get_y_board()
+
+    deltaX = findXDeltaFromDirection(direction)
+    deltaY = findYDeltaFromDirection(direction)
+
+    middleCoordinate = None
+    endCoordinate = None
+
+    try:
+        middleCoordinate = coordinate.Coordinate(int(startX + deltaX/2),
+                                                 int(startY + deltaY/2))
+        endCoordinate = coordinate.Coordinate(int(startX + deltaX),
+                                              int(startY + deltaY))
+    except ValueError:
+        return False
+
+    middleTileState = theGame.getState(middleCoordinate)
+    endTileState = theGame.getState(endCoordinate)
+
+    # Player A to play
+    if middleTileState and endTileState and playerAToPlay:
+        return bool((middleTileState in (types.PLAYER_B_REGULAR,
+                                           types.PLAYER_B_KING)) and
+                endTileState == types.EMPTY)
+    # Player B to play
+    elif middleTileState and endTileState and not playerAToPlay:
+        return bool((middleTileState in (types.PLAYER_A_REGULAR,
+                                           types.PLAYER_A_KING)) and
+                endTileState == types.EMPTY)
+    # No capture found
+    else:
+        return False
