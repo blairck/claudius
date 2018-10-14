@@ -134,29 +134,40 @@ class TestRules(unittest.TestCase):
             "9 .     .     .     .     .    9",
             "8    .     .     .     .     . 8",
             "7 .     .     .     .     .    7",
-            "6    .     A     b     .     . 6",
-            "5 .     .     a     .     .    5",
-            "4    .     a     B     .     . 4",
+            "6    A     b     .     .     . 6",
+            "5 .     a     .     .     .    5",
+            "4    a     B     .     .     . 4",
             "3 .     .     .     .     .    3",
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",]
         board = helper.parse_board_input(board_description)
-        self.assertTrue(rules.isACaptureP(board,
-                                          coordinate.Coordinate(5, 5),
-                                          2,
-                                          True))
-        self.assertTrue(rules.isACaptureP(board,
-                                          coordinate.Coordinate(5, 5),
-                                          4,
-                                          True))
-        self.assertFalse(rules.isACaptureP(board,
-                                          coordinate.Coordinate(5, 5),
-                                          6,
-                                          True))
-        self.assertFalse(rules.isACaptureP(board,
-                                          coordinate.Coordinate(5, 5),
-                                          8,
-                                          True))
+        capturingPiece = coordinate.Coordinate(3, 5)
+        self.assertTrue(rules.isACaptureP(board, capturingPiece, 2, True))
+        self.assertTrue(rules.isACaptureP(board, capturingPiece, 4, True))
+        self.assertFalse(rules.isACaptureP(board, capturingPiece, 6, True))
+        self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, True))
+
+    def test_isACaptureP_edges(self):
+        board_description = [
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 a     a     .     .     .    9",
+            "8    b     .     .     .     . 8",
+            "7 .     .     .     .     .    7",
+            "6    .     .     .     .     . 6",
+            "5 .     .     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",]
+        board = helper.parse_board_input(board_description)
+        capturingPiece = coordinate.Coordinate(2, 8)
+        self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, False))
+        self.assertTrue(rules.isACaptureP(board, capturingPiece, 2, False))
+        capturingPiece = coordinate.Coordinate(1, 9)
+        self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, True))
+        self.assertFalse(rules.isACaptureP(board, capturingPiece, 6, True))
 
 

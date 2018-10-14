@@ -79,19 +79,21 @@ def isACaptureP(theGame,
     except ValueError:
         return False
 
+    startTileState = theGame.getState(startCoordinate)
     middleTileState = theGame.getState(middleCoordinate)
     endTileState = theGame.getState(endCoordinate)
 
     # Player A to play
-    if middleTileState and endTileState and playerAToPlay:
-        return bool((middleTileState in (types.PLAYER_B_REGULAR,
-                                           types.PLAYER_B_KING)) and
-                endTileState == types.EMPTY)
+    if playerAToPlay:
+        return bool((startTileState in (types.PLAYER_A_REGULAR,
+                                        types.PLAYER_A_KING)) and
+                    (middleTileState in (types.PLAYER_B_REGULAR,
+                                         types.PLAYER_B_KING)) and
+                    endTileState == types.EMPTY)
     # Player B to play
-    elif middleTileState and endTileState and not playerAToPlay:
-        return bool((middleTileState in (types.PLAYER_A_REGULAR,
-                                           types.PLAYER_A_KING)) and
-                endTileState == types.EMPTY)
-    # No capture found
     else:
-        return False
+        return bool((startTileState in (types.PLAYER_B_REGULAR,
+                                        types.PLAYER_B_KING)) and
+                    (middleTileState in (types.PLAYER_A_REGULAR,
+                                         types.PLAYER_A_KING)) and
+                    endTileState == types.EMPTY)
