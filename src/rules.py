@@ -34,3 +34,23 @@ def findConnectionP(startCoordinate, endCoordinate):
     elif endX - startX == -1 and endY - startY == 1:
         return True
     return False
+
+def findXCoordinateFromDirection(direction):
+    """ Returns delta X, when given a direction value """
+    if direction in (2, 4):
+        return 2
+    elif direction in (6, 8):
+        return -2
+    else:
+        error_template = "Unexpected direction value of: {0}"
+        raise ValueError(error_template.format(direction))
+
+def findYCoordinateFromDirection(direction):
+    """ Returns delta Y, when given a direction value """
+    if direction in (8, 2):
+        return 2
+    elif direction in (4, 6):
+        return -2
+    else:
+        error_template = "Unexpected direction value of: {0}"
+        raise ValueError(error_template.format(direction))

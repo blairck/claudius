@@ -101,3 +101,28 @@ class TestRules(unittest.TestCase):
         actual_result = rules.legalMoveP(board, startCoordinate, endCoordinate)
         expected_result = True
         self.assertEqual(actual_result, expected_result)
+
+    def test_findXCoordinateFromDirection_left(self):
+        """ Get the delta X from a left direction """
+        actual_result = rules.findXCoordinateFromDirection(8)
+        expected_result = -2
+        self.assertEqual(actual_result, expected_result)
+
+    def test_findXCoordinateFromDirection_bad(self):
+        """ Handle a bad direction """
+        self.assertRaises(ValueError,
+                          rules.findXCoordinateFromDirection,
+                          80)
+
+    def test_findYCoordinateFromDirection_down(self):
+        """ Get the delta Y from a left direction """
+        actual_result = rules.findYCoordinateFromDirection(4)
+        expected_result = -2
+        self.assertEqual(actual_result, expected_result)
+
+    def test_findYCoordinateFromDirection_bad(self):
+        """ Handle a bad direction """
+        self.assertRaises(ValueError,
+                          rules.findYCoordinateFromDirection,
+                          80)
+
