@@ -99,3 +99,11 @@ class GameNode(object):
             for x in even_piece_rows:
                 self.setState(coordinate.Coordinate(x, y),
                               types.PLAYER_B_REGULAR)
+
+    def countPlayerPieces(self, piecesToCount):
+        count = 0
+        for i in range(0, 10):
+            for j in range(0, 10):
+                if self.gameState[i][j] in piecesToCount:
+                    count += 1
+        return count

@@ -80,3 +80,31 @@ class TestGameNode(unittest.TestCase):
                          types.PLAYER_B_REGULAR)
         self.assertEqual(gnObject.getState(coordinate.Coordinate(9, 5)),
                          types.EMPTY)
+
+    def test_countPlayerPieces_player_A(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
+        expectedResult = 2
+
+        actualResult = board.countPlayerPieces(playerPieces)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_countPlayerPieces_player_B(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
+        expectedResult = 1
+
+        actualResult = board.countPlayerPieces(playerPieces)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_countPlayerPieces_nonexistant(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        nonexistantPieceType = 99
+
+        playerPieces = (nonexistantPieceType,)
+        expectedResult = 0
+
+        actualResult = board.countPlayerPieces(playerPieces)
+        self.assertEqual(actualResult, expectedResult)
