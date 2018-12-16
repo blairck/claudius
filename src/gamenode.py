@@ -17,8 +17,6 @@ class GameNode(object):
                           [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
                           [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
                           [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],]
-        self.leafP = None # float
-        self.rootP = None # bool
         self.score = None # bool
         self.isCapture = False
         self.winningState = False

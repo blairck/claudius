@@ -15,8 +15,6 @@ class TestGameNode(unittest.TestCase):
         gnObject = gamenode.GameNode()
         result = gnObject.gameState[0][0]
         self.assertEqual(result, types.EMPTY)
-        self.assertFalse(gnObject.leafP)
-        self.assertFalse(gnObject.rootP)
         self.assertFalse(gnObject.score)
 
     def test_print_board(self):
