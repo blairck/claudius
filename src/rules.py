@@ -97,3 +97,34 @@ def isACaptureP(theGame,
                     (middleTileState in (types.PLAYER_A_REGULAR,
                                          types.PLAYER_A_KING)) and
                     endTileState == types.EMPTY)
+
+def makeCapture(theGame, startCoordinate, endCoordinate):
+    """ Update the board for a capture between a start and end coordinate """
+    startX = startCoordinate.get_x_board()
+    startY = startCoordinate.get_y_board()
+    endX = endCoordinate.get_x_board()
+    endY = endCoordinate.get_y_board()
+
+    startPieceType = theGame.getState(startCoordinate)
+
+    if startPieceType in (types.EMPTY, types.OFF_BOARD):
+        error_template = "Illegal start piece type: {0} at ({1}, {2})"
+        raise TypeError(error_template.format(startPieceType, startX, startY))
+    elif abs(startX - endX) not in (0, 2):
+        error_template = "Illegal X capture: {0} -> {1}"
+        raise ValueError(error_template.format(startX, endX))
+    elif abs(startY - endY) not in (0, 2):
+        error_template = "Illegal Y capture: {0} -> {1}"
+        raise ValueError(error_template.format(startY, endY))
+    elif startX == endX and startY == endY:
+        error_template = ("Start and end capture coordinates are the "
+                          "same: ({0}, {1})")
+        raise ValueError(error_template.format(startX, startY))
+
+    captureStartX = int(startX + (endX - startX)/2)
+    captureStartY = int(startY + (endY - startY)/2)
+    captureCoordinate = coordinate.Coordinate(captureStartX, captureStartY)
+
+    theGame.setState(endCoordinate, theGame.getState(startCoordinate))
+    theGame.setState(captureCoordinate, types.EMPTY)
+    theGame.setState(startCoordinate, types.EMPTY)

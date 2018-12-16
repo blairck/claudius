@@ -149,20 +149,7 @@ class TestRules(unittest.TestCase):
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, True))
 
     def test_isACaptureP_edges(self):
-        board_description = [
-            "  1  2  3  4  5  6  7  8  9  0",
-            "0    .     .     .     .     . 0",
-            "9 a     a     .     .     .    9",
-            "8    b     .     .     .     . 8",
-            "7 .     .     .     .     .    7",
-            "6    .     .     .     .     . 6",
-            "5 .     .     .     .     .    5",
-            "4    .     .     .     .     . 4",
-            "3 .     .     .     .     .    3",
-            "2    .     .     .     .     . 2",
-            "1 .     .     .     .     .    1",
-            "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
         capturingPiece = coordinate.Coordinate(2, 8)
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, False))
         self.assertTrue(rules.isACaptureP(board, capturingPiece, 2, False))
@@ -170,4 +157,62 @@ class TestRules(unittest.TestCase):
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, True))
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 6, True))
 
+    def test_makeCapture_bad_type(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
+        capturingPiece = coordinate.Coordinate(6, 6)
+        endLocation = coordinate.Coordinate(4, 8)
+        self.assertRaises(TypeError,
+            rules.makeCapture,
+            board,
+            capturingPiece,
+            endLocation)
+
+    def test_makeCapture_bad_x_capture(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        capturingPiece = coordinate.Coordinate(6, 6)
+        board.setState(capturingPiece, types.PLAYER_A_REGULAR)
+        endLocation = coordinate.Coordinate(6, 8)
+        self.assertRaises(ValueError,
+            rules.makeCapture,
+            board,
+            capturingPiece,
+            endLocation)
+
+    def test_makeCapture_bad_y_capture(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        capturingPiece = coordinate.Coordinate(6, 6)
+        board.setState(capturingPiece, types.PLAYER_A_REGULAR)
+        endLocation = coordinate.Coordinate(8, 6)
+        self.assertRaises(ValueError,
+            rules.makeCapture,
+            board,
+            capturingPiece,
+            endLocation)
+
+    def test_makeCapture_bad_same_coordinates(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        capturingPiece = coordinate.Coordinate(6, 6)
+        board.setState(capturingPiece, types.PLAYER_A_REGULAR)
+        endLocation = coordinate.Coordinate(6, 6)
+        self.assertRaises(ValueError,
+            rules.makeCapture,
+            board,
+            capturingPiece,
+            endLocation)
+
+    def test_makeCapture_good(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        capturingPiece = coordinate.Coordinate(2, 8)
+        endLocation = coordinate.Coordinate(4, 10)
+        capturedLocation = coordinate.Coordinate(3, 9)
+
+        rules.makeCapture(board, capturingPiece, endLocation)
+
+        self.assertEqual(board.getState(capturingPiece), types.EMPTY)
+        self.assertEqual(board.getState(capturedLocation), types.EMPTY)
+        self.assertEqual(board.getState(endLocation), types.PLAYER_B_REGULAR)
