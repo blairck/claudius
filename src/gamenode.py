@@ -18,6 +18,8 @@ class GameNode(object):
                           [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
                           [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],]
         self.score = None # bool
+        self.numberOfPiecesForA = None # count of player A pieces
+        self.numberOfPiecesForB = None # count of player B pieces
         self.isCapture = False
         self.winningState = False
 
@@ -107,3 +109,22 @@ class GameNode(object):
                 if self.gameState[i][j] in piecesToCount:
                     count += 1
         return count
+
+    def getPieceCount(self, playerAToPlay):
+        if playerAToPlay is None:
+            errorMessage = "playerAToPlay unassigned: {0}"
+            raise ValueError(errorMessage.format(playerAToPlay))
+        elif playerAToPlay:
+            if self.numberOfPiecesForA:
+                return self.numberOfPiecesForA
+            else:
+                playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
+                self.numberOfPiecesForA = self.countPlayerPieces(playerPieces)
+                return self.numberOfPiecesForA
+        else:
+            if self.numberOfPiecesForB:
+                return self.numberOfPiecesForB
+            else:
+                playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
+                self.numberOfPiecesForB = self.countPlayerPieces(playerPieces)
+                return self.numberOfPiecesForB

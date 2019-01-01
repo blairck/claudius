@@ -108,3 +108,39 @@ class TestGameNode(unittest.TestCase):
 
         actualResult = board.countPlayerPieces(playerPieces)
         self.assertEqual(actualResult, expectedResult)
+
+    def test_getPieceCount_bad_unassigned(self):
+        gnObject = gamenode.GameNode()
+        self.assertRaises(ValueError, gnObject.getPieceCount, None)
+
+    def test_getPieceCount_good_playerA_uncached(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerAToPlay = True
+        expectedResult = 2
+
+        # Assert uncached value and result
+        self.assertFalse(board.numberOfPiecesForA)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
+
+        # Assert cached value
+        self.assertEqual(board.numberOfPiecesForA, expectedResult)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_getPieceCount_good_playerB_uncached(self):
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerAToPlay = False
+        expectedResult = 1
+
+        # Assert uncached value and result
+        self.assertFalse(board.numberOfPiecesForB)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
+
+        # Assert cached value
+        self.assertEqual(board.numberOfPiecesForB, expectedResult)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
