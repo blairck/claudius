@@ -6,6 +6,7 @@ from random import shuffle
 from res import types
 from src import coordinate
 from src import gamenode
+from src import rules
 
 def randomSearch(theGame, playerAToPlay):
     """ Randomly pick a move from player's legal moves """
@@ -58,6 +59,45 @@ def getMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
                                       pieceDestinationRight,
                                       pieceLocation))
     return moveList
+
+def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
+    #Formerly known as getAllFoxCaptures()
+    """ This recursively finds all available captures for a single piece and
+    returns the list of captures. Checks for duplicates from loops"""
+    tempCaptureList = []
+    x_board = pieceLocation.get_x_board()
+    y_board = pieceLocation.get_y_board()
+    # 2, 4, 6, 8 are the four directions a piece might capture
+    for direction in (2, 4, 6, 8):
+        if rules.isACaptureP(theGame, pieceLocation, direction, playerAToPlay):
+            deltaX = rules.findXDeltaFromDirection(direction)
+            deltaY = rules.findYDeltaFromDirection(direction)
+            newMoveNode = transferNode(theGame)
+            destination = coordinate.Coordinate(x_board + deltaX,
+                                                y_board + deltaY)
+            rules.makeCapture(newMoveNode, pieceLocation, destination)
+            newMoveNode.isCapture = True
+            tempCaptureList.append(newMoveNode)
+            nextCapture = getCapturesForRegularPiece(newMoveNode,
+                                                     destination,
+                                                     playerAToPlay)
+            if nextCapture:
+                tempCaptureList.extend(nextCapture)
+    captureList = []
+    for board in tempCaptureList:
+        if board not in captureList:
+            captureList.append(board)
+
+    # A player must capture as many pieces as possible, so count captures where
+    # opposing player has the fewest pieces
+    if captureList and len(captureList) > 1:
+        fewestPiecesMove = min(captureList,
+                               key=lambda x: x.getPieceCount(not playerAToPlay))
+        numOfPieces = fewestPiecesMove.getPieceCount(not playerAToPlay)
+        def pieceCountComparison(x):
+            return x.getPieceCount(not playerAToPlay) == numOfPieces
+        captureList = list(filter(pieceCountComparison, captureList))
+    return captureList
 
 def destinationIsEmpty(theGame, pieceDestination):
     """ Returns True or False depending on whether destination is empty """
