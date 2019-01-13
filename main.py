@@ -47,7 +47,7 @@ if __name__ == '__main__':
                                                           str(userInput),
                                                           COMP_IS_PLAYER_A)
             if len(result) != 1:
-                print("Unknown or invalid move, please try again")
+                print("Unknown or invalid move, try again")
                 continue
             else:
                 game = result[0]

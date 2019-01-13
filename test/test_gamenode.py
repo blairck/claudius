@@ -15,8 +15,6 @@ class TestGameNode(unittest.TestCase):
         gnObject = gamenode.GameNode()
         result = gnObject.gameState[0][0]
         self.assertEqual(result, types.EMPTY)
-        self.assertFalse(gnObject.leafP)
-        self.assertFalse(gnObject.rootP)
         self.assertFalse(gnObject.score)
 
     def test_print_board(self):
@@ -82,3 +80,73 @@ class TestGameNode(unittest.TestCase):
                          types.PLAYER_B_REGULAR)
         self.assertEqual(gnObject.getState(coordinate.Coordinate(9, 5)),
                          types.EMPTY)
+
+    def test_countPlayerPieces_player_A(self):
+        """ Count player A pieces """
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
+        expectedResult = 2
+
+        actualResult = board.countPlayerPieces(playerPieces)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_countPlayerPieces_player_B(self):
+        """ Count player B pieces """
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
+        expectedResult = 1
+
+        actualResult = board.countPlayerPieces(playerPieces)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_countPlayerPieces_nonexistant(self):
+        """ Count pieces that don't exist """
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        nonexistantPieceType = 99
+
+        playerPieces = (nonexistantPieceType,)
+        expectedResult = 0
+
+        actualResult = board.countPlayerPieces(playerPieces)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_getPieceCount_bad_unassigned(self):
+        """ Handle unknown player type """
+        gnObject = gamenode.GameNode()
+        self.assertRaises(ValueError, gnObject.getPieceCount, None)
+
+    def test_getPieceCount_good_playerA(self):
+        """ Count player A pieces, cached and uncached """
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerAToPlay = True
+        expectedResult = 2
+
+        # Assert uncached value and result
+        self.assertFalse(board.numberOfPiecesForA)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
+
+        # Assert cached value
+        self.assertEqual(board.numberOfPiecesForA, expectedResult)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
+
+    def test_getPieceCount_good_playerB(self):
+        """ Count player B pieces, cached and uncached """
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        playerAToPlay = False
+        expectedResult = 1
+
+        # Assert uncached value and result
+        self.assertFalse(board.numberOfPiecesForB)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)
+
+        # Assert cached value
+        self.assertEqual(board.numberOfPiecesForB, expectedResult)
+        actualResult = board.getPieceCount(playerAToPlay)
+        self.assertEqual(actualResult, expectedResult)

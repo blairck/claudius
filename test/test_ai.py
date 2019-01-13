@@ -3,6 +3,7 @@
 import unittest
 
 # pylint: disable=import-error
+import helper
 from res import types
 from src import ai
 from src import coordinate
@@ -17,37 +18,62 @@ class TestAI(unittest.TestCase):
         expectedResult = 50
         self.assertEqual(actualResult, expectedResult)
 
-    def test_getMovesForRegularPiece_2_moves(self):
+    def test_getAllMovesForPlayer_good(self):
+        """ Check that capture moves take precedence over non-captures """
+        board_description = [
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 .     .     .     .     .    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     .     .     .    7",
+            "6    .     b     .     .     . 6",
+            "5 .     .     a     a     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",]
+        board = helper.parse_board_input(board_description)
+        #capturingPiece = coordinate.Coordinate(3, 5)
+
+        expectedLength = 1
+        movesList = ai.getAllMovesForPlayer(board, True)
+
+        actualMovesListLength = len(movesList)
+
+        self.assertEqual(expectedLength, actualMovesListLength)
+
+    def test_getNoncaptureMovesForRegularPiece_2_moves(self):
         """ Test that regular piece has to possible moves """
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                  pieceLocation,
-                                                  True)
+        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+                                                            pieceLocation,
+                                                            True)
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
 
-    def test_getMovesForRegularPiece_1_move(self):
+    def test_getNoncaptureMovesForRegularPiece_1_move(self):
         """ Test regular piece on the edge of the board, which has 1 move """
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                  pieceLocation,
-                                                  True)
+        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+                                                            pieceLocation,
+                                                            True)
         expectedResultLength = 1
         self.assertEqual(len(actualResult), expectedResultLength)
 
-    def test_getMovesForRegularPiece_0_moves(self):
+    def test_getNoncaptureMovesForRegularPiece_0_moves(self):
         """ Test regular piece that is completely blocked from moving """
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                  pieceLocation,
-                                                  True)
+        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+                                                            pieceLocation,
+                                                            True)
         expectedResultLength = 0
         self.assertEqual(len(actualResult), expectedResultLength)
 
@@ -118,9 +144,109 @@ class TestAI(unittest.TestCase):
 
         # When
         actualResult = ai.getAllMovesForPlayer(gnObject, False)
-        for item in actualResult:
-            item.print_board()
 
         # Then
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
+
+    def test_getCapturesForRegularPiece_good(self):
+        """ Check valid captures are returned for a regular piece """
+        board_description = [
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 .     .     .     .     .    9",
+            "8    .     .     B     b     . 8",
+            "7 .     .     .     .     .    7",
+            "6    A     b     b     b     . 6",
+            "5 .     a     .     .     .    5",
+            "4    a     B     .     b     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",]
+        board = helper.parse_board_input(board_description)
+        capturingPiece = coordinate.Coordinate(3, 5)
+
+        expectedLength = 2
+        movesList = ai.getCapturesForRegularPiece(board,
+                                                  capturingPiece,
+                                                  True)
+        actualMovesListLength = len(movesList)
+
+        self.assertEqual(expectedLength, actualMovesListLength)
+        # Since we don't want to assume an order of the moves being returned,
+        # just assert here on the common features of both legal moves
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(4, 6)))
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(6, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(8, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(8, 6)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(4, 6)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(6, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(8, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(8, 6)))
+
+    def test_removeBoardDuplicates(self):
+        """ Dedupe list of 2 identical boards """
+        board = helper.parse_board_input([
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 .     .     .     .     .    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     .     .     .    7",
+            "6    .     .     .     .     . 6",
+            "5 .     .     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",])
+        list_of_boards = [board, board,]
+
+        expectedLength = 1
+        resultList = ai.removeBoardDuplicates(list_of_boards)
+        self.assertEqual(expectedLength, len(resultList))
+
+    def test_filterForFewestOpposingPieces(self):
+        """ Filter list of boards to one with fewest 'a' pieces, board2 """
+        board1 = helper.parse_board_input([
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    a     .     .     .     . 0",
+            "9 .     b     .     .     .    9",
+            "8    a     .     .     .     . 8",
+            "7 .     b     .     .     .    7",
+            "6    a     .     .     .     . 6",
+            "5 .     b     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     b     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     b     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",])
+        board2 = helper.parse_board_input([
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     b     .     . 0",
+            "9 .     .     a     .     .    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     a     .     .    7",
+            "6    .     .     .     .     . 6",
+            "5 .     .     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",])
+        list_of_boards = [board1, board2,]
+
+        expectedLength = 1
+        resultList = ai.filterForFewestOpposingPieces(list_of_boards, True)
+        resultingPiece = coordinate.Coordinate(5, 7)
+        self.assertEqual(expectedLength, len(resultList))
+        self.assertEqual(types.PLAYER_A_REGULAR,
+                         resultList[0].getState(resultingPiece))
