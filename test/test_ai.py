@@ -18,37 +18,37 @@ class TestAI(unittest.TestCase):
         expectedResult = 50
         self.assertEqual(actualResult, expectedResult)
 
-    def test_getMovesForRegularPiece_2_moves(self):
+    def test_getNoncaptureMovesForRegularPiece_2_moves(self):
         """ Test that regular piece has to possible moves """
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                  pieceLocation,
-                                                  True)
+        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+                                                            pieceLocation,
+                                                            True)
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
 
-    def test_getMovesForRegularPiece_1_move(self):
+    def test_getNoncaptureMovesForRegularPiece_1_move(self):
         """ Test regular piece on the edge of the board, which has 1 move """
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                  pieceLocation,
-                                                  True)
+        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+                                                            pieceLocation,
+                                                            True)
         expectedResultLength = 1
         self.assertEqual(len(actualResult), expectedResultLength)
 
-    def test_getMovesForRegularPiece_0_moves(self):
+    def test_getNoncaptureMovesForRegularPiece_0_moves(self):
         """ Test regular piece that is completely blocked from moving """
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getMovesForRegularPiece(gnObject,
-                                                  pieceLocation,
-                                                  True)
+        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+                                                            pieceLocation,
+                                                            True)
         expectedResultLength = 0
         self.assertEqual(len(actualResult), expectedResultLength)
 

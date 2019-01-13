@@ -18,12 +18,12 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
     """playerAToPlay == True means it's the player A's turn. Otherwise B"""
     moves = []
     for location in getTupleOfAllCoordinates():
-        moves.extend(getMovesForRegularPiece(theGame,
-                                             location,
-                                             playerAToPlay))
+        moves.extend(getNoncaptureMovesForRegularPiece(theGame,
+                                                       location,
+                                                       playerAToPlay))
     return moves
 
-def getMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
+def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     """ This returns a GameNode for every legal move of a given piece """
     moveList = []
     xBoard = pieceLocation.get_x_board()
