@@ -19,6 +19,7 @@ class TestAI(unittest.TestCase):
         self.assertEqual(actualResult, expectedResult)
 
     def test_getAllMovesForPlayer_good(self):
+        """ Check that capture moves take precedence over non-captures """
         board_description = [
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     .     .     . 0",
@@ -149,6 +150,7 @@ class TestAI(unittest.TestCase):
         self.assertEqual(len(actualResult), expectedResultLength)
 
     def test_getCapturesForRegularPiece_good(self):
+        """ Check valid captures are returned for a regular piece """
         board_description = [
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     .     .     . 0",
@@ -169,23 +171,30 @@ class TestAI(unittest.TestCase):
         movesList = ai.getCapturesForRegularPiece(board,
                                                   capturingPiece,
                                                   True)
-        for item in movesList:
-            item.print_board()
         actualMovesListLength = len(movesList)
 
         self.assertEqual(expectedLength, actualMovesListLength)
-
-        # for move in actualMovesList:
-        #     move.print_board()
-
-        # TODO Finish these tests
-        # assert starting position is empty
-        # assert (4,6), (6,8), (8,8), (8,6) are empty
-        # case 1: pieceA ends in (9,3). (8,4) empty. pieceB is present in (6,6).
-        # case 2: pieceA ends in (5,7). (6,6) empty. pieceB is present in (8,4).
-        # assert length of results is 2
+        # Since we don't want to assume an order of the moves being returned,
+        # just assert here on the common features of both legal moves
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(4, 6)))
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(6, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(8, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[0].getState(coordinate.Coordinate(8, 6)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(4, 6)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(6, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(8, 8)))
+        self.assertEqual(types.EMPTY,
+                         movesList[1].getState(coordinate.Coordinate(8, 6)))
 
     def test_removeBoardDuplicates(self):
+        """ Dedupe list of 2 identical boards """
         board = helper.parse_board_input([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     .     .     . 0",
@@ -206,6 +215,7 @@ class TestAI(unittest.TestCase):
         self.assertEqual(expectedLength, len(resultList))
 
     def test_filterForFewestOpposingPieces(self):
+        """ Filter list of boards to one with fewest 'a' pieces, board2 """
         board1 = helper.parse_board_input([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    a     .     .     .     . 0",

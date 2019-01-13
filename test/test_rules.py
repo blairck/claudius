@@ -128,6 +128,7 @@ class TestRules(unittest.TestCase):
                           80)
 
     def test_isACaptureP_good(self):
+        """ Check validity of various captures """
         board_description = [
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     .     .     . 0",
@@ -149,6 +150,7 @@ class TestRules(unittest.TestCase):
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, True))
 
     def test_isACaptureP_edges(self):
+        """ Check captures near the edge of the board """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
         capturingPiece = coordinate.Coordinate(2, 8)
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, False))
@@ -158,6 +160,7 @@ class TestRules(unittest.TestCase):
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 6, True))
 
     def test_makeCapture_bad_type(self):
+        """ Check TypeError is raised when capturingPiece is empty space """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
@@ -169,18 +172,7 @@ class TestRules(unittest.TestCase):
                           endLocation)
 
     def test_makeCapture_bad_x_capture(self):
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
-
-        capturingPiece = coordinate.Coordinate(6, 6)
-        board.setState(capturingPiece, types.PLAYER_A_REGULAR)
-        endLocation = coordinate.Coordinate(6, 8)
-        self.assertRaises(ValueError,
-                          rules.makeCapture,
-                          board,
-                          capturingPiece,
-                          endLocation)
-
-    def test_makeCapture_bad_y_capture(self):
+        """ Try to capture too close along the x axis """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
@@ -192,7 +184,21 @@ class TestRules(unittest.TestCase):
                           capturingPiece,
                           endLocation)
 
+    def test_makeCapture_bad_y_capture(self):
+        """ Try to capture too close along the y axis """
+        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+
+        capturingPiece = coordinate.Coordinate(6, 6)
+        board.setState(capturingPiece, types.PLAYER_A_REGULAR)
+        endLocation = coordinate.Coordinate(6, 8)
+        self.assertRaises(ValueError,
+                          rules.makeCapture,
+                          board,
+                          capturingPiece,
+                          endLocation)
+
     def test_makeCapture_bad_same_coordinates(self):
+        """ Try to capture where start and end locations are the same """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
@@ -205,6 +211,7 @@ class TestRules(unittest.TestCase):
                           endLocation)
 
     def test_makeCapture_good(self):
+        """ Make a legal capture """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(2, 8)
