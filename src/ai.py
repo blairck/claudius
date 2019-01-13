@@ -18,6 +18,15 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
     """playerAToPlay == True means it's the player A's turn. Otherwise B"""
     moves = []
     for location in getTupleOfAllCoordinates():
+        moves.extend(getCapturesForRegularPiece(theGame,
+                                                location,
+                                                playerAToPlay))
+
+    # If any captures are possible, the player must choose from them
+    if moves:
+        return moves
+
+    for location in getTupleOfAllCoordinates():
         moves.extend(getNoncaptureMovesForRegularPiece(theGame,
                                                        location,
                                                        playerAToPlay))
@@ -64,12 +73,18 @@ def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     #Formerly known as getAllFoxCaptures()
     """ This recursively finds all available captures for a single piece and
     returns the list of captures. Checks for duplicates from loops"""
+    if theGame.getState(pieceLocation) is types.EMPTY:
+        return []
+
     tempCaptureList = []
     x_board = pieceLocation.get_x_board()
     y_board = pieceLocation.get_y_board()
     # 2, 4, 6, 8 are the four directions a piece might capture
     for direction in (2, 4, 6, 8):
-        if rules.isACaptureP(theGame, pieceLocation, direction, playerAToPlay):
+        if rules.isACaptureP(theGame,
+                             pieceLocation,
+                             direction,
+                             playerAToPlay):
             deltaX = rules.findXDeltaFromDirection(direction)
             deltaY = rules.findYDeltaFromDirection(direction)
             newMoveNode = transferNode(theGame)
