@@ -83,21 +83,33 @@ def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
                                                      playerAToPlay)
             if nextCapture:
                 tempCaptureList.extend(nextCapture)
-    captureList = []
-    for board in tempCaptureList:
-        if board not in captureList:
-            captureList.append(board)
 
+    captureList = removeBoardDuplicates(tempCaptureList)
+
+    captureList = filterForFewestOpposingPieces(captureList, playerAToPlay)
+
+    return captureList
+
+def filterForFewestOpposingPieces(boards, playerAToPlay):
+    # TODO: Unit test
     # A player must capture as many pieces as possible, so count captures where
     # opposing player has the fewest pieces
-    if captureList and len(captureList) > 1:
-        fewestPiecesMove = min(captureList,
+    if boards and len(boards) > 1:
+        fewestPiecesMove = min(boards,
                                key=lambda x: x.getPieceCount(not playerAToPlay))
         numOfPieces = fewestPiecesMove.getPieceCount(not playerAToPlay)
         def pieceCountComparison(x):
             return x.getPieceCount(not playerAToPlay) == numOfPieces
-        captureList = list(filter(pieceCountComparison, captureList))
-    return captureList
+        boards = list(filter(pieceCountComparison, boards))
+    return boards
+
+def removeBoardDuplicates(boards):
+    # TODO: Unit test
+    uniqueList = []
+    for board in boards:
+        if board not in uniqueList:
+            uniqueList.append(board)
+    return uniqueList
 
 def destinationIsEmpty(theGame, pieceDestination):
     """ Returns True or False depending on whether destination is empty """
