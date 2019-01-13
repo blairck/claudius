@@ -108,7 +108,6 @@ def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
 def filterForFewestOpposingPieces(boards, playerAToPlay):
     """ Filters boards to only the moves with fewest opposing pieces, because
     a player must capture as many pieces as possible """
-    # TODO: Unit test
     if boards and len(boards) > 1:
         fewestPiecesMove = min(boards,
                                key=lambda x: x.getPieceCount(not playerAToPlay))
@@ -121,7 +120,6 @@ def filterForFewestOpposingPieces(boards, playerAToPlay):
 
 def removeBoardDuplicates(boards):
     """ Removes duplicates from list of boards """
-    # TODO: Unit test
     uniqueList = []
     for board in boards:
         if board not in uniqueList:

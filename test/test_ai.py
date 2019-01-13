@@ -184,3 +184,59 @@ class TestAI(unittest.TestCase):
         # case 1: pieceA ends in (9,3). (8,4) empty. pieceB is present in (6,6).
         # case 2: pieceA ends in (5,7). (6,6) empty. pieceB is present in (8,4).
         # assert length of results is 2
+
+    def test_removeBoardDuplicates(self):
+        board = helper.parse_board_input([
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 .     .     .     .     .    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     .     .     .    7",
+            "6    .     .     .     .     . 6",
+            "5 .     .     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",])
+        list_of_boards = [board,board,]
+
+        expectedLength = 1
+        resultList = ai.removeBoardDuplicates(list_of_boards)
+        self.assertEqual(expectedLength, len(resultList))
+
+    def test_filterForFewestOpposingPieces(self):
+        board1 = helper.parse_board_input([
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    a     .     .     .     . 0",
+            "9 .     b     .     .     .    9",
+            "8    a     .     .     .     . 8",
+            "7 .     b     .     .     .    7",
+            "6    a     .     .     .     . 6",
+            "5 .     b     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     b     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     b     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",])
+        board2 = helper.parse_board_input([
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     b     .     . 0",
+            "9 .     .     a     .     .    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     a     .     .    7",
+            "6    .     .     .     .     . 6",
+            "5 .     .     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    .     .     .     .     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",])
+        list_of_boards = [board1,board2,]
+
+        expectedLength = 1
+        resultList = ai.filterForFewestOpposingPieces(list_of_boards, True)
+        resultingPiece = coordinate.Coordinate(5, 7)
+        self.assertEqual(expectedLength, len(resultList))
+        self.assertEqual(types.PLAYER_A_REGULAR,
+                         resultList[0].getState(resultingPiece))
