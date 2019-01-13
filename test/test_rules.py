@@ -163,10 +163,10 @@ class TestRules(unittest.TestCase):
         capturingPiece = coordinate.Coordinate(6, 6)
         endLocation = coordinate.Coordinate(4, 8)
         self.assertRaises(TypeError,
-            rules.makeCapture,
-            board,
-            capturingPiece,
-            endLocation)
+                          rules.makeCapture,
+                          board,
+                          capturingPiece,
+                          endLocation)
 
     def test_makeCapture_bad_x_capture(self):
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
@@ -175,10 +175,10 @@ class TestRules(unittest.TestCase):
         board.setState(capturingPiece, types.PLAYER_A_REGULAR)
         endLocation = coordinate.Coordinate(6, 8)
         self.assertRaises(ValueError,
-            rules.makeCapture,
-            board,
-            capturingPiece,
-            endLocation)
+                          rules.makeCapture,
+                          board,
+                          capturingPiece,
+                          endLocation)
 
     def test_makeCapture_bad_y_capture(self):
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
@@ -187,10 +187,10 @@ class TestRules(unittest.TestCase):
         board.setState(capturingPiece, types.PLAYER_A_REGULAR)
         endLocation = coordinate.Coordinate(8, 6)
         self.assertRaises(ValueError,
-            rules.makeCapture,
-            board,
-            capturingPiece,
-            endLocation)
+                          rules.makeCapture,
+                          board,
+                          capturingPiece,
+                          endLocation)
 
     def test_makeCapture_bad_same_coordinates(self):
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
@@ -199,10 +199,10 @@ class TestRules(unittest.TestCase):
         board.setState(capturingPiece, types.PLAYER_A_REGULAR)
         endLocation = coordinate.Coordinate(6, 6)
         self.assertRaises(ValueError,
-            rules.makeCapture,
-            board,
-            capturingPiece,
-            endLocation)
+                          rules.makeCapture,
+                          board,
+                          capturingPiece,
+                          endLocation)
 
     def test_makeCapture_good(self):
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)

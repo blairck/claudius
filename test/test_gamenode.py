@@ -82,6 +82,7 @@ class TestGameNode(unittest.TestCase):
                          types.EMPTY)
 
     def test_countPlayerPieces_player_A(self):
+        """ Count player A pieces """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
@@ -91,6 +92,7 @@ class TestGameNode(unittest.TestCase):
         self.assertEqual(actualResult, expectedResult)
 
     def test_countPlayerPieces_player_B(self):
+        """ Count player B pieces """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
@@ -100,6 +102,7 @@ class TestGameNode(unittest.TestCase):
         self.assertEqual(actualResult, expectedResult)
 
     def test_countPlayerPieces_nonexistant(self):
+        """ Count pieces that don't exist """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
         nonexistantPieceType = 99
 
@@ -110,10 +113,12 @@ class TestGameNode(unittest.TestCase):
         self.assertEqual(actualResult, expectedResult)
 
     def test_getPieceCount_bad_unassigned(self):
+        """ Handle unknown player type """
         gnObject = gamenode.GameNode()
         self.assertRaises(ValueError, gnObject.getPieceCount, None)
 
-    def test_getPieceCount_good_playerA_uncached(self):
+    def test_getPieceCount_good_playerA(self):
+        """ Count player A pieces, cached and uncached """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         playerAToPlay = True
@@ -129,7 +134,8 @@ class TestGameNode(unittest.TestCase):
         actualResult = board.getPieceCount(playerAToPlay)
         self.assertEqual(actualResult, expectedResult)
 
-    def test_getPieceCount_good_playerB_uncached(self):
+    def test_getPieceCount_good_playerB(self):
+        """ Count player B pieces, cached and uncached """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
         playerAToPlay = False

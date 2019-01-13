@@ -199,7 +199,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",])
-        list_of_boards = [board,board,]
+        list_of_boards = [board, board,]
 
         expectedLength = 1
         resultList = ai.removeBoardDuplicates(list_of_boards)
@@ -232,7 +232,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",])
-        list_of_boards = [board1,board2,]
+        list_of_boards = [board1, board2,]
 
         expectedLength = 1
         resultList = ai.filterForFewestOpposingPieces(list_of_boards, True)
