@@ -103,6 +103,7 @@ class GameNode(object):
                               types.PLAYER_B_REGULAR)
 
     def countPlayerPieces(self, piecesToCount):
+        """ Counts all pieces in list of piecesToCount"""
         count = 0
         for i in range(0, 10):
             for j in range(0, 10):
@@ -111,20 +112,19 @@ class GameNode(object):
         return count
 
     def getPieceCount(self, playerAToPlay):
+        """ Gets number of pieces a given player has"""
         if playerAToPlay is None:
             errorMessage = "playerAToPlay unassigned: {0}"
             raise ValueError(errorMessage.format(playerAToPlay))
         elif playerAToPlay:
             if self.numberOfPiecesForA:
                 return self.numberOfPiecesForA
-            else:
-                playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
-                self.numberOfPiecesForA = self.countPlayerPieces(playerPieces)
-                return self.numberOfPiecesForA
+            playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
+            self.numberOfPiecesForA = self.countPlayerPieces(playerPieces)
+            return self.numberOfPiecesForA
         else:
             if self.numberOfPiecesForB:
                 return self.numberOfPiecesForB
-            else:
-                playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
-                self.numberOfPiecesForB = self.countPlayerPieces(playerPieces)
-                return self.numberOfPiecesForB
+            playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
+            self.numberOfPiecesForB = self.countPlayerPieces(playerPieces)
+            return self.numberOfPiecesForB

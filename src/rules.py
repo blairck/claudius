@@ -91,12 +91,11 @@ def isACaptureP(theGame,
                                          types.PLAYER_B_KING)) and
                     endTileState == types.EMPTY)
     # Player B to play
-    else:
-        return bool((startTileState in (types.PLAYER_B_REGULAR,
-                                        types.PLAYER_B_KING)) and
-                    (middleTileState in (types.PLAYER_A_REGULAR,
-                                         types.PLAYER_A_KING)) and
-                    endTileState == types.EMPTY)
+    return bool((startTileState in (types.PLAYER_B_REGULAR,
+                                    types.PLAYER_B_KING)) and
+                (middleTileState in (types.PLAYER_A_REGULAR,
+                                     types.PLAYER_A_KING)) and
+                endTileState == types.EMPTY)
 
 def makeCapture(theGame, startCoordinate, endCoordinate):
     """ Update the board for a capture between a start and end coordinate """
