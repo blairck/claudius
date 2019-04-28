@@ -250,3 +250,26 @@ class TestAI(unittest.TestCase):
         self.assertEqual(expectedLength, len(resultList))
         self.assertEqual(types.PLAYER_A_REGULAR,
                          resultList[0].getState(resultingPiece))
+
+    def test_getPossiblePromotedPiecea_a_forwards(self):
+        board_description = [
+            "  1  2  3  4  5  6  7  8  9  0",
+            "0    .     .     .     .     . 0",
+            "9 .     a     .     B     A    9",
+            "8    .     .     .     .     . 8",
+            "7 .     .     .     .     .    7",
+            "6    .     .     .     .     . 6",
+            "5 .     .     .     .     .    5",
+            "4    .     .     .     .     . 4",
+            "3 .     .     .     .     .    3",
+            "2    b     A     .     B     . 2",
+            "1 .     .     .     .     .    1",
+            "  1  2  3  4  5  6  7  8  9  0",]
+        board = helper.parse_board_input(board_description)
+        expectedPiece = types.PLAYER_A_KING
+        pieceLocation = coordinate.Coordinate(3, 9)
+        pieceDestination = coordinate.Coordinate(2, 10)
+        actualPiece = ai.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)

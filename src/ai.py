@@ -133,11 +133,19 @@ def destinationIsEmpty(theGame, pieceDestination):
 def makePieceMove(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and destination and updates game state to move
     piece from pieceLocation to pieceDestination """
+    # TODO - Add King promotion here
     pieceType = theGame.getState(pieceLocation)
     moveResult = transferNode(theGame)
     moveResult.setState(pieceDestination, pieceType)
     moveResult.setState(pieceLocation, types.EMPTY)
     return moveResult
+
+def getPossiblePromotedPiece(theGame, pieceDestination, pieceLocation):
+    """ Takes a piece location and its destination. If it is a regular piece
+    moving to the final row, then returns a King type. Otherwise returns
+    regular piece type. """
+    pieceType = theGame.getState(pieceLocation)
+    return pieceType
 
 def getTupleOfAllCoordinates():
     """ Gets a tuple of all legal Coordinates on the board """
