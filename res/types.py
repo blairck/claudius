@@ -5,34 +5,42 @@ PLAYER_A_KING = 3
 PLAYER_B_REGULAR = 4
 PLAYER_B_KING = 5
 
-def getPieceAbbreviation(value):
-    if int(value)==OFF_BOARD:
+def getPieceAbbreviation(intValueAsString):
+    if int(intValueAsString)==OFF_BOARD:
         return "   "
-    elif int(value)==EMPTY:
+    elif int(intValueAsString)==EMPTY:
         return " . "
-    elif int(value)==PLAYER_A_REGULAR:
+    elif int(intValueAsString)==PLAYER_A_REGULAR:
         return " a "
-    elif int(value)==PLAYER_A_KING:
+    elif int(intValueAsString)==PLAYER_A_KING:
         return " A "
-    elif int(value)==PLAYER_B_REGULAR:
+    elif int(intValueAsString)==PLAYER_B_REGULAR:
         return " b "
-    elif int(value)==PLAYER_B_KING:
+    elif int(intValueAsString)==PLAYER_B_KING:
         return " B "
     else:
-        raise TypeError(("Invalid piece int = {0}").format(value))
+        raise TypeError(("Invalid piece int = {0}").format(intValueAsString))
 
-def getPieceIntValueFromChar(value):
-    if value==' ':
+def getPieceIntValueFromChar(charValue):
+    if charValue==' ':
         return OFF_BOARD
-    elif value=='.':
+    elif charValue=='.':
         return EMPTY
-    elif value=='a':
+    elif charValue=='a':
         return PLAYER_A_REGULAR
-    elif value=='A':
+    elif charValue=='A':
         return PLAYER_A_KING
-    elif value=='b':
+    elif charValue=='b':
         return PLAYER_B_REGULAR
-    elif value=='B':
+    elif charValue=='B':
         return PLAYER_B_KING
     else:
-        raise TypeError(("Invalid piece char = {0}").format(value))
+        raise TypeError(("Invalid piece char = {0}").format(charValue))
+
+def getPromotedPiece(intValue):
+    if intValue == PLAYER_A_REGULAR:
+        return PLAYER_A_KING
+    elif intValue == PLAYER_B_REGULAR:
+        return PLAYER_B_KING
+    else:
+        return intValue
