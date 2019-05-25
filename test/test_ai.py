@@ -252,23 +252,30 @@ class TestAI(unittest.TestCase):
                          resultList[0].getState(resultingPiece))
 
     def test_getPossiblePromotedPiecea_a_forwards(self):
-        board_description = [
-            "  1  2  3  4  5  6  7  8  9  0",
-            "0    .     .     .     .     . 0",
-            "9 .     a     .     B     A    9",
-            "8    .     .     .     .     . 8",
-            "7 .     .     .     .     .    7",
-            "6    .     .     .     .     . 6",
-            "5 .     .     .     .     .    5",
-            "4    .     .     .     .     . 4",
-            "3 .     .     .     .     .    3",
-            "2    b     A     .     B     . 2",
-            "1 .     .     .     .     .    1",
-            "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = helper.parse_board_input(helper.piecePromotions)
         expectedPiece = types.PLAYER_A_KING
         pieceLocation = coordinate.Coordinate(3, 9)
         pieceDestination = coordinate.Coordinate(2, 10)
+        actualPiece = ai.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)
+
+    def test_getPossiblePromotedPiecea_a_forwards_no_promotion(self):
+        board = helper.parse_board_input(helper.piecePromotions)
+        expectedPiece = types.PLAYER_A_REGULAR
+        pieceLocation = coordinate.Coordinate(2, 8)
+        pieceDestination = coordinate.Coordinate(1, 9)
+        actualPiece = ai.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)
+
+    def test_getPossiblePromotedPiecea_b_backwards(self):
+        board = helper.parse_board_input(helper.piecePromotions)
+        expectedPiece = types.PLAYER_B_KING
+        pieceLocation = coordinate.Coordinate(2, 2)
+        pieceDestination = coordinate.Coordinate(1, 1)
         actualPiece = ai.getPossiblePromotedPiece(board,
             pieceDestination,
             pieceLocation)
