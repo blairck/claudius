@@ -8,21 +8,6 @@ from res import types
 class TestTypes(unittest.TestCase):
     """ Tests for the Types module """
 
-    def test_getPromotedPiece_a_regular(self):
-        "Correctly get a promoted piece for player A"
-        self.assertEqual(types.PLAYER_A_KING,
-                         types.getPromotedPiece(types.PLAYER_A_REGULAR))
-
-    def test_getPromotedPiece_b_regular(self):
-        "Correctly get a promoted piece for player B"
-        self.assertEqual(types.PLAYER_B_KING,
-                         types.getPromotedPiece(types.PLAYER_B_REGULAR))
-
-    def test_getPromotedPiece_no_change(self):
-        "Correctly return the same input where no promotion is possible"
-        self.assertEqual(types.EMPTY,
-                         types.getPromotedPiece(types.EMPTY))
-
     def test_getPieceAbbreviation_OFF_BOARD(self):
         "Correctly convert a type to a character for display"
         self.assertEqual("   ", types.getPieceAbbreviation(types.OFF_BOARD))

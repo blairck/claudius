@@ -36,11 +36,3 @@ def getPieceIntValueFromChar(charValue):
         return PLAYER_B_KING
     else:
         raise TypeError(("Invalid piece char = {0}").format(charValue))
-
-def getPromotedPiece(intValue):
-    if intValue == PLAYER_A_REGULAR:
-        return PLAYER_A_KING
-    elif intValue == PLAYER_B_REGULAR:
-        return PLAYER_B_KING
-    else:
-        return intValue
