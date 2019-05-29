@@ -8,12 +8,16 @@ def getPositionFromListOfMoves(theGame, theMoves, userInput, userIsPlayerB):
     """ Gets a position with userInput from a list of legal moves (theMoves).
     Returns empty list if none found or ambiguous"""
     userCoordinates = getCoordinatesFromUserInput(userInput)
-    if (len(userCoordinates) > 1 and
-            theGame.getState(userCoordinates[0]) != types.EMPTY):
+    if (len(userCoordinates) == 1):
+        return matchSingleCoordinateToMoves(theMoves,
+                                            userCoordinates[0],
+                                            userIsPlayerB)
+    elif (len(userCoordinates) > 1):
         return matchMultipleCoordinatesToMoves(theMoves,
                                                userCoordinates,
                                                userIsPlayerB)
-    return []
+    else:
+        return []
 
 def matchMultipleCoordinatesToMoves(theMoves,
                                     userCoordinates,
