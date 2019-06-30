@@ -12,8 +12,57 @@ from src import interface
 class TestInterface(unittest.TestCase):
     """ Integration Tests for the Interface module """
 
+    def test_getPositionFromListOfMoves_single(self):
+        """ Test getting position from single possible user input """
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
+        listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
+        actualValue = interface.getPositionFromListOfMoves(gnObject,
+                                                           listOfMoves,
+                                                           "06",
+                                                           userIsPlayerB)
+        self.assertEqual(len(actualValue), 1)
+
+    def test_getPositionFromListOfMoves_multiple(self):
+        """ Test getting position from single possible user input """
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
+        listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
+        actualValue = interface.getPositionFromListOfMoves(gnObject,
+                                                           listOfMoves,
+                                                           "7786",
+                                                           userIsPlayerB)
+        self.assertEqual(len(actualValue), 1)
+
+    def test_getPositionFromListOfMoves_none(self):
+        """ Test getting position from single possible user input """
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
+        listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
+        actualValue = interface.getPositionFromListOfMoves(gnObject,
+                                                           listOfMoves,
+                                                           "7775",
+                                                           userIsPlayerB)
+        self.assertEqual(len(actualValue), 0)
+
+
+    def test_matchSingleCoordinateToMoves_playerB(self):
+        """ Match multi-coordinate playerB input to move """
+        userIsPlayerB = True
+        gnObject = gamenode.GameNode()
+        gnObject.createStartingPosition()
+        listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
+        coordinates = interface.getCoordinatesFromUserInput("06")[0]
+        actualValue = interface.matchSingleCoordinateToMoves(listOfMoves,
+                                                             coordinates,
+                                                             userIsPlayerB)
+        self.assertEqual(len(actualValue), 1)
+
     def test_matchMultipleCoordinatesToMoves_playerB_unambiguous(self):
-        """ Match multi-coordinate goose input to move """
+        """ Match multi-coordinate playerB input to move """
         userIsPlayerB = True
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
