@@ -127,3 +127,16 @@ def makeCapture(theGame, startCoordinate, endCoordinate):
     theGame.setState(endCoordinate, theGame.getState(startCoordinate))
     theGame.setState(captureCoordinate, types.EMPTY)
     theGame.setState(startCoordinate, types.EMPTY)
+
+def getPossiblePromotedPiece(theGame, pieceDestination, pieceLocation):
+    """ Takes a piece location and its destination. If it is a regular piece
+    moving to the final row, then returns a King type. Otherwise returns
+    the original piece type. """
+    pieceType = theGame.getState(pieceLocation)
+    if (pieceDestination.get_y_board() == 10 and 
+        pieceType == types.PLAYER_A_REGULAR):
+        pieceType = types.PLAYER_A_KING
+    elif (pieceDestination.get_y_board() == 1 and 
+        pieceType == types.PLAYER_B_REGULAR):
+        pieceType = types.PLAYER_B_KING
+    return pieceType

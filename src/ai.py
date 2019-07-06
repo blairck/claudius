@@ -133,26 +133,13 @@ def destinationIsEmpty(theGame, pieceDestination):
 def makePieceMove(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and destination and updates game state to move
     piece from pieceLocation to pieceDestination """
-    pieceType = getPossiblePromotedPiece(theGame,
-                                         pieceDestination,
-                                         pieceLocation)
+    pieceType = rules.getPossiblePromotedPiece(theGame,
+                                               pieceDestination,
+                                               pieceLocation)
     moveResult = transferNode(theGame)
     moveResult.setState(pieceDestination, pieceType)
     moveResult.setState(pieceLocation, types.EMPTY)
     return moveResult
-
-def getPossiblePromotedPiece(theGame, pieceDestination, pieceLocation):
-    """ Takes a piece location and its destination. If it is a regular piece
-    moving to the final row, then returns a King type. Otherwise returns
-    the original piece type. """
-    pieceType = theGame.getState(pieceLocation)
-    if (pieceDestination.get_y_board() == 10 and 
-        pieceType == types.PLAYER_A_REGULAR):
-        pieceType = types.PLAYER_A_KING
-    elif (pieceDestination.get_y_board() == 1 and 
-        pieceType == types.PLAYER_B_REGULAR):
-        pieceType = types.PLAYER_B_KING
-    return pieceType
 
 def getTupleOfAllCoordinates():
     """ Gets a tuple of all legal Coordinates on the board """
