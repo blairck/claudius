@@ -46,11 +46,25 @@ def parse_board_input(description):
 
     return gnObject1
 
-simpleCaptureBoardDescription = [
+simpleCountPiecesDescription = [
     "  1  2  3  4  5  6  7  8  9  0",
     "0    .     .     .     .     . 0",
     "9 a     a     .     .     .    9",
     "8    b     .     .     .     . 8",
+    "7 .     .     .     .     .    7",
+    "6    .     .     .     .     . 6",
+    "5 .     .     .     .     .    5",
+    "4    .     .     .     .     . 4",
+    "3 .     .     .     .     .    3",
+    "2    .     .     .     .     . 2",
+    "1 .     .     .     .     .    1",
+    "  1  2  3  4  5  6  7  8  9  0",]
+
+simpleCaptureBoardDescription = [
+    "  1  2  3  4  5  6  7  8  9  0",
+    "0    .     .     .     .     . 0",
+    "9 a     a     .     b     .    9",
+    "8    b     .     .     a     . 8",
     "7 .     .     .     .     .    7",
     "6    .     .     .     .     . 6",
     "5 .     .     .     .     .    5",
