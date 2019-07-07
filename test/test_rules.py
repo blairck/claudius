@@ -254,8 +254,6 @@ class TestRules(unittest.TestCase):
             pieceLocation)
         self.assertEqual(expectedPiece, actualPiece)
 
-
-
     def test_getPossiblePromotedPiece_b_backwards_no_promotion(self):
         board = helper.parse_board_input(helper.piecePromotions)
         expectedPiece = types.PLAYER_B_REGULAR
