@@ -124,7 +124,9 @@ def makeCapture(theGame, startCoordinate, endCoordinate):
     captureStartY = int(startY + (endY - startY)/2)
     captureCoordinate = coordinate.Coordinate(captureStartX, captureStartY)
 
-    theGame.setState(endCoordinate, theGame.getState(startCoordinate))
+    theGame.setState(endCoordinate, getPossiblePromotedPiece(theGame,
+                                                             endCoordinate,
+                                                             startCoordinate))
     theGame.setState(captureCoordinate, types.EMPTY)
     theGame.setState(startCoordinate, types.EMPTY)
 
