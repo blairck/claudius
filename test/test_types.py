@@ -57,6 +57,10 @@ class TestTypes(unittest.TestCase):
         "Correctly convert a piece char to int"
         self.assertEqual(types.EMPTY, types.getPieceIntValueFromChar('.'))
 
+    def test_getPieceIntValueFromChar_OFF_BOARD(self):
+        "Correctly convert an off-board tile to int"
+        self.assertEqual(types.OFF_BOARD, types.getPieceIntValueFromChar(' '))
+
     def test_getPieceIntValueFromChar_invalid(self):
         "Raise TypeError when char isn't a valid piece"
         self.assertRaises(TypeError,

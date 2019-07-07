@@ -133,7 +133,9 @@ def destinationIsEmpty(theGame, pieceDestination):
 def makePieceMove(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and destination and updates game state to move
     piece from pieceLocation to pieceDestination """
-    pieceType = theGame.getState(pieceLocation)
+    pieceType = rules.getPossiblePromotedPiece(theGame,
+                                               pieceDestination,
+                                               pieceLocation)
     moveResult = transferNode(theGame)
     moveResult.setState(pieceDestination, pieceType)
     moveResult.setState(pieceLocation, types.EMPTY)

@@ -214,12 +214,52 @@ class TestRules(unittest.TestCase):
         """ Make a legal capture """
         board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
 
-        capturingPiece = coordinate.Coordinate(2, 8)
-        endLocation = coordinate.Coordinate(4, 10)
-        capturedLocation = coordinate.Coordinate(3, 9)
+        capturingPiece = coordinate.Coordinate(8, 8)
+        endLocation = coordinate.Coordinate(6, 10)
+        capturedLocation = coordinate.Coordinate(7, 9)
 
         rules.makeCapture(board, capturingPiece, endLocation)
 
         self.assertEqual(board.getState(capturingPiece), types.EMPTY)
         self.assertEqual(board.getState(capturedLocation), types.EMPTY)
-        self.assertEqual(board.getState(endLocation), types.PLAYER_B_REGULAR)
+        self.assertEqual(board.getState(endLocation), types.PLAYER_A_KING)
+
+    def test_getPossiblePromotedPiece_a_forwards(self):
+        board = helper.parse_board_input(helper.piecePromotions)
+        expectedPiece = types.PLAYER_A_KING
+        pieceLocation = coordinate.Coordinate(3, 9)
+        pieceDestination = coordinate.Coordinate(2, 10)
+        actualPiece = rules.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)
+
+    def test_getPossiblePromotedPiece_a_forwards_no_promotion(self):
+        board = helper.parse_board_input(helper.piecePromotions)
+        expectedPiece = types.PLAYER_A_REGULAR
+        pieceLocation = coordinate.Coordinate(2, 8)
+        pieceDestination = coordinate.Coordinate(1, 9)
+        actualPiece = rules.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)
+
+    def test_getPossiblePromotedPiece_b_backwards(self):
+        board = helper.parse_board_input(helper.piecePromotions)
+        expectedPiece = types.PLAYER_B_KING
+        pieceLocation = coordinate.Coordinate(2, 2)
+        pieceDestination = coordinate.Coordinate(1, 1)
+        actualPiece = rules.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)
+
+    def test_getPossiblePromotedPiece_b_backwards_no_promotion(self):
+        board = helper.parse_board_input(helper.piecePromotions)
+        expectedPiece = types.PLAYER_B_REGULAR
+        pieceLocation = coordinate.Coordinate(7, 5)
+        pieceDestination = coordinate.Coordinate(6, 4)
+        actualPiece = rules.getPossiblePromotedPiece(board,
+            pieceDestination,
+            pieceLocation)
+        self.assertEqual(expectedPiece, actualPiece)
