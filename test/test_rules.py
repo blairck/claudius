@@ -8,6 +8,7 @@ from res import types
 from src import coordinate
 from src import gamenode
 from src import rules
+from src import boardParser
 
 # pylint: disable=too-many-public-methods
 class TestRules(unittest.TestCase):
@@ -142,7 +143,7 @@ class TestRules(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = boardParser.parseBoardInput(board_description)
         capturingPiece = coordinate.Coordinate(3, 5)
         self.assertTrue(rules.isACaptureP(board, capturingPiece, 2, True))
         self.assertTrue(rules.isACaptureP(board, capturingPiece, 4, True))
@@ -151,7 +152,8 @@ class TestRules(unittest.TestCase):
 
     def test_isACaptureP_edges(self):
         """ Check captures near the edge of the board """
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        board = boardParser.parseBoardInput(
+            helper.simpleCaptureBoardDescription)
         capturingPiece = coordinate.Coordinate(2, 8)
         self.assertFalse(rules.isACaptureP(board, capturingPiece, 8, False))
         self.assertTrue(rules.isACaptureP(board, capturingPiece, 2, False))
@@ -161,7 +163,8 @@ class TestRules(unittest.TestCase):
 
     def test_makeCapture_bad_type(self):
         """ Check TypeError is raised when capturingPiece is empty space """
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        board = boardParser.parseBoardInput(
+            helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
         endLocation = coordinate.Coordinate(4, 8)
@@ -173,7 +176,8 @@ class TestRules(unittest.TestCase):
 
     def test_makeCapture_bad_x_capture(self):
         """ Try to capture too close along the x axis """
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        board = boardParser.parseBoardInput(
+            helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
         board.setState(capturingPiece, types.PLAYER_A_REGULAR)
@@ -186,7 +190,8 @@ class TestRules(unittest.TestCase):
 
     def test_makeCapture_bad_y_capture(self):
         """ Try to capture too close along the y axis """
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        board = boardParser.parseBoardInput(
+            helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
         board.setState(capturingPiece, types.PLAYER_A_REGULAR)
@@ -199,7 +204,8 @@ class TestRules(unittest.TestCase):
 
     def test_makeCapture_bad_same_coordinates(self):
         """ Try to capture where start and end locations are the same """
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        board = boardParser.parseBoardInput(
+            helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(6, 6)
         board.setState(capturingPiece, types.PLAYER_A_REGULAR)
@@ -212,7 +218,8 @@ class TestRules(unittest.TestCase):
 
     def test_makeCapture_good(self):
         """ Make a legal capture """
-        board = helper.parse_board_input(helper.simpleCaptureBoardDescription)
+        board = boardParser.parseBoardInput(
+            helper.simpleCaptureBoardDescription)
 
         capturingPiece = coordinate.Coordinate(8, 8)
         endLocation = coordinate.Coordinate(6, 10)
@@ -225,7 +232,8 @@ class TestRules(unittest.TestCase):
         self.assertEqual(board.getState(endLocation), types.PLAYER_A_KING)
 
     def test_getPossiblePromotedPiece_a_forwards(self):
-        board = helper.parse_board_input(helper.piecePromotions)
+        board = boardParser.parseBoardInput(
+            helper.piecePromotions)
         expectedPiece = types.PLAYER_A_KING
         pieceLocation = coordinate.Coordinate(3, 9)
         pieceDestination = coordinate.Coordinate(2, 10)
@@ -235,7 +243,7 @@ class TestRules(unittest.TestCase):
         self.assertEqual(expectedPiece, actualPiece)
 
     def test_getPossiblePromotedPiece_a_forwards_no_promotion(self):
-        board = helper.parse_board_input(helper.piecePromotions)
+        board = boardParser.parseBoardInput(helper.piecePromotions)
         expectedPiece = types.PLAYER_A_REGULAR
         pieceLocation = coordinate.Coordinate(2, 8)
         pieceDestination = coordinate.Coordinate(1, 9)
@@ -245,7 +253,7 @@ class TestRules(unittest.TestCase):
         self.assertEqual(expectedPiece, actualPiece)
 
     def test_getPossiblePromotedPiece_b_backwards(self):
-        board = helper.parse_board_input(helper.piecePromotions)
+        board = boardParser.parseBoardInput(helper.piecePromotions)
         expectedPiece = types.PLAYER_B_KING
         pieceLocation = coordinate.Coordinate(2, 2)
         pieceDestination = coordinate.Coordinate(1, 1)
@@ -255,7 +263,7 @@ class TestRules(unittest.TestCase):
         self.assertEqual(expectedPiece, actualPiece)
 
     def test_getPossiblePromotedPiece_b_backwards_no_promotion(self):
-        board = helper.parse_board_input(helper.piecePromotions)
+        board = boardParser.parseBoardInput(helper.piecePromotions)
         expectedPiece = types.PLAYER_B_REGULAR
         pieceLocation = coordinate.Coordinate(7, 5)
         pieceDestination = coordinate.Coordinate(6, 4)

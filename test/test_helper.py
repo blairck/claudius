@@ -6,11 +6,12 @@ import unittest
 import helper
 from res import types
 from src import coordinate
+from src import boardParser
 
 class TestHelper(unittest.TestCase):
     """ Tests for the helper module """
 
-    def test_parse_board_input_good(self):
+    def test_parseBoardInput_good(self):
         """ Verify a board description is parsed correctly """
         board_description = [
             "  1  2  3  4  5  6  7  8  9  0",
@@ -26,7 +27,7 @@ class TestHelper(unittest.TestCase):
             "1 a     a     a     a     a    1",
             "  1  2  3  4  5  6  7  8  9  0",]
 
-        actualResult = helper.parse_board_input(board_description)
+        actualResult = boardParser.parseBoardInput(board_description)
         self.assertEqual(actualResult.getState(coordinate.Coordinate(10, 6)),
                          types.EMPTY)
         self.assertEqual(actualResult.getState(coordinate.Coordinate(3, 5)),

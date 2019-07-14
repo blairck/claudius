@@ -8,6 +8,7 @@ from res import types
 from src import ai
 from src import coordinate
 from src import gamenode
+from src import boardParser
 
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
@@ -33,7 +34,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = boardParser.parseBoardInput(board_description)
         #capturingPiece = coordinate.Coordinate(3, 5)
 
         expectedLength = 1
@@ -164,7 +165,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = boardParser.parseBoardInput(board_description)
         capturingPiece = coordinate.Coordinate(3, 5)
 
         expectedLength = 2
@@ -195,7 +196,7 @@ class TestAI(unittest.TestCase):
 
     def test_removeBoardDuplicates(self):
         """ Dedupe list of 2 identical boards """
-        board = helper.parse_board_input([
+        board = boardParser.parseBoardInput([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     .     .     . 0",
             "9 .     .     .     .     .    9",
@@ -216,7 +217,7 @@ class TestAI(unittest.TestCase):
 
     def test_filterForFewestOpposingPieces(self):
         """ Filter list of boards to one with fewest 'a' pieces, board2 """
-        board1 = helper.parse_board_input([
+        board1 = boardParser.parseBoardInput([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    a     .     .     .     . 0",
             "9 .     b     .     .     .    9",
@@ -229,7 +230,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     b     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",])
-        board2 = helper.parse_board_input([
+        board2 = boardParser.parseBoardInput([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     b     .     . 0",
             "9 .     .     a     .     .    9",
