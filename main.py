@@ -1,8 +1,14 @@
 from res import types
 from src import ai
+from src import boardParser
 from src import coordinate
 from src import gamenode
 from src import interface
+try:
+    import debug
+    print("Using custom starting position...")
+except:
+    pass
 
 def aPlayerHasWon(game):
     """ Check game state to see if a player has won """
@@ -14,8 +20,11 @@ def determineDraw(game, ai):
 
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
-    game = gamenode.GameNode()
-    game.createStartingPosition()
+    try:
+        game = boardParser.parseBoardInput(debug.customPosition)
+    except NameError:
+        game = gamenode.GameNode()
+        game.createStartingPosition()
 
     firstTurn = True
     COMP_IS_PLAYER_A = True
