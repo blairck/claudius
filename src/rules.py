@@ -4,9 +4,11 @@
 from res import types
 from src import coordinate
 
-def legalMoveP(theGame, startCoordinate, endCoordinate):
+def isLegalMove(theGame, startCoordinate, endCoordinate):
     """"Tests whether a start coordinate and end coordinate constitute a
     legal move"""
+    """Ideally, this just takes a board state, start/end coordinates
+    and returns true or false"""
     if (theGame.getState(startCoordinate) == types.PLAYER_A_REGULAR and
             endCoordinate.get_y_board() < startCoordinate.get_y_board()):
         return False

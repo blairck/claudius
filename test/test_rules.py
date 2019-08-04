@@ -54,53 +54,53 @@ class TestRules(unittest.TestCase):
         expected_result = True
         self.assertEqual(actual_result, expected_result)
 
-    def test_legalMoveP_backwards_PLAYER_A_REGULAR(self):
+    def test_isLegalMove_backwards_PLAYER_A_REGULAR(self):
         """ PLAYER_A_REGULAR moving backwards returns false """
         board = gamenode.GameNode()
         startCoordinate = coordinate.Coordinate(4, 4)
         endCoordinate = coordinate.Coordinate(3, 3)
         board.setState(startCoordinate, types.PLAYER_A_REGULAR)
-        actual_result = rules.legalMoveP(board, startCoordinate, endCoordinate)
+        actual_result = rules.isLegalMove(board, startCoordinate, endCoordinate)
         expected_result = False
         self.assertEqual(actual_result, expected_result)
 
-    def test_legalMoveP_forwards_PLAYER_A_REGULAR(self):
+    def test_isLegalMove_forwards_PLAYER_A_REGULAR(self):
         """ PLAYER_A_REGULAR moving forwards returns true """
         board = gamenode.GameNode()
         startCoordinate = coordinate.Coordinate(4, 4)
         endCoordinate = coordinate.Coordinate(3, 5)
         board.setState(startCoordinate, types.PLAYER_A_REGULAR)
-        actual_result = rules.legalMoveP(board, startCoordinate, endCoordinate)
+        actual_result = rules.isLegalMove(board, startCoordinate, endCoordinate)
         expected_result = True
         self.assertEqual(actual_result, expected_result)
 
-    def test_legalMoveP_forwards_disconnected_PLAYER_A_REGULAR(self):
+    def test_isLegalMove_forwards_disconnected_PLAYER_A_REGULAR(self):
         """ PLAYER_A_REGULAR moving forwards but not connected """
         board = gamenode.GameNode()
         startCoordinate = coordinate.Coordinate(4, 4)
         endCoordinate = coordinate.Coordinate(3, 7)
         board.setState(startCoordinate, types.PLAYER_A_REGULAR)
-        actual_result = rules.legalMoveP(board, startCoordinate, endCoordinate)
+        actual_result = rules.isLegalMove(board, startCoordinate, endCoordinate)
         expected_result = False
         self.assertEqual(actual_result, expected_result)
 
-    def test_legalMoveP_backwards_PLAYER_B_REGULAR(self):
+    def test_isLegalMove_backwards_PLAYER_B_REGULAR(self):
         """ PLAYER_B_REGULAR moving backwards returns false """
         board = gamenode.GameNode()
         startCoordinate = coordinate.Coordinate(4, 4)
         endCoordinate = coordinate.Coordinate(5, 5)
         board.setState(startCoordinate, types.PLAYER_B_REGULAR)
-        actual_result = rules.legalMoveP(board, startCoordinate, endCoordinate)
+        actual_result = rules.isLegalMove(board, startCoordinate, endCoordinate)
         expected_result = False
         self.assertEqual(actual_result, expected_result)
 
-    def test_legalMoveP_forwards_PLAYER_B_REGULAR(self):
+    def test_isLegalMove_forwards_PLAYER_B_REGULAR(self):
         """ PLAYER_B_REGULAR moving fowards returns true """
         board = gamenode.GameNode()
         startCoordinate = coordinate.Coordinate(4, 4)
         endCoordinate = coordinate.Coordinate(5, 3)
         board.setState(startCoordinate, types.PLAYER_B_REGULAR)
-        actual_result = rules.legalMoveP(board, startCoordinate, endCoordinate)
+        actual_result = rules.isLegalMove(board, startCoordinate, endCoordinate)
         expected_result = True
         self.assertEqual(actual_result, expected_result)
 
