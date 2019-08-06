@@ -27,29 +27,83 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
         return moves
 
     for location in getTupleOfAllCoordinates():
-        moves.extend(getNoncaptureMovesForRegularPiece(theGame,
-                                                       location,
-                                                       playerAToPlay))
+        moves.extend(getNoncaptureMovesForPiece(theGame,
+                                                location,
+                                                playerAToPlay))
     return moves
+
+def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
+    """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
+    Depending on the piece type"""
+    """TODO Can the first 2 conditions be simplified somehow?"""
+    moveList = []
+    if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
+            and playerAToPlay):
+        moveList.extend(getNoncaptureMovesForKingPiece(theGame,
+                                                       pieceLocation))
+    elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
+            and not playerAToPlay):
+        moveList.extend(getNoncaptureMovesForKingPiece(theGame,
+                                                       pieceLocation))
+    elif (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
+            types.PLAYER_B_REGULAR)):
+        moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
+                                                          pieceLocation,
+                                                          playerAToPlay))
+    return moveList
+
+def getNoncaptureMovesForKingPiece(theGame, pieceLocation):
+    """Do the king piece"""
+    """TODO - Approach:
+    -  Add 4 coordinates to a list. Illegal coordinates (off board) don't get added
+    -  Filter out coordinates that are not empty """
+    moveList = []
+    xBoard = pieceLocation.get_x_board()
+    yBoard = pieceLocation.get_y_board()
+    deltas = (-1, 1)
+    for x in deltas:
+        for y in deltas:
+            newMove = getCoordinateHelper(xBoard + x, yBoard + y)
+            if newMove and destinationIsEmpty(theGame, newMove):
+                moveList.append(makePieceMove(theGame,
+                                              newMove,
+                                              pieceLocation))
+    return moveList
+
 
 def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     """ This returns a GameNode for every legal move of a given piece """
+    """TODO Ideally, this just takes a board state, start/end coordinates
+    and returns true or false:
+    - We really just want to check 4 directions.
+    - (1)upperleft: regular/king pieces
+    - (2)upperright: regular/king pieces
+    - (3)lowerleft: king pieces
+    - (4)lowerright: king pieces
+    - Just all the above moves that are legal to a list
+    - Approach:
+    -  Add 4 coordinates to a list. Illegal coordinates (off board) don't get added
+    -  Filter out coordinates that are not empty
+    -  If king, return list
+    -  If regular piece, filter out "backward" direction moves (depending on player)
+    -  Return list
+    """
     moveList = []
     xBoard = pieceLocation.get_x_board()
     yBoard = pieceLocation.get_y_board()
     pieceDestinationLeft = None
     pieceDestinationRight = None
 
-    if (playerAToPlay and
+    if (playerAToPlay and 
             theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
         # Player A moves in positive Y increments
-        moveDirection = 1
+        moveForwardsDelta = 1
         pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                   yBoard + moveDirection)
+                                                   yBoard + moveForwardsDelta)
         pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                    yBoard + moveDirection)
+                                                    yBoard + moveForwardsDelta)
     elif (not playerAToPlay and
-          theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
+            theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
         # Player B moves in negative Y increments
         moveDirection = -1
         pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
