@@ -13,6 +13,71 @@ from src import boardParser
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
 
+    def test_getNoncaptureMovesForPiece_KingA(self):
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(2, 8)
+        playerAToPlay = True
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 4
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_KingB(self):
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(7, 7)
+        playerAToPlay = False
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 3
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_RegularA(self):
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(3, 5)
+        playerAToPlay = True
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 2
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_RegularB(self):
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(7, 3)
+        playerAToPlay = False
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 1
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_None(self):
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(3, 5)
+        playerAToPlay = False
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 0
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
     def test_getNoncaptureMovesForKingPiece_1MoveAvailable(self):
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(7, 7)
