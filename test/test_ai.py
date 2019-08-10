@@ -4,11 +4,11 @@ import unittest
 
 # pylint: disable=import-error
 import helper
-from res import types
 from src import ai
+from src import boardParser
 from src import coordinate
 from src import gamenode
-from src import boardParser
+from res import types
 
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """

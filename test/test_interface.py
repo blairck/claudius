@@ -3,14 +3,29 @@
 import unittest
 
 # pylint: disable=import-error
-from res import types
+import helper
 from src import ai
+from src import boardParser
 from src import coordinate
 from src import gamenode
 from src import interface
+from res import types
 
 class TestInterface(unittest.TestCase):
     """ Integration Tests for the Interface module """
+
+    def test_getPositionFromListOfMoves_issue_27(self):
+        board = boardParser.parseBoardInput(helper.issue_27)
+        userIsPlayerB = True
+
+        listOfMoves = ai.getAllMovesForPlayer(board, not userIsPlayerB)
+        actualListOfMoves = interface.getPositionFromListOfMoves(board,
+                                                                 listOfMoves,
+                                                                 "51",
+                                                                 userIsPlayerB)
+        expectedListLength = 1
+
+        self.assertEqual(expectedListLength, len(actualListOfMoves))
 
     def test_getPositionFromListOfMoves_single(self):
         """ Test getting position from single possible user input """

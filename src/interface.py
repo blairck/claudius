@@ -46,9 +46,11 @@ def matchSingleCoordinateToMoves(theMoves, userCoordinate, userIsPlayerB):
 def isCoordinateMatch(theMove, userCoordinate, userIsPlayerB):
     """ Returns true or false if the user coordinate matches theMove """
     destinationType = theMove.getState(userCoordinate)
-    if userIsPlayerB and destinationType is types.PLAYER_B_REGULAR:
+    if userIsPlayerB and destinationType in (types.PLAYER_B_REGULAR,
+                                             types.PLAYER_B_KING):
         return True
-    elif not userIsPlayerB and destinationType is types.PLAYER_A_REGULAR:
+    elif not userIsPlayerB and destinationType in (types.PLAYER_A_REGULAR,
+                                                   types.PLAYER_A_KING):
         return True
     return False
 
