@@ -35,7 +35,6 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
 def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
     """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
     Depending on the piece type"""
-    """TODO Can the first 2 conditions be simplified somehow?"""
     moveList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
@@ -53,10 +52,7 @@ def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
     return moveList
 
 def getNoncaptureMovesForKingPiece(theGame, pieceLocation):
-    """Do the king piece"""
-    """TODO - Approach:
-    -  Add 4 coordinates to a list. Illegal coordinates (off board) don't get added
-    -  Filter out coordinates that are not empty """
+    """Gets all the noncapture moves for a king piece"""
     moveList = []
     xBoard = pieceLocation.get_x_board()
     yBoard = pieceLocation.get_y_board()
@@ -72,22 +68,7 @@ def getNoncaptureMovesForKingPiece(theGame, pieceLocation):
 
 
 def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
-    """ This returns a GameNode for every legal move of a given piece """
-    """TODO Ideally, this just takes a board state, start/end coordinates
-    and returns true or false:
-    - We really just want to check 4 directions.
-    - (1)upperleft: regular/king pieces
-    - (2)upperright: regular/king pieces
-    - (3)lowerleft: king pieces
-    - (4)lowerright: king pieces
-    - Just all the above moves that are legal to a list
-    - Approach:
-    -  Add 4 coordinates to a list. Illegal coordinates (off board) don't get added
-    -  Filter out coordinates that are not empty
-    -  If king, return list
-    -  If regular piece, filter out "backward" direction moves (depending on player)
-    -  Return list
-    """
+    """ This returns a GameNode for every legal move of a regular piece """
     moveList = []
     xBoard = pieceLocation.get_x_board()
     yBoard = pieceLocation.get_y_board()
