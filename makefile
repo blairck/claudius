@@ -15,6 +15,8 @@ run:
 status: tests lint
 	#Overall project status with lint and tests
 
+test: tests
+
 tests:
 	#Just run unit tests and display code coverage result
 	$(ENVIRONMENT)/bin/coverage run test/run_tests.py --include src/*,test/*,res/*
