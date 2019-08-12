@@ -2,15 +2,143 @@
 
 import unittest
 
-# pylint: disable=import-error
+# pylint: disable=import-error,too-many-public-methods
 import helper
-from res import types
 from src import ai
+from src import boardParser
 from src import coordinate
 from src import gamenode
+from res import types
 
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
+
+    def test_getNoncaptureMovesForPiece_KingA(self):
+        """ Tests gettting all noncapture moves for a pA king """
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(2, 8)
+        playerAToPlay = True
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 4
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_KingB(self):
+        """ Tests gettting all noncapture moves for a pB king """
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(7, 7)
+        playerAToPlay = False
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 3
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_RegularA(self):
+        """ Tests gettting all noncapture moves for a pA regular """
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(3, 5)
+        playerAToPlay = True
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 2
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_RegularB(self):
+        """ Tests gettting all noncapture moves for a pB regular """
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(7, 3)
+        playerAToPlay = False
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 1
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForPiece_None(self):
+        """ Tests gettting all noncapture moves for a piece that has none """
+        board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
+        pieceLocation = coordinate.Coordinate(3, 5)
+        playerAToPlay = False
+
+        actualResult = ai.getNoncaptureMovesForPiece(board,
+                                                     pieceLocation,
+                                                     playerAToPlay)
+
+        expectedResultLength = 0
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForKingPiece_1MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has 1 available """
+        board = boardParser.parseBoardInput(helper.multipleKings)
+        pieceLocation = coordinate.Coordinate(7, 7)
+
+        actualResult = ai.getNoncaptureMovesForKingPiece(board,
+                                                         pieceLocation)
+
+        expectedResultLength = 1
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+        self.assertEqual(types.EMPTY, actualResult[0].getState(pieceLocation))
+        self.assertEqual(types.PLAYER_B_KING,
+                         actualResult[0].getState(coordinate.Coordinate(6, 8)))
+
+    def test_getNoncaptureMovesForKingPiece_2MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has 2 available """
+        board = boardParser.parseBoardInput(helper.multipleKings)
+        pieceLocation = coordinate.Coordinate(7, 3)
+
+        actualResult = ai.getNoncaptureMovesForKingPiece(board,
+                                                         pieceLocation)
+
+        expectedResultLength = 2
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+        self.assertEqual(types.EMPTY, actualResult[0].getState(pieceLocation))
+        self.assertEqual(types.PLAYER_A_KING,
+                         actualResult[0].getState(coordinate.Coordinate(6, 2)))
+        self.assertEqual(types.PLAYER_A_KING,
+                         actualResult[1].getState(coordinate.Coordinate(8, 2)))
+
+    def test_getNoncaptureMovesForKingPiece_4MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has 4 available """
+        board = boardParser.parseBoardInput(helper.multipleKings)
+        pieceLocation = coordinate.Coordinate(3, 3)
+
+        actualResult = ai.getNoncaptureMovesForKingPiece(board,
+                                                         pieceLocation)
+
+        expectedResultLength = 4
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getNoncaptureMovesForKingPiece_0MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has none
+        available """
+        board = boardParser.parseBoardInput(helper.multipleKings)
+        pieceLocation = coordinate.Coordinate(3, 7)
+
+        actualResult = ai.getNoncaptureMovesForKingPiece(board,
+                                                         pieceLocation)
+
+        expectedResultLength = 0
+
+        self.assertEqual(expectedResultLength, len(actualResult))
 
     def test_getTupleOfAllCoordinates(self):
         """ Check that all the legal coordinates are generated """
@@ -33,7 +161,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = boardParser.parseBoardInput(board_description)
         #capturingPiece = coordinate.Coordinate(3, 5)
 
         expectedLength = 1
@@ -164,7 +292,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     .     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",]
-        board = helper.parse_board_input(board_description)
+        board = boardParser.parseBoardInput(board_description)
         capturingPiece = coordinate.Coordinate(3, 5)
 
         expectedLength = 2
@@ -195,7 +323,7 @@ class TestAI(unittest.TestCase):
 
     def test_removeBoardDuplicates(self):
         """ Dedupe list of 2 identical boards """
-        board = helper.parse_board_input([
+        board = boardParser.parseBoardInput([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     .     .     . 0",
             "9 .     .     .     .     .    9",
@@ -216,7 +344,7 @@ class TestAI(unittest.TestCase):
 
     def test_filterForFewestOpposingPieces(self):
         """ Filter list of boards to one with fewest 'a' pieces, board2 """
-        board1 = helper.parse_board_input([
+        board1 = boardParser.parseBoardInput([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    a     .     .     .     . 0",
             "9 .     b     .     .     .    9",
@@ -229,7 +357,7 @@ class TestAI(unittest.TestCase):
             "2    .     .     .     .     . 2",
             "1 .     b     .     .     .    1",
             "  1  2  3  4  5  6  7  8  9  0",])
-        board2 = helper.parse_board_input([
+        board2 = boardParser.parseBoardInput([
             "  1  2  3  4  5  6  7  8  9  0",
             "0    .     .     b     .     . 0",
             "9 .     .     a     .     .    9",

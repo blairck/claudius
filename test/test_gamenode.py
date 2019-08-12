@@ -6,6 +6,7 @@ from test import helper
 from res import types
 from src import coordinate
 from src import gamenode
+from src import boardParser
 
 class TestGameNode(unittest.TestCase):
     """ Tests for the GameNode module """
@@ -83,7 +84,7 @@ class TestGameNode(unittest.TestCase):
 
     def test_countPlayerPieces_player_A(self):
         """ Count player A pieces """
-        board = helper.parse_board_input(helper.simpleCountPiecesDescription)
+        board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
 
         playerPieces = (types.PLAYER_A_REGULAR, types.PLAYER_A_KING)
         expectedResult = 2
@@ -93,7 +94,7 @@ class TestGameNode(unittest.TestCase):
 
     def test_countPlayerPieces_player_B(self):
         """ Count player B pieces """
-        board = helper.parse_board_input(helper.simpleCountPiecesDescription)
+        board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
 
         playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
         expectedResult = 1
@@ -103,7 +104,7 @@ class TestGameNode(unittest.TestCase):
 
     def test_countPlayerPieces_nonexistant(self):
         """ Count pieces that don't exist """
-        board = helper.parse_board_input(helper.simpleCountPiecesDescription)
+        board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
         nonexistantPieceType = 99
 
         playerPieces = (nonexistantPieceType,)
@@ -119,7 +120,7 @@ class TestGameNode(unittest.TestCase):
 
     def test_getPieceCount_good_playerA(self):
         """ Count player A pieces, cached and uncached """
-        board = helper.parse_board_input(helper.simpleCountPiecesDescription)
+        board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
 
         playerAToPlay = True
         expectedResult = 2
@@ -136,7 +137,7 @@ class TestGameNode(unittest.TestCase):
 
     def test_getPieceCount_good_playerB(self):
         """ Count player B pieces, cached and uncached """
-        board = helper.parse_board_input(helper.simpleCountPiecesDescription)
+        board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
 
         playerAToPlay = False
         expectedResult = 1

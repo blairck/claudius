@@ -27,13 +27,48 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
         return moves
 
     for location in getTupleOfAllCoordinates():
-        moves.extend(getNoncaptureMovesForRegularPiece(theGame,
-                                                       location,
-                                                       playerAToPlay))
+        moves.extend(getNoncaptureMovesForPiece(theGame,
+                                                location,
+                                                playerAToPlay))
     return moves
 
+def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
+    """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
+    Depending on the piece type"""
+    moveList = []
+    if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
+            and playerAToPlay):
+        moveList.extend(getNoncaptureMovesForKingPiece(theGame,
+                                                       pieceLocation))
+    elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
+          and not playerAToPlay):
+        moveList.extend(getNoncaptureMovesForKingPiece(theGame,
+                                                       pieceLocation))
+    elif (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
+                                              types.PLAYER_B_REGULAR)):
+        moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
+                                                          pieceLocation,
+                                                          playerAToPlay))
+    return moveList
+
+def getNoncaptureMovesForKingPiece(theGame, pieceLocation):
+    """Gets all the noncapture moves for a king piece"""
+    moveList = []
+    xBoard = pieceLocation.get_x_board()
+    yBoard = pieceLocation.get_y_board()
+    deltas = (-1, 1)
+    for x in deltas:
+        for y in deltas:
+            newMove = getCoordinateHelper(xBoard + x, yBoard + y)
+            if newMove and destinationIsEmpty(theGame, newMove):
+                moveList.append(makePieceMove(theGame,
+                                              newMove,
+                                              pieceLocation))
+    return moveList
+
+
 def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
-    """ This returns a GameNode for every legal move of a given piece """
+    """ This returns a GameNode for every legal move of a regular piece """
     moveList = []
     xBoard = pieceLocation.get_x_board()
     yBoard = pieceLocation.get_y_board()
@@ -43,11 +78,11 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     if (playerAToPlay and
             theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
         # Player A moves in positive Y increments
-        moveDirection = 1
+        moveForwardsDelta = 1
         pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                   yBoard + moveDirection)
+                                                   yBoard + moveForwardsDelta)
         pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                    yBoard + moveDirection)
+                                                    yBoard + moveForwardsDelta)
     elif (not playerAToPlay and
           theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
         # Player B moves in negative Y increments

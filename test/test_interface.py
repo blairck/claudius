@@ -2,15 +2,30 @@
 
 import unittest
 
-# pylint: disable=import-error
-from res import types
+# pylint: disable=import-error,too-many-public-methods
+import helper
 from src import ai
+from src import boardParser
 from src import coordinate
 from src import gamenode
 from src import interface
+from res import types
 
 class TestInterface(unittest.TestCase):
     """ Integration Tests for the Interface module """
+
+    def test_getPositionFromListOfMoves_issue_31(self):
+        """ Tests fix for issue_31 where promotion rows were unselectable"""
+        board = boardParser.parseBoardInput(helper.issue_31)
+        userIsPlayerB = True
+
+        listOfMoves = ai.getAllMovesForPlayer(board, not userIsPlayerB)
+        actualListOfMoves = interface.getPositionFromListOfMoves(listOfMoves,
+                                                                 "51",
+                                                                 userIsPlayerB)
+        expectedListLength = 1
+
+        self.assertEqual(expectedListLength, len(actualListOfMoves))
 
     def test_getPositionFromListOfMoves_single(self):
         """ Test getting position from single possible user input """
@@ -18,8 +33,7 @@ class TestInterface(unittest.TestCase):
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
         listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
-        actualValue = interface.getPositionFromListOfMoves(gnObject,
-                                                           listOfMoves,
+        actualValue = interface.getPositionFromListOfMoves(listOfMoves,
                                                            "06",
                                                            userIsPlayerB)
         self.assertEqual(len(actualValue), 1)
@@ -30,8 +44,7 @@ class TestInterface(unittest.TestCase):
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
         listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
-        actualValue = interface.getPositionFromListOfMoves(gnObject,
-                                                           listOfMoves,
+        actualValue = interface.getPositionFromListOfMoves(listOfMoves,
                                                            "7786",
                                                            userIsPlayerB)
         self.assertEqual(len(actualValue), 1)
@@ -42,8 +55,7 @@ class TestInterface(unittest.TestCase):
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
         listOfMoves = ai.getAllMovesForPlayer(gnObject, not userIsPlayerB)
-        actualValue = interface.getPositionFromListOfMoves(gnObject,
-                                                           listOfMoves,
+        actualValue = interface.getPositionFromListOfMoves(listOfMoves,
                                                            "7775",
                                                            userIsPlayerB)
         self.assertEqual(len(actualValue), 0)

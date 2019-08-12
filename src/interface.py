@@ -4,20 +4,19 @@
 from res import types
 from src import coordinate
 
-def getPositionFromListOfMoves(theGame, theMoves, userInput, userIsPlayerB):
+def getPositionFromListOfMoves(theMoves, userInput, userIsPlayerB):
     """ Gets a position with userInput from a list of legal moves (theMoves).
     Returns empty list if none found or ambiguous"""
     userCoordinates = getCoordinatesFromUserInput(userInput)
-    if (len(userCoordinates) == 1):
+    if len(userCoordinates) == 1:
         return matchSingleCoordinateToMoves(theMoves,
                                             userCoordinates[0],
                                             userIsPlayerB)
-    elif (len(userCoordinates) > 1):
+    elif len(userCoordinates) > 1:
         return matchMultipleCoordinatesToMoves(theMoves,
                                                userCoordinates,
                                                userIsPlayerB)
-    else:
-        return []
+    return []
 
 def matchMultipleCoordinatesToMoves(theMoves,
                                     userCoordinates,
@@ -46,9 +45,11 @@ def matchSingleCoordinateToMoves(theMoves, userCoordinate, userIsPlayerB):
 def isCoordinateMatch(theMove, userCoordinate, userIsPlayerB):
     """ Returns true or false if the user coordinate matches theMove """
     destinationType = theMove.getState(userCoordinate)
-    if userIsPlayerB and destinationType is types.PLAYER_B_REGULAR:
+    if userIsPlayerB and destinationType in (types.PLAYER_B_REGULAR,
+                                             types.PLAYER_B_KING):
         return True
-    elif not userIsPlayerB and destinationType is types.PLAYER_A_REGULAR:
+    elif not userIsPlayerB and destinationType in (types.PLAYER_A_REGULAR,
+                                                   types.PLAYER_A_KING):
         return True
     return False
 
