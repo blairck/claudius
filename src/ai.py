@@ -41,11 +41,11 @@ def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
         moveList.extend(getNoncaptureMovesForKingPiece(theGame,
                                                        pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
-            and not playerAToPlay):
+          and not playerAToPlay):
         moveList.extend(getNoncaptureMovesForKingPiece(theGame,
                                                        pieceLocation))
     elif (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
-            types.PLAYER_B_REGULAR)):
+                                              types.PLAYER_B_REGULAR)):
         moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
                                                           pieceLocation,
                                                           playerAToPlay))
@@ -75,7 +75,7 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     pieceDestinationLeft = None
     pieceDestinationRight = None
 
-    if (playerAToPlay and 
+    if (playerAToPlay and
             theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
         # Player A moves in positive Y increments
         moveForwardsDelta = 1
@@ -84,7 +84,7 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
         pieceDestinationRight = getCoordinateHelper(xBoard + 1,
                                                     yBoard + moveForwardsDelta)
     elif (not playerAToPlay and
-            theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
+          theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
         # Player B moves in negative Y increments
         moveDirection = -1
         pieceDestinationLeft = getCoordinateHelper(xBoard - 1,

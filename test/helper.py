@@ -85,7 +85,7 @@ getNoncaptureMovesForPiece = [
     "1 .     .     .     .     .    1",
     "  1  2  3  4  5  6  7  8  9  0",]
 
-issue_27 = [
+issue_31 = [
     "  1  2  3  4  5  6  7  8  9  0",
     "0    .     .     .     .     . 0",
     "9 .     .     A     .     .    9",

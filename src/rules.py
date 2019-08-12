@@ -103,10 +103,10 @@ def getPossiblePromotedPiece(theGame, pieceDestination, pieceLocation):
     moving to the final row, then returns a King type. Otherwise returns
     the original piece type. """
     pieceType = theGame.getState(pieceLocation)
-    if (pieceDestination.get_y_board() == 10 and 
-        pieceType == types.PLAYER_A_REGULAR):
+    if (pieceDestination.get_y_board() == 10 and
+            pieceType == types.PLAYER_A_REGULAR):
         pieceType = types.PLAYER_A_KING
-    elif (pieceDestination.get_y_board() == 1 and 
-        pieceType == types.PLAYER_B_REGULAR):
+    elif (pieceDestination.get_y_board() == 1 and
+          pieceType == types.PLAYER_B_REGULAR):
         pieceType = types.PLAYER_B_KING
     return pieceType
