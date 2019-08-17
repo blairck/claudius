@@ -51,8 +51,7 @@ if __name__ == '__main__':
         legalMoves = ai.getAllMovesForPlayer(game, not COMP_IS_PLAYER_A)
         while(True):
             userInput = input('Enter a move: ')
-            result = interface.getPositionFromListOfMoves(game,
-                                                          legalMoves,
+            result = interface.getPositionFromListOfMoves(legalMoves,
                                                           str(userInput),
                                                           COMP_IS_PLAYER_A)
             if len(result) != 1:
