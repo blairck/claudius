@@ -24,10 +24,7 @@ def findYDeltaFromDirection(direction):
         error_template = "Unexpected direction value of: {0}"
         raise ValueError(error_template.format(direction))
 
-def isACaptureP(theGame,
-                startCoordinate,
-                direction,
-                playerAToPlay):
+def isACaptureP(theGame, startCoordinate, direction, playerAToPlay):
     """Returns True if there's a capture, given a start coordinate and
     a direction, otherwise returns False"""
     startX = startCoordinate.get_x_board()
