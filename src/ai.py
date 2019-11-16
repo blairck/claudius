@@ -54,14 +54,17 @@ def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
         moveList.extend(getAllNoncaptureMovesForKingPiece(theGame,
                                                           pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
-          and not playerAToPlay):
+            and not playerAToPlay):
         moveList.extend(getAllNoncaptureMovesForKingPiece(theGame,
                                                           pieceLocation))
-    elif (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
-                                              types.PLAYER_B_REGULAR)):
+    elif (theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR
+            and playerAToPlay):
         moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
-                                                          pieceLocation,
-                                                          playerAToPlay))
+                                                          pieceLocation))
+    elif (theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR
+            and not playerAToPlay):
+        moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
+                                                          pieceLocation))
     return moveList
 
 def getAllNoncaptureMovesForKingPiece(theGame, pieceLocation):
@@ -99,7 +102,7 @@ def getDiagonalNonCaptureMovesForKing(theGame,
                                        newPiece.get_y_board() + directionY)
     return resultingMoves
 
-def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
+def getNoncaptureMovesForRegularPiece(theGame, pieceLocation):
     """ This returns a GameNode for every legal move of a regular piece """
     moveList = []
     xBoard = pieceLocation.get_x_board()
@@ -107,22 +110,15 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     pieceDestinationLeft = None
     pieceDestinationRight = None
 
-    if (playerAToPlay and
-            theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR):
+    if theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR:
         # Player A moves in positive Y increments
-        moveForwardsDelta = 1
-        pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                   yBoard + moveForwardsDelta)
-        pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                    yBoard + moveForwardsDelta)
-    elif (not playerAToPlay and
-          theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR):
+        moveDelta = 1
+    elif theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR:
         # Player B moves in negative Y increments
-        moveDirection = -1
-        pieceDestinationLeft = getCoordinateHelper(xBoard - 1,
-                                                   yBoard + moveDirection)
-        pieceDestinationRight = getCoordinateHelper(xBoard + 1,
-                                                    yBoard + moveDirection)
+        moveDelta = -1
+        
+    pieceDestinationLeft = getCoordinateHelper(xBoard - 1, yBoard + moveDelta)
+    pieceDestinationRight = getCoordinateHelper(xBoard + 1, yBoard + moveDelta)
 
     if (pieceDestinationLeft and
             destinationIsEmpty(theGame, pieceDestinationLeft)):

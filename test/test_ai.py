@@ -188,8 +188,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
-                                                            pieceLocation,
-                                                            True)
+                                                            pieceLocation)
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
 
@@ -199,8 +198,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
-                                                            pieceLocation,
-                                                            True)
+                                                            pieceLocation)
         expectedResultLength = 1
         self.assertEqual(len(actualResult), expectedResultLength)
 
@@ -211,8 +209,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
-                                                            pieceLocation,
-                                                            True)
+                                                            pieceLocation)
         expectedResultLength = 0
         self.assertEqual(len(actualResult), expectedResultLength)
 
