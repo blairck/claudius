@@ -288,6 +288,19 @@ class TestAI(unittest.TestCase):
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
 
+    def test_getAllMovesForPlayer_king_cap_at_distance(self):
+        """ Test simple case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture1)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, True)
+
+        # Then
+        expectedLength = 1
+        self.assertEqual(len(actualResult), expectedLength)
+
+
     def test_getCapturesForRegularPiece_good(self):
         """ Check valid captures are returned for a regular piece """
         board_description = [
