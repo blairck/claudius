@@ -18,9 +18,9 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
     """playerAToPlay == True means it's the player A's turn. Otherwise B"""
     moves = []
     for location in getTupleOfAllCoordinates():
-        moves.extend(getCapturesForRegularPiece(theGame,
-                                                location,
-                                                playerAToPlay))
+        moves.extend(getCapturesForPiece(theGame,
+                                         location,
+                                         playerAToPlay))
 
     # If any captures are possible, the player must choose from them
     if moves:
@@ -31,6 +31,19 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
                                                 location,
                                                 playerAToPlay))
     return moves
+
+def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
+    """ Gets capture list for regular or king pieces """
+    moveList = []
+    if (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
+                                            types.PLAYER_B_REGULAR)):
+        moveList.extend(getCapturesForRegularPiece(theGame,
+                                                   pieceLocation,
+                                                   playerAToPlay))
+    # find king captures. if there are none, then keep any noncaptures
+    # that are found
+
+    return moveList
 
 def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
     """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
@@ -78,7 +91,7 @@ def getDiagonalNonCaptureMovesForKing(theGame,
     while(True):
         if (newPiece is None or 
             theGame.getState(newPiece) is not types.EMPTY):
-            return resultingMoves
+            break
         resultingMoves.append(makePieceMove(theGame,
                                             newPiece,
                                             startingLocation))
@@ -124,7 +137,6 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     return moveList
 
 def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
-    #Formerly known as getAllFoxCaptures()
     """ This recursively finds all available captures for a single piece and
     returns the list of captures. Checks for duplicates from loops"""
     if theGame.getState(pieceLocation) is types.EMPTY:
