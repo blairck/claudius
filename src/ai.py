@@ -45,6 +45,35 @@ def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
 
     return moveList
 
+def getLastMoveInEachDirection(theGame, pieceLocation):
+    """ Checks 4 directions king could move; returns last move in each dir """
+    # TODO - unit test
+    deltaAndMoveList = []
+    deltaPairs = ((-1, -1), (-1, 1), (1, -1), (1, 1))
+    for deltaPair in deltaPairs:
+        pair = []
+        pair.append(deltaPair)
+        result = getAllNoncaptureMovesForKingPiece(theGame, pieceLocation, pair)
+        lastResult = result[len(result)-1]
+        pair.append(lastResult)
+        deltaAndMoveList.append(pair)
+    return deltaAndMoveList
+
+def getDirectionFromDelta(delta):
+    """ Gets a direction from x/y delta pair"""
+    # TODO - unit test
+    if delta == (1, 1):
+        return 2
+    elif delta == (1, -1):
+        return 4
+    elif delta == (-1, -1):
+        return 6
+    elif delta == (-1, 1):
+        return 8
+    else:
+        error_template = "Unexpected delta value of: {0}"
+        raise ValueError(error_template.format(delta))
+
 def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
     """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
     Depending on the piece type"""
@@ -67,16 +96,20 @@ def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
                                                           pieceLocation))
     return moveList
 
-def getAllNoncaptureMovesForKingPiece(theGame, pieceLocation):
-    """Gets all the noncapture moves for a king piece"""
+def getAllNoncaptureMovesForKingPiece(theGame,
+                                      pieceLocation,
+                                      deltaPairs=((-1, -1),
+                                                  (-1, 1),
+                                                  (1, -1), 
+                                                  (1, 1))):
+    """Gets all the noncapture moves for a king piece or pass in deltaPairs
+    to specify the direction"""
     moveList = []
-    deltas = (-1, 1)
-    for x in deltas:
-        for y in deltas:
-            moveList.extend(getDiagonalNonCaptureMovesForKing(theGame,
-                                                              pieceLocation,
-                                                              x,
-                                                              y))
+    for deltaPair in deltaPairs:
+        moveList.extend(getDiagonalNonCaptureMovesForKing(theGame,
+                                                          pieceLocation,
+                                                          deltaPair[0],
+                                                          deltaPair[1]))
     return moveList
 
 def getDiagonalNonCaptureMovesForKing(theGame,
