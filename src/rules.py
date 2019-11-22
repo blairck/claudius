@@ -95,6 +95,31 @@ def makeCapture(theGame, startCoordinate, endCoordinate):
     theGame.setState(captureCoordinate, types.EMPTY)
     theGame.setState(startCoordinate, types.EMPTY)
 
+def getCaptureCoordinateFromDirection(startCoordinate, direction):
+    """ Takes a coordinate and a direction, and returns the landing point of
+    a possible capture """
+    # TODO - unit test
+    if direction == 2:
+        delta = {'x':2, 'y':2}
+    elif direction == 4:
+        delta = {'x':2, 'y':-2}
+    elif direction == 6:
+        delta = {'x':-2, 'y':-2}
+    elif direction == 8:
+        delta = {'x':-2, 'y':2}
+    else:
+        error_template = "Unexpected direction value of: {0}"
+        raise ValueError(error_template.format(direction))
+
+    startX = startCoordinate.get_x_board()
+    startY = startCoordinate.get_y_board()
+    endX = startX + delta.get('x')
+    endY = startY + delta.get('y')
+
+    # can raise ValueError if off-board
+    return coordinate.Coordinate(endX, endY)
+
+
 def getPossiblePromotedPiece(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and its destination. If it is a regular piece
     moving to the final row, then returns a King type. Otherwise returns
