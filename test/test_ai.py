@@ -399,3 +399,42 @@ class TestAI(unittest.TestCase):
         self.assertEqual(expectedLength, len(resultList))
         self.assertEqual(types.PLAYER_A_REGULAR,
                          resultList[0].getState(resultingPiece))
+
+    def test_getDirectionFromDelta_2(self):
+        """ Test getting direction from input delta"""
+        testDelta = (1, 1)
+        expectedResult = 2
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_4(self):
+        """ Test getting direction from input delta"""
+        testDelta = (1, -1)
+        expectedResult = 4
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_6(self):
+        """ Test getting direction from input delta"""
+        testDelta = (-1, -1)
+        expectedResult = 6
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_8(self):
+        """ Test getting direction from input delta"""
+        testDelta = (-1, 1)
+        expectedResult = 8
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_error(self):
+        """ Test when delta does not exist """
+
+        self.assertRaises(ValueError,
+                          ai.getDirectionFromDelta,
+                          (1, 5))
