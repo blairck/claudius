@@ -297,6 +297,32 @@ class TestAI(unittest.TestCase):
         expectedLength = 1
         self.assertEqual(len(actualResult), expectedLength)
 
+    def test_getLastMoveInEachDirection(self):
+        """ Test getting furtherst move a king can move in each direction"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture2)
+        king = coordinate.Coordinate(5, 5)
+
+        # When
+        actualResult = ai.getLastMoveInEachDirection(board, king)
+
+        # Then
+        expectedDeltasAndKings = [((-1, -1), coordinate.Coordinate(1, 1)),
+                                  ((-1, 1), coordinate.Coordinate(3, 7)),
+                                  ((1, -1), coordinate.Coordinate(9, 1)),
+                                  ((1, 1), coordinate.Coordinate(10, 10))]
+        expectedLength = len(expectedDeltasAndKings)
+        self.assertEqual(expectedLength, len(actualResult))
+        for i in range(expectedLength):
+            expectedDelta = expectedDeltasAndKings[i][0]
+            expectedState = types.PLAYER_A_KING
+            actualDelta = actualResult[i][0]
+            actualState = actualResult[i][1].getState(
+                expectedDeltasAndKings[i][1])
+
+            self.assertEqual(expectedDelta, actualDelta)
+            self.assertEqual(expectedState, actualState)
+
 
     def test_getCapturesForRegularPiece_good(self):
         """ Check valid captures are returned for a regular piece """

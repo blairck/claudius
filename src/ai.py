@@ -47,7 +47,6 @@ def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
 
 def getLastMoveInEachDirection(theGame, pieceLocation):
     """ Checks 4 directions king could move; returns last move in each dir """
-    # TODO - unit test
     deltaAndMoveList = []
     deltaPairs = ((-1, -1), (-1, 1), (1, -1), (1, 1))
     for deltaPair in deltaPairs:
