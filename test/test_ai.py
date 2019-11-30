@@ -312,10 +312,11 @@ class TestAI(unittest.TestCase):
                                   ((1, -1), coordinate.Coordinate(9, 1)),
                                   ((1, 1), coordinate.Coordinate(10, 10))]
         expectedLength = len(expectedDeltasAndKings)
+        expectedState = types.PLAYER_A_KING
+
         self.assertEqual(expectedLength, len(actualResult))
         for i in range(expectedLength):
             expectedDelta = expectedDeltasAndKings[i][0]
-            expectedState = types.PLAYER_A_KING
             actualDelta = actualResult[i][0]
             actualState = actualResult[i][1].getState(
                 expectedDeltasAndKings[i][1])

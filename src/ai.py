@@ -59,8 +59,7 @@ def getLastMoveInEachDirection(theGame, pieceLocation):
     return deltaAndMoveList
 
 def getDirectionFromDelta(delta):
-    """ Gets a direction from x/y delta pair"""
-    # TODO - unit test
+    """ Gets a direction from x/y delta pair """
     if delta == (1, 1):
         return 2
     elif delta == (1, -1):

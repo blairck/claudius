@@ -98,7 +98,6 @@ def makeCapture(theGame, startCoordinate, endCoordinate):
 def getCaptureCoordinateFromDirection(startCoordinate, direction):
     """ Takes a coordinate and a direction, and returns the landing point of
     a possible capture """
-    # TODO - unit test
     if direction == 2:
         delta = {'x':2, 'y':2}
     elif direction == 4:
