@@ -35,14 +35,18 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
 def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
     """ Gets capture list for regular or king pieces """
     moveList = []
-    if (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
-                                            types.PLAYER_B_REGULAR)):
+    if (theGame.getState(pieceLocation) in (types.PLAYER_A_KING,
+                                            types.PLAYER_B_KING)):
+        # find king captures. if there are none, then keep any noncaptures
+        # that are found
+        moveList.extend(getCapturesForKingPiece(theGame,
+                                                pieceLocation,
+                                                playerAToPlay))
+    elif (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
+                                              types.PLAYER_B_REGULAR)):
         moveList.extend(getCapturesForRegularPiece(theGame,
                                                    pieceLocation,
                                                    playerAToPlay))
-    # find king captures. if there are none, then keep any noncaptures
-    # that are found
-
     return moveList
 
 def getLastMoveInEachDirection(theGame, pieceLocation):
