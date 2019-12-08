@@ -126,9 +126,9 @@ def getDiagonalNonCaptureMovesForKing(theGame,
         if (newPiece is None or 
             theGame.getState(newPiece) is not types.EMPTY):
             break
-        resultingMoves.append(makePieceMove(theGame,
-                                            newPiece,
-                                            startingLocation))
+        newMove = makePieceMove(theGame, newPiece, startingLocation)
+        newMove.pieceLastMoved = newPiece
+        resultingMoves.append(newMove)
         newPiece = getCoordinateHelper(newPiece.get_x_board() + directionX,
                                        newPiece.get_y_board() + directionY)
     return resultingMoves
