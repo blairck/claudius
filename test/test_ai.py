@@ -151,6 +151,19 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
+    def test_getAllNoncaptureMovesForKingPiece_corner(self):
+        """ Tests getting noncaptures moves for a king that has none
+        available """
+        board = boardParser.parseBoardInput(helper.kingCapture4)
+        pieceLocation = coordinate.Coordinate(1, 1)
+
+        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+                                                            pieceLocation)
+
+        expectedResultLength = 1
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
     def test_getTupleOfAllCoordinates(self):
         """ Check that all the legal coordinates are generated """
         actualResult = len(ai.getTupleOfAllCoordinates())
@@ -295,6 +308,32 @@ class TestAI(unittest.TestCase):
 
         # Then
         expectedLength = 1
+        self.assertEqual(len(actualResult), expectedLength)
+
+    def test_getAllMovesForPlayer_king_cap_at_distance3(self):
+        """ Test simple case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture3)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, True)
+
+        # Then
+        expectedLength = 3
+        self.assertEqual(len(actualResult), expectedLength)
+
+    def test_getAllMovesForPlayer_king_cap_at_distance_multi_hop(self):
+        """ Test case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture4)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, False)
+
+        # Then
+        expectedLength = 3
+        for item in actualResult:
+            item.print_board()
         self.assertEqual(len(actualResult), expectedLength)
 
     def test_getLastMoveInEachDirection(self):
