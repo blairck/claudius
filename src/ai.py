@@ -53,9 +53,15 @@ def getLastMoveInEachDirection(theGame, pieceLocation):
         pair = []
         pair.append(deltaPair)
         result = getAllNoncaptureMovesForKingPiece(theGame, pieceLocation, pair)
-        lastResult = result[len(result)-1]
-        pair.append(lastResult)
-        deltaAndMoveList.append(pair)
+        if len(result) > 0:
+            lastResult = result[len(result)-1]
+            pair.append(lastResult)
+            deltaAndMoveList.append(pair)
+        else:
+            lastResult = transferNode(theGame)
+            lastResult.pieceLastMoved = pieceLocation
+            pair.append(lastResult)
+            deltaAndMoveList.append(pair)
     return deltaAndMoveList
 
 def getDirectionFromDelta(delta):
