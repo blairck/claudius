@@ -104,10 +104,13 @@ def getAllNoncaptureMovesForKingPiece(theGame,
     to specify the direction"""
     moveList = []
     for deltaPair in deltaPairs:
-        moveList.extend(getDiagonalNonCaptureMovesForKing(theGame,
-                                                          pieceLocation,
-                                                          deltaPair[0],
-                                                          deltaPair[1]))
+        try:
+            moveList.extend(getDiagonalNonCaptureMovesForKing(theGame,
+                                                              pieceLocation,
+                                                              deltaPair[0],
+                                                              deltaPair[1]))
+        except ValueError:
+            continue
     return moveList
 
 def getDiagonalNonCaptureMovesForKing(theGame,
