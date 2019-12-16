@@ -103,22 +103,24 @@ def getCapturesForKingPiece(theGame, pieceLocation, playerAToPlay):
 
 def getLastMoveInEachDirection(theGame, pieceLocation):
     """ Checks 4 directions king could move; returns last move in each dir """
-    deltaAndMoveList = []
+    moveList = []
     deltaPairs = ((-1, -1), (-1, 1), (1, -1), (1, 1))
     for deltaPair in deltaPairs:
-        pair = []
-        pair.append(deltaPair)
-        result = getAllNoncaptureMovesForKingPiece(theGame, pieceLocation, pair)
+        deltaAsList = []
+        deltaAsList.append(deltaPair)
+        result = getAllNoncaptureMovesForKingPiece(theGame,
+                                                   pieceLocation,
+                                                   deltaAsList)
         if len(result) > 0:
-            lastResult = result[len(result)-1]
-            pair.append(lastResult)
-            deltaAndMoveList.append(pair)
+            lastBoard = result[len(result)-1]
+            lastBoard.deltaLastMoved = deltaPair
+            moveList.append(lastBoard)
         else:
-            lastResult = transferNode(theGame)
-            lastResult.pieceLastMoved = pieceLocation
-            pair.append(lastResult)
-            deltaAndMoveList.append(pair)
-    return deltaAndMoveList
+            lastBoard = transferNode(theGame)
+            lastBoard.pieceLastMoved = pieceLocation
+            lastBoard.deltaLastMoved = deltaPair
+            moveList.append(lastBoard)
+    return moveList
 
 def getDirectionFromDelta(delta):
     """ Gets a direction from x/y delta pair """

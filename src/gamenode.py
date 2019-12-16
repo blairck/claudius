@@ -23,6 +23,7 @@ class GameNode(object):
         self.isCapture = False
         self.winningState = False
         self.pieceLastMoved = None
+        self.directionDelta = None
 
     def __eq__(self, other):
         for i in range(0, 10):
