@@ -53,25 +53,24 @@ def getCapturesForKingPiece(theGame, pieceLocation, playerAToPlay):
     # step #1: get a list of all the regular moves
     # step #2: find moves that have captures in the SAME DIRECTION
     # step #3: save moves to filteredList. will only ever be 0<=x<=4 results
-    deltaAndMoveList = []
+    captureList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
-        deltaAndMoveList.extend(getLastMoveInEachDirection(theGame,
+        captureList.extend(getLastMoveInEachDirection(theGame,
                                                            pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
             and not playerAToPlay):
-        deltaAndMoveList.extend(getLastMoveInEachDirection(theGame,
+        captureList.extend(getLastMoveInEachDirection(theGame,
                                                            pieceLocation))
     else:
-        return deltaAndMoveList
+        return captureList
 
     # step #4: for each move get list of landing squares in direction of cap
     # step #4a: collect these moves into a finalResult
     deltaAndCaptureList = []
-    for deltaAndMove in deltaAndMoveList:
-        direction = getDirectionFromDelta(deltaAndMove[0])
-        delta = deltaAndMove[0]
-        board = deltaAndMove[1]
+    for board in captureList:
+        delta = board.deltaLastMoved
+        direction = getDirectionFromDelta(delta)
 
         #uses pieceLastMoved (where piece stopped) and direction, to check cap
         if rules.isACaptureP(board,

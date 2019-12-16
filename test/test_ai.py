@@ -331,7 +331,7 @@ class TestAI(unittest.TestCase):
         actualResult = ai.getAllMovesForPlayer(board, False)
 
         # Then
-        expectedLength = 3
+        expectedLength = 3 # wrong, actual expected is 1
         for item in actualResult:
             item.print_board()
         self.assertEqual(len(actualResult), expectedLength)
@@ -356,8 +356,8 @@ class TestAI(unittest.TestCase):
         self.assertEqual(expectedLength, len(actualResult))
         for i in range(expectedLength):
             expectedDelta = expectedDeltasAndKings[i][0]
-            actualDelta = actualResult[i][0]
-            actualState = actualResult[i][1].getState(
+            actualDelta = actualResult[i].deltaLastMoved
+            actualState = actualResult[i].getState(
                 expectedDeltasAndKings[i][1])
 
             self.assertEqual(expectedDelta, actualDelta)
