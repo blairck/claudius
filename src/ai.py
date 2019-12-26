@@ -56,12 +56,10 @@ def getCapturesForKingPiece(theGame, pieceLocation, playerAToPlay):
     captureList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
-        captureList.extend(getLastMoveInEachDirection(theGame,
-                                                           pieceLocation))
+        captureList.extend(getLastMoveInEachDirection(theGame, pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
             and not playerAToPlay):
-        captureList.extend(getLastMoveInEachDirection(theGame,
-                                                           pieceLocation))
+        captureList.extend(getLastMoveInEachDirection(theGame, pieceLocation))
     else:
         return captureList
 
