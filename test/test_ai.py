@@ -307,7 +307,7 @@ class TestAI(unittest.TestCase):
         actualResult = ai.getAllMovesForPlayer(board, True)
 
         # Then
-        expectedLength = 1
+        expectedLength = 4
         self.assertEqual(len(actualResult), expectedLength)
 
     def test_getAllMovesForPlayer_king_cap_at_distance3(self):
@@ -319,7 +319,7 @@ class TestAI(unittest.TestCase):
         actualResult = ai.getAllMovesForPlayer(board, True)
 
         # Then
-        expectedLength = 3
+        expectedLength = 5
         self.assertEqual(len(actualResult), expectedLength)
 
     def test_getAllMovesForPlayer_king_cap_at_distance_multi_hop(self):
@@ -331,9 +331,7 @@ class TestAI(unittest.TestCase):
         actualResult = ai.getAllMovesForPlayer(board, False)
 
         # Then
-        expectedLength = 3 # wrong, actual expected is 1
-        for item in actualResult:
-            item.print_board()
+        expectedLength = 1 
         self.assertEqual(len(actualResult), expectedLength)
 
     def test_getLastMoveInEachDirection(self):

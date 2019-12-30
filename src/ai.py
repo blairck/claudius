@@ -49,10 +49,13 @@ def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
                                                    playerAToPlay))
     return moveList
 
-def getCapturesForKingPiece(theGame, pieceLocation, playerAToPlay):
+def getCapturesForKingPiece(theGame,
+                            pieceLocation,
+                            playerAToPlay):
     # step #1: get a list of all the regular moves
     # step #2: find moves that have captures in the SAME DIRECTION
     # step #3: save moves to filteredList. will only ever be 0<=x<=4 results
+    # TODO: Move to seperate method and add unit tests
     captureList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
@@ -65,6 +68,7 @@ def getCapturesForKingPiece(theGame, pieceLocation, playerAToPlay):
 
     # step #4: for each move get list of landing squares in direction of cap
     # step #4a: collect these moves into a finalResult
+    # TODO: Move to seperate method and add unit tests
     deltaAndCaptureList = []
     for board in captureList:
         delta = board.deltaLastMoved
@@ -81,24 +85,51 @@ def getCapturesForKingPiece(theGame, pieceLocation, playerAToPlay):
             rules.makeCapture(board, board.pieceLastMoved, endCoordinate)
             deltaAndCaptureList.append(board)
 
-    # moveList = []
-    # for deltaAndMaxMove in deltaAndMaxMoveWithCapList:
-    #     direction = getDirectionFromDelta(deltaAndMaxMove[0])
-    #     board = deltaAndMaxMove[1]
-    #     board.print_board()
+    # this gets non capture moves in a direction. reconcile with steps?
+    # TODO: Move to seperate method and add unit tests
+    moveList = []
+    for maxMove in deltaAndCaptureList:
+        moveList.append(transferNode(maxMove))
 
-    #     endCoordinate = rules.getCaptureCoordinateFromDirection(
-    #         board.pieceLastMoved,
-    #         direction)
-    #     move = rules.makeCapture(board, board.pieceLastMoved, endCoordinate)
-    #     moveList.append(move)
+        result = getAllNoncaptureMovesForKingPiece(maxMove,
+            maxMove.pieceLastMoved,
+            [maxMove.deltaLastMoved,])
+
+        moveList.extend(result)
+
+    if len(moveList) is 0:
+        return moveList
 
     # step #5: for each landing square, go to step #1
+    # TODO: Move to seperate method and add unit tests
+    allMoves = []
+    for move in moveList:
+        allMoves.append(transferNode(move))
+
+        allMoves.extend(getCapturesForKingPiece(move,
+            move.pieceLastMoved,
+            playerAToPlay))
+
     # step #6: once all captures have been collected, filter by most caps
+    # TODO: Move to seperate method and add unit tests
+    mostCaptureMoves = []
+    opposingPlayer = not playerAToPlay
+    keyFunction = lambda x: x.getPieceCount(opposingPlayer)
+    minimum = min(allMoves, key=keyFunction).getPieceCount(opposingPlayer)
+    minimumIndices = [i for i, v in enumerate(allMoves)
+        if v.getPieceCount(opposingPlayer) == minimum]
+    for index in minimumIndices:
+        mostCaptureMoves.append(allMoves[index])
 
-    return deltaAndCaptureList
+    # step #7: remove duplicates
+    finalMoves = []
+    for board in mostCaptureMoves:
+        if board not in finalMoves:
+            finalMoves.append(board)
+    return finalMoves
 
-def getLastMoveInEachDirection(theGame, pieceLocation):
+def getLastMoveInEachDirection(theGame,
+                               pieceLocation):
     """ Checks 4 directions king could move; returns last move in each dir """
     moveList = []
     deltaPairs = ((-1, -1), (-1, 1), (1, -1), (1, 1))
@@ -361,6 +392,8 @@ def getCoordinateHelper(xBoard, yBoard):
 def transferNode(startNode):
     """ Copies input gamenode to a new one and returns it. """
     resultNode = gamenode.GameNode()
+    resultNode.pieceLastMoved = startNode.pieceLastMoved
+    resultNode.deltaLastMoved = startNode.deltaLastMoved
     for x in range(0, 10):
         for y in range(0, 10):
             resultNode.gameState[x][y] = startNode.gameState[x][y]

@@ -94,6 +94,7 @@ def makeCapture(theGame, startCoordinate, endCoordinate):
                                                              startCoordinate))
     theGame.setState(captureCoordinate, types.EMPTY)
     theGame.setState(startCoordinate, types.EMPTY)
+    theGame.pieceLastMoved = endCoordinate
 
 def getCaptureCoordinateFromDirection(startCoordinate, direction):
     """ Takes a coordinate and a direction, and returns the landing point of

@@ -24,6 +24,7 @@ class GameNode(object):
         self.winningState = False
         self.pieceLastMoved = None
         self.directionDelta = None
+        self.deltaLastMoved = None
 
     def __eq__(self, other):
         for i in range(0, 10):
