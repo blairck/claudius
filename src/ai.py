@@ -51,7 +51,14 @@ def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
 
 def getCapturesForKingPiece(theGame,
                             pieceLocation,
-                            playerAToPlay):
+                            playerAToPlay,
+                            enableBackwardsCapture=True):
+    if not enableBackwardsCapture:
+        backwardsDelta = (-1*theGame.deltaLastMoved[0],
+                          -1*theGame.deltaLastMoved[1])
+    else:
+        backwardsDelta = None
+
     # step #1: get a list of all the regular moves
     # step #2: find moves that have captures in the SAME DIRECTION
     # step #3: save moves to filteredList. will only ever be 0<=x<=4 results
@@ -59,10 +66,14 @@ def getCapturesForKingPiece(theGame,
     captureList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
-        captureList.extend(getLastMoveInEachDirection(theGame, pieceLocation))
+        captureList.extend(getLastMoveInEachDirection(theGame,
+                                                      pieceLocation,
+                                                      backwardsDelta))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
             and not playerAToPlay):
-        captureList.extend(getLastMoveInEachDirection(theGame, pieceLocation))
+        captureList.extend(getLastMoveInEachDirection(theGame,
+                                                      pieceLocation,
+                                                      backwardsDelta))
     else:
         return captureList
 
@@ -108,7 +119,8 @@ def getCapturesForKingPiece(theGame,
 
         allMoves.extend(getCapturesForKingPiece(move,
             move.pieceLastMoved,
-            playerAToPlay))
+            playerAToPlay,
+            False))
 
     # step #6: once all captures have been collected, filter by most caps
     # TODO: Move to seperate method and add unit tests
@@ -122,6 +134,7 @@ def getCapturesForKingPiece(theGame,
         mostCaptureMoves.append(allMoves[index])
 
     # step #7: remove duplicates
+    # Non-optimal linear search for uniqueness
     finalMoves = []
     for board in mostCaptureMoves:
         if board not in finalMoves:
@@ -129,11 +142,14 @@ def getCapturesForKingPiece(theGame,
     return finalMoves
 
 def getLastMoveInEachDirection(theGame,
-                               pieceLocation):
+                               pieceLocation,
+                               skipDelta=None):
     """ Checks 4 directions king could move; returns last move in each dir """
     moveList = []
     deltaPairs = ((-1, -1), (-1, 1), (1, -1), (1, 1))
     for deltaPair in deltaPairs:
+        if deltaPair == skipDelta:
+            continue
         deltaAsList = []
         deltaAsList.append(deltaPair)
         result = getAllNoncaptureMovesForKingPiece(theGame,
