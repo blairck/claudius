@@ -22,6 +22,9 @@ class GameNode(object):
         self.numberOfPiecesForB = None # count of player B pieces
         self.isCapture = False
         self.winningState = False
+        self.pieceLastMoved = None
+        self.directionDelta = None
+        self.deltaLastMoved = None
 
     def __eq__(self, other):
         for i in range(0, 10):

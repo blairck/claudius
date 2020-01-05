@@ -186,3 +186,91 @@ class TestRules(unittest.TestCase):
                                                      pieceDestination,
                                                      pieceLocation)
         self.assertEqual(expectedPiece, actualPiece)
+
+    def test_getCaptureCoordinateFromDirection_direction_2(self):
+        """ Tests getting coordinate from direction """
+        # Given
+        testCoordinate = coordinate.Coordinate(7, 5)
+        testDirection = 2
+
+        # When
+        result = rules.getCaptureCoordinateFromDirection(testCoordinate,
+                                                         testDirection)
+
+        # Then
+        expectedX = result.get_x_board()
+        expectedY = result.get_y_board()
+        self.assertEqual(expectedX, 9)
+        self.assertEqual(expectedY, 7)
+
+    def test_getCaptureCoordinateFromDirection_direction_4(self):
+        """ Tests getting coordinate from direction """
+        # Given
+        testCoordinate = coordinate.Coordinate(7, 5)
+        testDirection = 4
+
+        # When
+        result = rules.getCaptureCoordinateFromDirection(testCoordinate,
+                                                         testDirection)
+
+        # Then
+        expectedX = result.get_x_board()
+        expectedY = result.get_y_board()
+        self.assertEqual(expectedX, 9)
+        self.assertEqual(expectedY, 3)
+
+    def test_getCaptureCoordinateFromDirection_direction_6(self):
+        """ Tests getting coordinate from direction """
+        # Given
+        testCoordinate = coordinate.Coordinate(7, 5)
+        testDirection = 6
+
+        # When
+        result = rules.getCaptureCoordinateFromDirection(testCoordinate,
+                                                         testDirection)
+
+        # Then
+        expectedX = result.get_x_board()
+        expectedY = result.get_y_board()
+        self.assertEqual(expectedX, 5)
+        self.assertEqual(expectedY, 3)
+
+    def test_getCaptureCoordinateFromDirection_direction_8(self):
+        """ Tests getting coordinate from direction """
+        # Given
+        testCoordinate = coordinate.Coordinate(7, 5)
+        testDirection = 8
+
+        # When
+        result = rules.getCaptureCoordinateFromDirection(testCoordinate,
+                                                         testDirection)
+
+        # Then
+        expectedX = result.get_x_board()
+        expectedY = result.get_y_board()
+        self.assertEqual(expectedX, 5)
+        self.assertEqual(expectedY, 7)
+
+    def test_getCaptureCoordinateFromDirection_bad_direction(self):
+        """ Tests getting coordinate from a bad direction """
+        # Given
+        testCoordinate = coordinate.Coordinate(7, 5)
+        testDirection = 9
+
+        # Then
+        self.assertRaises(ValueError,
+                          rules.getCaptureCoordinateFromDirection,
+                          testCoordinate,
+                          testDirection)
+
+    def test_getCaptureCoordinateFromDirection_edge_of_board(self):
+        """ Tests getting coordinate from a bad direction """
+        # Given
+        testCoordinate = coordinate.Coordinate(9, 5)
+        testDirection = 2
+
+        # Then
+        self.assertRaises(ValueError,
+                          rules.getCaptureCoordinateFromDirection,
+                          testCoordinate,
+                          testDirection)

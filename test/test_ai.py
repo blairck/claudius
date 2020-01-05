@@ -13,6 +13,19 @@ from res import types
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
 
+    def test_getDiagonalNonCaptureMovesForKing(self):
+        board = boardParser.parseBoardInput(helper.oneKing)
+
+        startingPiece = coordinate.Coordinate(5, 5)
+
+        actualResult = ai.getDiagonalNonCaptureMovesForKing(board,
+                                                            startingPiece,
+                                                            1,
+                                                            1)
+
+        expectedLength = 5
+        self.assertEqual(expectedLength, len(actualResult))
+
     def test_getNoncaptureMovesForPiece_KingA(self):
         """ Tests gettting all noncapture moves for a pA king """
         board = boardParser.parseBoardInput(helper.getNoncaptureMovesForPiece)
@@ -23,7 +36,7 @@ class TestAI(unittest.TestCase):
                                                      pieceLocation,
                                                      playerAToPlay)
 
-        expectedResultLength = 4
+        expectedResultLength = 7
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
@@ -37,7 +50,7 @@ class TestAI(unittest.TestCase):
                                                      pieceLocation,
                                                      playerAToPlay)
 
-        expectedResultLength = 3
+        expectedResultLength = 8
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
@@ -83,60 +96,71 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
-    def test_getNoncaptureMovesForKingPiece_1MoveAvailable(self):
-        """ Tests getting noncaptures moves for a king that has 1 available """
+    def test_getAllNoncaptureMovesForKingPiece_1MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has 3 available """
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(7, 7)
 
-        actualResult = ai.getNoncaptureMovesForKingPiece(board,
-                                                         pieceLocation)
+        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+                                                            pieceLocation)
 
-        expectedResultLength = 1
+        expectedResultLength = 3
 
         self.assertEqual(expectedResultLength, len(actualResult))
         self.assertEqual(types.EMPTY, actualResult[0].getState(pieceLocation))
         self.assertEqual(types.PLAYER_B_KING,
                          actualResult[0].getState(coordinate.Coordinate(6, 8)))
 
-    def test_getNoncaptureMovesForKingPiece_2MoveAvailable(self):
-        """ Tests getting noncaptures moves for a king that has 2 available """
+    def test_getAllNoncaptureMovesForKingPiece_2MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has 4 available """
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(7, 3)
 
-        actualResult = ai.getNoncaptureMovesForKingPiece(board,
-                                                         pieceLocation)
+        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+                                                            pieceLocation)
 
-        expectedResultLength = 2
+        expectedResultLength = 4
 
         self.assertEqual(expectedResultLength, len(actualResult))
         self.assertEqual(types.EMPTY, actualResult[0].getState(pieceLocation))
         self.assertEqual(types.PLAYER_A_KING,
                          actualResult[0].getState(coordinate.Coordinate(6, 2)))
-        self.assertEqual(types.PLAYER_A_KING,
-                         actualResult[1].getState(coordinate.Coordinate(8, 2)))
 
-    def test_getNoncaptureMovesForKingPiece_4MoveAvailable(self):
-        """ Tests getting noncaptures moves for a king that has 4 available """
+    def test_getAllNoncaptureMovesForKingPiece_4MoveAvailable(self):
+        """ Tests getting noncaptures moves for a king that has 8 available """
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(3, 3)
 
-        actualResult = ai.getNoncaptureMovesForKingPiece(board,
-                                                         pieceLocation)
+        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+                                                            pieceLocation)
 
-        expectedResultLength = 4
+        expectedResultLength = 8
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
-    def test_getNoncaptureMovesForKingPiece_0MoveAvailable(self):
+    def test_getAllNoncaptureMovesForKingPiece_0MoveAvailable(self):
         """ Tests getting noncaptures moves for a king that has none
         available """
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(3, 7)
 
-        actualResult = ai.getNoncaptureMovesForKingPiece(board,
-                                                         pieceLocation)
+        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+                                                            pieceLocation)
 
         expectedResultLength = 0
+
+        self.assertEqual(expectedResultLength, len(actualResult))
+
+    def test_getAllNoncaptureMovesForKingPiece_corner(self):
+        """ Tests getting noncaptures moves for a king that has none
+        available """
+        board = boardParser.parseBoardInput(helper.kingCapture4)
+        pieceLocation = coordinate.Coordinate(1, 1)
+
+        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+                                                            pieceLocation)
+
+        expectedResultLength = 1
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
@@ -177,8 +201,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
-                                                            pieceLocation,
-                                                            True)
+                                                            pieceLocation)
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
 
@@ -188,8 +211,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
-                                                            pieceLocation,
-                                                            True)
+                                                            pieceLocation)
         expectedResultLength = 1
         self.assertEqual(len(actualResult), expectedResultLength)
 
@@ -200,8 +222,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
         actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
-                                                            pieceLocation,
-                                                            True)
+                                                            pieceLocation)
         expectedResultLength = 0
         self.assertEqual(len(actualResult), expectedResultLength)
 
@@ -276,6 +297,82 @@ class TestAI(unittest.TestCase):
         # Then
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
+
+    def test_getAllMovesForPlayer_king_cap_at_distance(self):
+        """ Test simple case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture1)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, True)
+
+        # Then
+        expectedLength = 4
+        self.assertEqual(len(actualResult), expectedLength)
+
+    def test_getAllMovesForPlayer_king_cap_at_distance3(self):
+        """ Test simple case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture3)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, True)
+
+        # Then
+        expectedLength = 7
+        self.assertEqual(len(actualResult), expectedLength)
+
+    def test_getAllMovesForPlayer_king_cap_at_distance4(self):
+        """ Test simple case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture5)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, False)
+
+        # Then
+        expectedLength = 4
+        self.assertEqual(len(actualResult), expectedLength)
+
+    def test_getAllMovesForPlayer_king_cap_at_distance_multi_hop(self):
+        """ Test case of king capturing at a distance"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture4)
+
+        # When
+        actualResult = ai.getAllMovesForPlayer(board, False)
+
+        # Then
+        expectedLength = 1 
+        self.assertEqual(len(actualResult), expectedLength)
+
+    def test_getLastMoveInEachDirection(self):
+        """ Test getting furtherst move a king can move in each direction"""
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture2)
+        king = coordinate.Coordinate(5, 5)
+
+        # When
+        actualResult = ai.getLastMoveInEachDirection(board, king)
+
+        # Then
+        expectedDeltasAndKings = [((-1, -1), coordinate.Coordinate(1, 1)),
+                                  ((-1, 1), coordinate.Coordinate(3, 7)),
+                                  ((1, -1), coordinate.Coordinate(9, 1)),
+                                  ((1, 1), coordinate.Coordinate(10, 10))]
+        expectedLength = len(expectedDeltasAndKings)
+        expectedState = types.PLAYER_A_KING
+
+        self.assertEqual(expectedLength, len(actualResult))
+        for i in range(expectedLength):
+            expectedDelta = expectedDeltasAndKings[i][0]
+            actualDelta = actualResult[i].deltaLastMoved
+            actualState = actualResult[i].getState(
+                expectedDeltasAndKings[i][1])
+
+            self.assertEqual(expectedDelta, actualDelta)
+            self.assertEqual(expectedState, actualState)
+
 
     def test_getCapturesForRegularPiece_good(self):
         """ Check valid captures are returned for a regular piece """
@@ -378,3 +475,42 @@ class TestAI(unittest.TestCase):
         self.assertEqual(expectedLength, len(resultList))
         self.assertEqual(types.PLAYER_A_REGULAR,
                          resultList[0].getState(resultingPiece))
+
+    def test_getDirectionFromDelta_2(self):
+        """ Test getting direction from input delta"""
+        testDelta = (1, 1)
+        expectedResult = 2
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_4(self):
+        """ Test getting direction from input delta"""
+        testDelta = (1, -1)
+        expectedResult = 4
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_6(self):
+        """ Test getting direction from input delta"""
+        testDelta = (-1, -1)
+        expectedResult = 6
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_8(self):
+        """ Test getting direction from input delta"""
+        testDelta = (-1, 1)
+        expectedResult = 8
+        actualResult = ai.getDirectionFromDelta(testDelta)
+
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_getDirectionFromDelta_error(self):
+        """ Test when delta does not exist """
+
+        self.assertRaises(ValueError,
+                          ai.getDirectionFromDelta,
+                          (1, 5))

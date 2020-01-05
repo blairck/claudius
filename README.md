@@ -1,6 +1,6 @@
 ## Claudius ##
 ### Description ###
-Jaeger is a console-based implementation of checkers.
+Claudius is a console-based implementation of checkers.
 
 Project Status: This project is in development.
 

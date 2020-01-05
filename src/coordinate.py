@@ -15,6 +15,9 @@ class Coordinate(object):
         self.x = x
         self.y = y
 
+    def __str__(self):
+        return "({0}, {1})".format(self.x, self.y)
+
     def get_x_board(self):
         """ Get the X coordinate in board notation """
         return self.x
