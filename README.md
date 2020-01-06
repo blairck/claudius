@@ -55,9 +55,9 @@ Here is how to quickly get into a game:
 Enter a move:
 ```
 * By default, you'll be playing as player A, which moves first. To make a move
-* you'll need to provide the starting location and the ending location. For
-* example, the move "84-95" (alternatively "8495") would result in this
-* board position:
+you'll need to provide the starting location and the ending location. For
+example, the move "84-95" (alternatively "8495") would result in this board
+position:
 ```
   1  2  3  4  5  6  7  8  9  0
 0    b     b     b     b     b 0
@@ -88,6 +88,5 @@ type that. For example, you could type "15" which would make this move:
 1 a     a     a     a     a    1
   1  2  3  4  5  6  7  8  9  0
 ```
-* To quit, type "quit()" or Ctrl-D.
-* Feel free to change game settings (such as difficulty) in the main.py file
-* and play again.
+* To quit, type "quit()" or Ctrl-D. Feel free to change game settings (such as 
+difficulty) in the main.py file and play again.
