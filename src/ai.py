@@ -14,6 +14,13 @@ def randomSearch(theGame, playerAToPlay):
     shuffle(moves)
     return moves[0]
 
+def getHighestOrLowestScoreMove(moves, playerAToPlay):
+    """ Returns the highest/lowest scored move depending on the player """
+    if playerAToPlay:
+        return max(moves, key=lambda x: x.score)
+    else:
+        return min(moves, key=lambda x: x.score)
+
 def evaluationFunction(theGame):
     # This evaluation uses attributes that are applicable to both players. Then
     # it adds up the occurrences for A, subtracts the occurrences for B, and
