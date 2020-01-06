@@ -17,11 +17,16 @@ DISPLAY_EVALUATION = False # Display computer evaluation of the position
 
 def aPlayerHasWon(game):
     """ Check game state to see if a player has won """
-    raise NotImplementedError
+    game.playerAMoveCount = len(ai.getAllMovesForPlayer(game, True))
+    game.playerBMoveCount = len(ai.getAllMovesForPlayer(game, False))
 
-def determineDraw(game, ai):
-    """ Check game state to see if it is drawn """
-    raise NotImplementedError
+    if game.playerAWins():
+        print("Player A wins!")
+        return True
+    elif game.playerBWins():
+        print("Player B wins!")
+        return True
+    return False
 
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
