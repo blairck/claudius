@@ -73,6 +73,12 @@ if __name__ == '__main__':
         legalMoves = ai.getAllMovesForPlayer(game, not COMP_IS_PLAYER_A)
         while(True):
             userInput = input('Enter a move: ')
+            if userInput == 'm' or userInput == 'moves':
+                print("These are your legal moves:")
+                for move in legalMoves:
+                    move.print_board()
+                print("--------------------------------")
+                continue
             result = interface.getPositionFromListOfMoves(legalMoves,
                                                           str(userInput),
                                                           COMP_IS_PLAYER_A)
