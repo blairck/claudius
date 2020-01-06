@@ -14,6 +14,182 @@ def randomSearch(theGame, playerAToPlay):
     shuffle(moves)
     return moves[0]
 
+def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
+    """ Searches at steadily increasing ply and breaks if a draw or end
+    state is found, otherwise searches to searchPly (inclusive). """
+    bestMove = None
+    plyRange = range(1, searchPly + 1, 1)
+    for ply in plyRange:
+        bestMove = findBestMove(theGame, playerAToPlay, ply)
+        if (bestMove is None
+                or bestMove.score < -2999
+                or bestMove.score > 2999):
+            return bestMove
+    return bestMove
+
+def findBestMove(theGame,
+                 playerAToPlay,
+                 searchPly,
+                 minimum=-10000,
+                 maximum=10000,
+                 firstCall=True):
+    """ Main alpha-beta minimax algorithm to find best move """
+    allMoves = getAllMovesForPlayer(theGame, playerAToPlay)
+    if firstCall and len(allMoves) == 0:
+        return None
+    elif not firstCall and len(allMoves) == 0:
+        return 0
+
+    for move in allMoves:
+        evaluationFunction(move)
+        move.playerAMoveCount = len(getAllMovesForPlayer(move, True))
+        move.playerBMoveCount = len(getAllMovesForPlayer(move, False))
+        move.determineWinningState()
+
+    shuffle(allMoves)
+    searchPly -= 1
+    if searchPly > 0 and not theGame.winningState:
+        allMoves.sort(key=lambda x: x.score, reverse=playerAToPlay)
+        if playerAToPlay:
+            for move in allMoves:
+                result = findBestMove(move,
+                                      not playerAToPlay,
+                                      searchPly,
+                                      minimum,
+                                      maximum,
+                                      False)
+                move.score = result
+                if result > minimum:
+                    minimum = result
+                if result > maximum:
+                    move.score = maximum
+                    return move.score
+        else:
+            for move in allMoves:
+                result = findBestMove(move,
+                                      not playerAToPlay,
+                                      searchPly,
+                                      minimum,
+                                      maximum,
+                                      False)
+                move.score = result
+                if result < maximum:
+                    maximum = result
+                if result < minimum:
+                    move.score = minimum
+                    return move.score
+    if firstCall:
+        return getHighestOrLowestScoreMove(allMoves, playerAToPlay)
+    else:
+        return getHighestOrLowestScoreMove(allMoves, playerAToPlay).score
+
+def getHighestOrLowestScoreMove(moves, playerAToPlay):
+    """ Returns the highest/lowest scored move depending on the player """
+    if playerAToPlay:
+        return max(moves, key=lambda x: x.score)
+    else:
+        return min(moves, key=lambda x: x.score)
+
+def evaluationFunction(theGame):
+    # This evaluation uses attributes that are applicable to both players. Then
+    # it adds up the occurrences for A, subtracts the occurrences for B, and
+    # multiplies by weight. All attribute/weight products are then added up and
+    # saved to theGame.score.
+    # Definitions:
+    # - Attribute: A specific feature of a player's position
+    # - Weight: Values which give attributes relative importance
+    # - List of attributes:
+    # 1. Regular pieces
+    # 2. King pieces
+    # 3. Pieces in columns 5/6 (center)
+    # 4. Pieces in columns 3/4 & 7/8 (flank)
+    # 5. Pieces in columns 1/2 & 9/10 (edge)
+    # 6. Pieces in rows 4/5/6/7 (mid)
+
+    if theGame.score:
+        return
+
+    attributeCount = {"regularPieces":0,
+                      "kingPieces":0,
+                      "centerPieces":0,
+                      "flankPieces":0,
+                      "edgePieces":0,
+                      "midPieces":0}
+
+    weightValues = {"regularPieces":10,
+                    "kingPieces":50,
+                    "centerPieces":5,
+                    "flankPieces":3,
+                    "edgePieces":2,
+                    "midPieces":4}
+
+    for x in range(0, 10):
+        for y in range(0, 10):
+            if theGame.gameState[x][y] in (types.EMPTY, types.OFF_BOARD):
+                continue
+
+            # attribute "regularPieces"
+            if theGame.gameState[x][y] == types.PLAYER_A_REGULAR:
+                attributeCount["regularPieces"] += 1
+            elif theGame.gameState[x][y] == types.PLAYER_B_REGULAR:
+                attributeCount["regularPieces"] -= 1
+
+            # attribute "kingPieces"
+            if theGame.gameState[x][y] == types.PLAYER_A_KING:
+                attributeCount["kingPieces"] += 1
+            elif theGame.gameState[x][y] == types.PLAYER_B_KING:
+                attributeCount["kingPieces"] -= 1
+
+            # attribute "centerPieces"
+            if (theGame.gameState[x][y] in (types.PLAYER_A_REGULAR,
+                                            types.PLAYER_A_KING) and
+                4<=x<=5):
+                attributeCount["centerPieces"] += 1
+            elif (theGame.gameState[x][y] in (types.PLAYER_B_REGULAR,
+                                              types.PLAYER_B_KING) and
+                4<=x<=5):
+                attributeCount["centerPieces"] -= 1
+
+            # attribute "flankPieces"
+            if (theGame.gameState[x][y] in (types.PLAYER_A_REGULAR,
+                                            types.PLAYER_A_KING) and
+                (2<=x<=3 or 6<=x<=7)):
+                attributeCount["flankPieces"] += 1
+            elif (theGame.gameState[x][y] in (types.PLAYER_B_REGULAR,
+                                              types.PLAYER_B_KING) and
+                (2<=x<=3 or 6<=x<=7)):
+                attributeCount["flankPieces"] -= 1
+
+            # attribute "edgePieces"
+            if (theGame.gameState[x][y] in (types.PLAYER_A_REGULAR,
+                                            types.PLAYER_A_KING) and
+                (0<=x<=1 or 8<=x<=9)):
+                attributeCount["edgePieces"] += 1
+            elif (theGame.gameState[x][y] in (types.PLAYER_B_REGULAR,
+                                              types.PLAYER_B_KING) and
+                (0<=x<=1 or 8<=x<=9)):
+                attributeCount["edgePieces"] -= 1
+
+            # attribute "midPieces"
+            if (theGame.gameState[x][y] in (types.PLAYER_A_REGULAR,
+                                            types.PLAYER_A_KING) and
+                3<=y<=6):
+                attributeCount["midPieces"] += 1
+            elif (theGame.gameState[x][y] in (types.PLAYER_B_REGULAR,
+                                              types.PLAYER_B_KING) and
+                3<=y<=6):
+                attributeCount["midPieces"] -= 1
+
+    theGame.score = (
+           weightValues["regularPieces"] * attributeCount["regularPieces"] +
+           weightValues["kingPieces"] * attributeCount["kingPieces"] +
+           weightValues["centerPieces"] * attributeCount["centerPieces"] +
+           weightValues["flankPieces"] * attributeCount["flankPieces"] +
+           weightValues["edgePieces"] * attributeCount["edgePieces"] +
+           weightValues["midPieces"] * attributeCount["midPieces"])
+
+
+
 def getAllMovesForPlayer(theGame, playerAToPlay):
     """playerAToPlay == True means it's the player A's turn. Otherwise B"""
     moves = []

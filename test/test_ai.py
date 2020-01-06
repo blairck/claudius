@@ -514,3 +514,45 @@ class TestAI(unittest.TestCase):
         self.assertRaises(ValueError,
                           ai.getDirectionFromDelta,
                           (1, 5))
+
+    def test_evaluationFunction_simple(self):
+        """ Test evaluation function scoring """
+
+        # Given
+        board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
+
+        # When
+        expectedResult = 13
+        ai.evaluationFunction(board)
+        actualResult = board.score
+
+        # Then
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_evaluationFunction_simple2(self):
+        """ Test evaluation function scoring """
+
+        # Given
+        board = boardParser.parseBoardInput(helper.kingCapture1)
+
+        # When
+        expectedResult = -1
+        ai.evaluationFunction(board)
+        actualResult = board.score
+
+        # Then
+        self.assertEqual(expectedResult, actualResult)
+
+    def test_evaluationFunction_simple3(self):
+        """ Test evaluation function scoring """
+
+        # Given
+        board = boardParser.parseBoardInput(helper.oneKing)
+
+        # When
+        expectedResult = 59
+        ai.evaluationFunction(board)
+        actualResult = board.score
+
+        # Then
+        self.assertEqual(expectedResult, actualResult)

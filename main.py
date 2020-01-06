@@ -10,13 +10,23 @@ try:
 except:
     pass
 
+# Settings
+COMP_IS_PLAYER_A = False # User is player A (false) or player B (true)
+SEARCH_PLY = 2 # From 0 (weak random moves) to 5 (strong moves) for AI strength
+DISPLAY_EVALUATION = False # Display computer evaluation of the position
+
 def aPlayerHasWon(game):
     """ Check game state to see if a player has won """
-    raise NotImplementedError
+    game.playerAMoveCount = len(ai.getAllMovesForPlayer(game, True))
+    game.playerBMoveCount = len(ai.getAllMovesForPlayer(game, False))
 
-def determineDraw(game, ai):
-    """ Check game state to see if it is drawn """
-    raise NotImplementedError
+    if game.playerAWins():
+        print("Player A wins!")
+        return True
+    elif game.playerBWins():
+        print("Player B wins!")
+        return True
+    return False
 
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
@@ -27,7 +37,6 @@ if __name__ == '__main__':
         game.createStartingPosition()
 
     firstTurn = True
-    COMP_IS_PLAYER_A = True
 
     if COMP_IS_PLAYER_A:
         computersTurn = True
@@ -42,15 +51,34 @@ if __name__ == '__main__':
             game.print_board()
             print("--------------------------------")
 
+        if aPlayerHasWon(game):
+            break
+
         if computersTurn:
-            game = ai.randomSearch(game, COMP_IS_PLAYER_A)
+            if SEARCH_PLY == 0:
+                game = ai.randomSearch(game, COMP_IS_PLAYER_A)
+            else:
+                game = ai.iterativeDeepeningSearch(game,
+                                                   COMP_IS_PLAYER_A,
+                                                   SEARCH_PLY)
+            if DISPLAY_EVALUATION:
+                print("Computer evaluation: {0}".format(game.score))
             computersTurn = False
 
         game.print_board()
 
+        if aPlayerHasWon(game):
+            break
+
         legalMoves = ai.getAllMovesForPlayer(game, not COMP_IS_PLAYER_A)
         while(True):
             userInput = input('Enter a move: ')
+            if userInput == 'm' or userInput == 'moves':
+                print("These are your legal moves:")
+                for move in legalMoves:
+                    move.print_board()
+                print("--------------------------------")
+                continue
             result = interface.getPositionFromListOfMoves(legalMoves,
                                                           str(userInput),
                                                           COMP_IS_PLAYER_A)
