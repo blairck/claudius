@@ -10,6 +10,11 @@ try:
 except:
     pass
 
+# Settings
+COMP_IS_PLAYER_A = False # User is player A (false) or player B (true)
+SEARCH_PLY = 2 # From 0 (weak random moves) to 5 (strong moves) for AI strength
+DISPLAY_EVALUATION = False # Display computer evaluation of the position
+
 def aPlayerHasWon(game):
     """ Check game state to see if a player has won """
     raise NotImplementedError
@@ -27,7 +32,6 @@ if __name__ == '__main__':
         game.createStartingPosition()
 
     firstTurn = True
-    COMP_IS_PLAYER_A = True
 
     if COMP_IS_PLAYER_A:
         computersTurn = True
@@ -43,7 +47,14 @@ if __name__ == '__main__':
             print("--------------------------------")
 
         if computersTurn:
-            game = ai.randomSearch(game, COMP_IS_PLAYER_A)
+            if SEARCH_PLY == 0:
+                game = ai.randomSearch(game, COMP_IS_PLAYER_A)
+            else:
+                game = ai.iterativeDeepeningSearch(game,
+                                                   COMP_IS_PLAYER_A,
+                                                   SEARCH_PLY)
+            if DISPLAY_EVALUATION:
+                print("Computer evaluation: {0}".format(game.score))
             computersTurn = False
 
         game.print_board()
