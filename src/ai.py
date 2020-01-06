@@ -14,6 +14,75 @@ def randomSearch(theGame, playerAToPlay):
     shuffle(moves)
     return moves[0]
 
+def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
+    """ Searches at steadily increasing ply and breaks if a draw or end
+    state is found, otherwise searches to searchPly (inclusive). """
+    bestMove = None
+    plyRange = range(1, searchPly + 1, 1)
+    for ply in plyRange:
+        bestMove = findBestMove(theGame, playerAToPlay, ply)
+        if (bestMove is None
+                or bestMove.score < -2999
+                or bestMove.score > 2999):
+            return bestMove
+    return bestMove
+
+def findBestMove(theGame,
+                 playerAToPlay,
+                 searchPly,
+                 minimum=-10000,
+                 maximum=10000,
+                 firstCall=True):
+    """ Main alpha-beta minimax algorithm to find best move """
+    allMoves = getAllMovesForPlayer(theGame, playerAToPlay)
+    if firstCall and len(allMoves) == 0:
+        return None
+    elif not firstCall and len(allMoves) == 0:
+        return 0
+
+    for move in allMoves:
+        evaluationFunction(move)
+        move.playerAMoveCount = len(getAllMovesForPlayer(move, True))
+        move.playerBMoveCount = len(getAllMovesForPlayer(move, False))
+        move.determineWinningState()
+
+    shuffle(allMoves)
+    searchPly -= 1
+    if searchPly > 0 and not theGame.winningState:
+        allMoves.sort(key=lambda x: x.score, reverse=playerAToPlay)
+        if playerAToPlay:
+            for move in allMoves:
+                result = findBestMove(move,
+                                      not playerAToPlay,
+                                      searchPly,
+                                      minimum,
+                                      maximum,
+                                      False)
+                move.score = result
+                if result > minimum:
+                    minimum = result
+                if result > maximum:
+                    move.score = maximum
+                    return move.score
+        else:
+            for move in allMoves:
+                result = findBestMove(move,
+                                      not playerAToPlay,
+                                      searchPly,
+                                      minimum,
+                                      maximum,
+                                      False)
+                move.score = result
+                if result < maximum:
+                    maximum = result
+                if result < minimum:
+                    move.score = minimum
+                    return move.score
+    if firstCall:
+        return getHighestOrLowestScoreMove(allMoves, playerAToPlay)
+    else:
+        return getHighestOrLowestScoreMove(allMoves, playerAToPlay).score
+
 def getHighestOrLowestScoreMove(moves, playerAToPlay):
     """ Returns the highest/lowest scored move depending on the player """
     if playerAToPlay:
