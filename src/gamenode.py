@@ -25,6 +25,8 @@ class GameNode(object):
         self.pieceLastMoved = None
         self.directionDelta = None
         self.deltaLastMoved = None
+        self.playerAMoveCount = None
+        self.playerBMoveCount = None
 
     def __eq__(self, other):
         for i in range(0, 10):
@@ -131,3 +133,23 @@ class GameNode(object):
             playerPieces = (types.PLAYER_B_REGULAR, types.PLAYER_B_KING)
             self.numberOfPiecesForB = self.countPlayerPieces(playerPieces)
             return self.numberOfPiecesForB
+
+    def playerAWins(self):
+        """ Returns True if player A won, False otherwise """
+        if self.playerBMoveCount == 0:
+            self.score = 5000
+            return True
+        else:
+            return False
+
+    def playerBWins(self):
+        """ Returns True if player B won, False otherwise """
+        if self.playerAMoveCount == 0:
+            self.score = -5000
+            return True
+        else:
+            return False
+
+    def determineWinningState(self):
+        """ Set winningState if this node is in one """
+        self.winningState = bool(self.playerAWins() or self.playerBWins())
