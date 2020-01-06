@@ -51,6 +51,9 @@ if __name__ == '__main__':
             game.print_board()
             print("--------------------------------")
 
+        if aPlayerHasWon(game):
+            break
+
         if computersTurn:
             if SEARCH_PLY == 0:
                 game = ai.randomSearch(game, COMP_IS_PLAYER_A)
@@ -63,6 +66,9 @@ if __name__ == '__main__':
             computersTurn = False
 
         game.print_board()
+
+        if aPlayerHasWon(game):
+            break
 
         legalMoves = ai.getAllMovesForPlayer(game, not COMP_IS_PLAYER_A)
         while(True):
