@@ -28,6 +28,9 @@ class GameNode(object):
         self.playerAMoveCount = None
         self.playerBMoveCount = None
 
+    def __hash__(self):
+        return hash(str(self.gameState))
+
     def __eq__(self, other):
         for i in range(0, 10):
             for j in range(0, 10):
