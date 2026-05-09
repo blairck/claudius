@@ -3,40 +3,62 @@
 from functools import cache, reduce
 from random import shuffle
 
-# pylint: disable=import-error
 from res import types
 from src import coordinate
 from src import gamenode
 from src import rules
 
-def randomSearch(theGame, playerAToPlay):
-    """ Randomly pick a move from player's legal moves """
-    moves = getAllMovesForPlayer(theGame, playerAToPlay)
-    shuffle(moves)
-    return moves[0]
 
 def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
     """ Searches at steadily increasing ply and breaks if a draw or end
     state is found, otherwise searches to searchPly (inclusive). """
     if searchPly == 0:
-        return randomSearch(theGame, playerAToPlay)
+        return _randomSearch(theGame, playerAToPlay)
     bestMove = None
     plyRange = range(1, searchPly + 1)
     for ply in plyRange:
-        bestMove = findBestMove(theGame, playerAToPlay, ply)
+        bestMove = _findBestMove(theGame, playerAToPlay, ply)
         if (bestMove is None
                 or bestMove.score < -2999
                 or bestMove.score > 2999):
             return bestMove
     return bestMove
 
+
 @cache
-def findBestMove(theGame,
-                 playerAToPlay,
-                 searchPly,
-                 minimum=-10000,
-                 maximum=10000,
-                 firstCall=True):
+def getAllMovesForPlayer(theGame, playerAToPlay):
+    """playerAToPlay == True means it's the player A's turn. Otherwise B"""
+    moves = []
+    for location in _getTupleOfAllCoordinates():
+        moves.extend(_getCapturesForPiece(theGame,
+                                         location,
+                                         playerAToPlay))
+
+    # If any captures are possible, the active player must choose from them
+    if moves:
+        return moves
+
+    for location in _getTupleOfAllCoordinates():
+        moves.extend(_getNoncaptureMovesForPiece(theGame,
+                                                location,
+                                                playerAToPlay))
+    return moves
+
+
+def _randomSearch(theGame, playerAToPlay):
+    """ Randomly pick a move from player's legal moves """
+    moves = getAllMovesForPlayer(theGame, playerAToPlay)
+    shuffle(moves)
+    return moves[0]
+
+
+@cache
+def _findBestMove(theGame,
+                  playerAToPlay,
+                  searchPly,
+                  minimum=-10000,
+                  maximum=10000,
+                  firstCall=True):
     """ Main alpha-beta minimax algorithm to find best move """
     allMoves = getAllMovesForPlayer(theGame, playerAToPlay)
     if firstCall and len(allMoves) == 0:
@@ -45,7 +67,7 @@ def findBestMove(theGame,
         return 0
 
     for move in allMoves:
-        move.score = evaluationFunction(move)
+        move.score = _evaluationFunction(move)
         move.playerAMoveCount = len(getAllMovesForPlayer(move, True))
         move.playerBMoveCount = len(getAllMovesForPlayer(move, False))
         move.determineWinningState()
@@ -56,7 +78,7 @@ def findBestMove(theGame,
         allMoves.sort(key=lambda x: x.score, reverse=playerAToPlay)
         if playerAToPlay:
             for move in allMoves:
-                result = findBestMove(move,
+                result = _findBestMove(move,
                                       not playerAToPlay,
                                       searchPly,
                                       minimum,
@@ -70,7 +92,7 @@ def findBestMove(theGame,
                     return move.score
         else:
             for move in allMoves:
-                result = findBestMove(move,
+                result = _findBestMove(move,
                                       not playerAToPlay,
                                       searchPly,
                                       minimum,
@@ -83,11 +105,12 @@ def findBestMove(theGame,
                     move.score = minimum
                     return move.score
     if firstCall:
-        return getHighestOrLowestScoreMove(allMoves, playerAToPlay)
+        return _getHighestOrLowestScoreMove(allMoves, playerAToPlay)
     else:
-        return getHighestOrLowestScoreMove(allMoves, playerAToPlay).score
+        return _getHighestOrLowestScoreMove(allMoves, playerAToPlay).score
 
-def getHighestOrLowestScoreMove(moves, playerAToPlay):
+
+def _getHighestOrLowestScoreMove(moves, playerAToPlay):
     """ Returns the highest/lowest scored move depending on the player """
     if playerAToPlay:
         return max(moves, key=lambda x: x.score)
@@ -96,7 +119,7 @@ def getHighestOrLowestScoreMove(moves, playerAToPlay):
 
 
 @cache
-def evaluationFunction(theGame):
+def _evaluationFunction(theGame):
     # This evaluation uses attributes that are applicable to both players. Then
     # it adds up the occurrences for A, subtracts the occurrences for B, and
     # multiplies by weight. All attribute/weight products are then added up and
@@ -192,45 +215,25 @@ def evaluationFunction(theGame):
                    weightValues["midPieces"] * attributeCount["midPieces"]])
 
 
-@cache
-def getAllMovesForPlayer(theGame, playerAToPlay):
-    """playerAToPlay == True means it's the player A's turn. Otherwise B"""
-    moves = []
-    for location in getTupleOfAllCoordinates():
-        moves.extend(getCapturesForPiece(theGame,
-                                         location,
-                                         playerAToPlay))
-
-    # If any captures are possible, the player must choose from them
-    if moves:
-        return moves
-
-    for location in getTupleOfAllCoordinates():
-        moves.extend(getNoncaptureMovesForPiece(theGame,
-                                                location,
-                                                playerAToPlay))
-    return moves
-
-
-def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
+def _getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
     """ Gets capture list for regular or king pieces """
     moveList = []
     if (theGame.getState(pieceLocation) in (types.PLAYER_A_KING,
                                             types.PLAYER_B_KING)):
         # find king captures. if there are none, then keep any noncaptures
         # that are found
-        moveList.extend(getCapturesForKingPiece(theGame,
+        moveList.extend(_getCapturesForKingPiece(theGame,
                                                 pieceLocation,
                                                 playerAToPlay))
     elif (theGame.getState(pieceLocation) in (types.PLAYER_A_REGULAR,
                                               types.PLAYER_B_REGULAR)):
-        moveList.extend(getCapturesForRegularPiece(theGame,
+        moveList.extend(_getCapturesForRegularPiece(theGame,
                                                    pieceLocation,
                                                    playerAToPlay))
     return moveList
 
 
-def getCapturesForKingPiece(theGame,
+def _getCapturesForKingPiece(theGame,
                             pieceLocation,
                             playerAToPlay,
                             enableBackwardsCapture=True):
@@ -247,12 +250,12 @@ def getCapturesForKingPiece(theGame,
     captureList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
-        captureList.extend(getLastMoveInEachDirection(theGame,
+        captureList.extend(_getLastMoveInEachDirection(theGame,
                                                       pieceLocation,
                                                       backwardsDelta))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
             and not playerAToPlay):
-        captureList.extend(getLastMoveInEachDirection(theGame,
+        captureList.extend(_getLastMoveInEachDirection(theGame,
                                                       pieceLocation,
                                                       backwardsDelta))
     else:
@@ -264,7 +267,7 @@ def getCapturesForKingPiece(theGame,
     deltaAndCaptureList = []
     for board in captureList:
         delta = board.deltaLastMoved
-        direction = getDirectionFromDelta(delta)
+        direction = _getDirectionFromDelta(delta)
 
         #uses pieceLastMoved (where piece stopped) and direction, to check cap
         if rules.isACaptureP(board,
@@ -281,9 +284,9 @@ def getCapturesForKingPiece(theGame,
     # TODO: Move to seperate method and add unit tests
     moveList = []
     for maxMove in deltaAndCaptureList:
-        moveList.append(transferNode(maxMove))
+        moveList.append(_transferNode(maxMove))
 
-        result = getAllNoncaptureMovesForKingPiece(maxMove,
+        result = _getAllNoncaptureMovesForKingPiece(maxMove,
             maxMove.pieceLastMoved,
             [maxMove.deltaLastMoved,])
 
@@ -296,9 +299,9 @@ def getCapturesForKingPiece(theGame,
     # TODO: Move to seperate method and add unit tests
     allMoves = []
     for move in moveList:
-        allMoves.append(transferNode(move))
+        allMoves.append(_transferNode(move))
 
-        allMoves.extend(getCapturesForKingPiece(move,
+        allMoves.extend(_getCapturesForKingPiece(move,
             move.pieceLastMoved,
             playerAToPlay,
             False))
@@ -323,7 +326,7 @@ def getCapturesForKingPiece(theGame,
     return finalMoves
 
 
-def getLastMoveInEachDirection(theGame,
+def _getLastMoveInEachDirection(theGame,
                                pieceLocation,
                                skipDelta=None):
     """ Checks 4 directions king could move; returns last move in each dir """
@@ -334,7 +337,7 @@ def getLastMoveInEachDirection(theGame,
             continue
         deltaAsList = []
         deltaAsList.append(deltaPair)
-        result = getAllNoncaptureMovesForKingPiece(theGame,
+        result = _getAllNoncaptureMovesForKingPiece(theGame,
                                                    pieceLocation,
                                                    deltaAsList)
         if len(result) > 0:
@@ -342,14 +345,14 @@ def getLastMoveInEachDirection(theGame,
             lastBoard.deltaLastMoved = deltaPair
             moveList.append(lastBoard)
         else:
-            lastBoard = transferNode(theGame)
+            lastBoard = _transferNode(theGame)
             lastBoard.pieceLastMoved = pieceLocation
             lastBoard.deltaLastMoved = deltaPair
             moveList.append(lastBoard)
     return moveList
 
 
-def getDirectionFromDelta(delta):
+def _getDirectionFromDelta(delta):
     """ Gets a direction from x/y delta pair """
     if delta == (1, 1):
         return 2
@@ -364,30 +367,30 @@ def getDirectionFromDelta(delta):
         raise ValueError(error_template.format(delta))
 
 
-def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
+def _getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
     """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
     Depending on the piece type"""
     moveList = []
     if (theGame.getState(pieceLocation) is types.PLAYER_A_KING
             and playerAToPlay):
-        moveList.extend(getAllNoncaptureMovesForKingPiece(theGame,
+        moveList.extend(_getAllNoncaptureMovesForKingPiece(theGame,
                                                           pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_KING
             and not playerAToPlay):
-        moveList.extend(getAllNoncaptureMovesForKingPiece(theGame,
+        moveList.extend(_getAllNoncaptureMovesForKingPiece(theGame,
                                                           pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_A_REGULAR
             and playerAToPlay):
-        moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
+        moveList.extend(_getNoncaptureMovesForRegularPiece(theGame,
                                                           pieceLocation))
     elif (theGame.getState(pieceLocation) is types.PLAYER_B_REGULAR
             and not playerAToPlay):
-        moveList.extend(getNoncaptureMovesForRegularPiece(theGame,
+        moveList.extend(_getNoncaptureMovesForRegularPiece(theGame,
                                                           pieceLocation))
     return moveList
 
 
-def getAllNoncaptureMovesForKingPiece(theGame,
+def _getAllNoncaptureMovesForKingPiece(theGame,
                                       pieceLocation,
                                       deltaPairs=((-1, -1),
                                                   (-1, 1),
@@ -398,7 +401,7 @@ def getAllNoncaptureMovesForKingPiece(theGame,
     moveList = []
     for deltaPair in deltaPairs:
         try:
-            moveList.extend(getDiagonalNonCaptureMovesForKing(theGame,
+            moveList.extend(_getDiagonalNonCaptureMovesForKing(theGame,
                                                               pieceLocation,
                                                               deltaPair[0],
                                                               deltaPair[1]))
@@ -407,7 +410,7 @@ def getAllNoncaptureMovesForKingPiece(theGame,
     return moveList
 
 
-def getDiagonalNonCaptureMovesForKing(theGame,
+def _getDiagonalNonCaptureMovesForKing(theGame,
                                       startingLocation,
                                       directionX,
                                       directionY):
@@ -423,15 +426,15 @@ def getDiagonalNonCaptureMovesForKing(theGame,
         if (newPiece is None or 
             theGame.getState(newPiece) is not types.EMPTY):
             break
-        newMove = makePieceMove(theGame, newPiece, startingLocation)
+        newMove = _makePieceMove(theGame, newPiece, startingLocation)
         newMove.pieceLastMoved = newPiece
         resultingMoves.append(newMove)
-        newPiece = getCoordinateHelper(newPiece.get_x_board() + directionX,
+        newPiece = _getCoordinateHelper(newPiece.get_x_board() + directionX,
                                        newPiece.get_y_board() + directionY)
     return resultingMoves
 
 
-def getNoncaptureMovesForRegularPiece(theGame, pieceLocation):
+def _getNoncaptureMovesForRegularPiece(theGame, pieceLocation):
     """ This returns a GameNode for every legal move of a regular piece """
     moveList = []
     xBoard = pieceLocation.get_x_board()
@@ -446,23 +449,23 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation):
         # Player B moves in negative Y increments
         moveDelta = -1
         
-    pieceDestinationLeft = getCoordinateHelper(xBoard - 1, yBoard + moveDelta)
-    pieceDestinationRight = getCoordinateHelper(xBoard + 1, yBoard + moveDelta)
+    pieceDestinationLeft = _getCoordinateHelper(xBoard - 1, yBoard + moveDelta)
+    pieceDestinationRight = _getCoordinateHelper(xBoard + 1, yBoard + moveDelta)
 
     if (pieceDestinationLeft and
-            destinationIsEmpty(theGame, pieceDestinationLeft)):
-        moveList.append(makePieceMove(theGame,
+            _destinationIsEmpty(theGame, pieceDestinationLeft)):
+        moveList.append(_makePieceMove(theGame,
                                       pieceDestinationLeft,
                                       pieceLocation))
     if (pieceDestinationRight and
-            destinationIsEmpty(theGame, pieceDestinationRight)):
-        moveList.append(makePieceMove(theGame,
+            _destinationIsEmpty(theGame, pieceDestinationRight)):
+        moveList.append(_makePieceMove(theGame,
                                       pieceDestinationRight,
                                       pieceLocation))
     return moveList
 
 
-def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
+def _getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     """ This recursively finds all available captures for a single piece and
     returns the list of captures. Checks for duplicates from loops"""
     if theGame.getState(pieceLocation) is types.EMPTY:
@@ -479,26 +482,26 @@ def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
                              playerAToPlay):
             deltaX = rules.findXDeltaFromDirection(direction)
             deltaY = rules.findYDeltaFromDirection(direction)
-            newMoveNode = transferNode(theGame)
+            newMoveNode = _transferNode(theGame)
             destination = coordinate.Coordinate(x_board + deltaX,
                                                 y_board + deltaY)
             rules.makeCapture(newMoveNode, pieceLocation, destination)
             newMoveNode.isCapture = True
             tempCaptureList.append(newMoveNode)
-            nextCapture = getCapturesForRegularPiece(newMoveNode,
+            nextCapture = _getCapturesForRegularPiece(newMoveNode,
                                                      destination,
                                                      playerAToPlay)
             if nextCapture:
                 tempCaptureList.extend(nextCapture)
 
-    captureList = removeBoardDuplicates(tempCaptureList)
+    captureList = _removeBoardDuplicates(tempCaptureList)
 
-    captureList = filterForFewestOpposingPieces(captureList, playerAToPlay)
+    captureList = _filterForFewestOpposingPieces(captureList, playerAToPlay)
 
     return captureList
 
 
-def filterForFewestOpposingPieces(boards, playerAToPlay):
+def _filterForFewestOpposingPieces(boards, playerAToPlay):
     """ Filters boards to only the moves with fewest opposing pieces, because
     a player must capture as many pieces as possible """
     if boards and len(boards) > 1:
@@ -511,29 +514,30 @@ def filterForFewestOpposingPieces(boards, playerAToPlay):
         boards = list(filter(pieceCountComparison, boards))
     return boards
 
-def removeBoardDuplicates(boards):
+
+def _removeBoardDuplicates(boards):
     """ Removes duplicates from list of boards """
     return list(set(boards))
 
 
-def destinationIsEmpty(theGame, pieceDestination):
+def _destinationIsEmpty(theGame, pieceDestination):
     """ Returns True or False depending on whether destination is empty """
     return bool(theGame.getState(pieceDestination) is types.EMPTY)
 
 
-def makePieceMove(theGame, pieceDestination, pieceLocation):
+def _makePieceMove(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and destination and updates game state to move
     piece from pieceLocation to pieceDestination """
     pieceType = rules.getPossiblePromotedPiece(theGame,
                                                pieceDestination,
                                                pieceLocation)
-    moveResult = transferNode(theGame)
+    moveResult = _transferNode(theGame)
     moveResult.setState(pieceDestination, pieceType)
     moveResult.setState(pieceLocation, types.EMPTY)
     return moveResult
 
 
-def getTupleOfAllCoordinates():
+def _getTupleOfAllCoordinates():
     """ Gets a tuple of all legal Coordinates on the board """
     return (coordinate.Coordinate(1, 1),
             coordinate.Coordinate(3, 1),
@@ -586,14 +590,16 @@ def getTupleOfAllCoordinates():
             coordinate.Coordinate(8, 10),
             coordinate.Coordinate(10, 10),)
 
-def getCoordinateHelper(xBoard, yBoard):
+
+def _getCoordinateHelper(xBoard, yBoard):
     """ Wrap the error handling """
     try:
         return coordinate.Coordinate(xBoard, yBoard)
     except ValueError:
         return None
 
-def transferNode(startNode):
+
+def _transferNode(startNode):
     """ Copies input gamenode to a new one and returns it. """
     resultNode = gamenode.GameNode()
     resultNode.pieceLastMoved = startNode.pieceLastMoved
