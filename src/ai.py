@@ -1,5 +1,6 @@
 """ This module contains the AI search algorithm """
 
+from functools import cache, reduce
 from random import shuffle
 
 # pylint: disable=import-error
@@ -17,8 +18,10 @@ def randomSearch(theGame, playerAToPlay):
 def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
     """ Searches at steadily increasing ply and breaks if a draw or end
     state is found, otherwise searches to searchPly (inclusive). """
+    if searchPly == 0:
+        return randomSearch(theGame, playerAToPlay)
     bestMove = None
-    plyRange = range(1, searchPly + 1, 1)
+    plyRange = range(1, searchPly + 1)
     for ply in plyRange:
         bestMove = findBestMove(theGame, playerAToPlay, ply)
         if (bestMove is None
@@ -27,6 +30,7 @@ def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
             return bestMove
     return bestMove
 
+@cache
 def findBestMove(theGame,
                  playerAToPlay,
                  searchPly,
@@ -41,7 +45,7 @@ def findBestMove(theGame,
         return 0
 
     for move in allMoves:
-        evaluationFunction(move)
+        move.score = evaluationFunction(move)
         move.playerAMoveCount = len(getAllMovesForPlayer(move, True))
         move.playerBMoveCount = len(getAllMovesForPlayer(move, False))
         move.determineWinningState()
@@ -90,6 +94,8 @@ def getHighestOrLowestScoreMove(moves, playerAToPlay):
     else:
         return min(moves, key=lambda x: x.score)
 
+
+@cache
 def evaluationFunction(theGame):
     # This evaluation uses attributes that are applicable to both players. Then
     # it adds up the occurrences for A, subtracts the occurrences for B, and
@@ -107,7 +113,7 @@ def evaluationFunction(theGame):
     # 6. Pieces in rows 4/5/6/7 (mid)
 
     if theGame.score:
-        return
+        return theGame.score
 
     attributeCount = {"regularPieces":0,
                       "kingPieces":0,
@@ -123,11 +129,8 @@ def evaluationFunction(theGame):
                     "edgePieces":2,
                     "midPieces":4}
 
-    for x in range(0, 10):
-        for y in range(0, 10):
-            if theGame.gameState[x][y] in (types.EMPTY, types.OFF_BOARD):
-                continue
-
+    for x in range(0, 10, 2):
+        for y in range(0, 10, 2):
             # attribute "regularPieces"
             if theGame.gameState[x][y] == types.PLAYER_A_REGULAR:
                 attributeCount["regularPieces"] += 1
@@ -180,16 +183,16 @@ def evaluationFunction(theGame):
                 3<=y<=6):
                 attributeCount["midPieces"] -= 1
 
-    theGame.score = (
-           weightValues["regularPieces"] * attributeCount["regularPieces"] +
-           weightValues["kingPieces"] * attributeCount["kingPieces"] +
-           weightValues["centerPieces"] * attributeCount["centerPieces"] +
-           weightValues["flankPieces"] * attributeCount["flankPieces"] +
-           weightValues["edgePieces"] * attributeCount["edgePieces"] +
-           weightValues["midPieces"] * attributeCount["midPieces"])
+    return reduce(lambda x, y: x + y,
+                  [weightValues["regularPieces"] * attributeCount["regularPieces"],
+                   weightValues["kingPieces"] * attributeCount["kingPieces"],
+                   weightValues["centerPieces"] * attributeCount["centerPieces"],
+                   weightValues["flankPieces"] * attributeCount["flankPieces"],
+                   weightValues["edgePieces"] * attributeCount["edgePieces"],
+                   weightValues["midPieces"] * attributeCount["midPieces"]])
 
 
-
+@cache
 def getAllMovesForPlayer(theGame, playerAToPlay):
     """playerAToPlay == True means it's the player A's turn. Otherwise B"""
     moves = []
@@ -208,6 +211,7 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
                                                 playerAToPlay))
     return moves
 
+
 def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
     """ Gets capture list for regular or king pieces """
     moveList = []
@@ -224,6 +228,7 @@ def getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
                                                    pieceLocation,
                                                    playerAToPlay))
     return moveList
+
 
 def getCapturesForKingPiece(theGame,
                             pieceLocation,
@@ -284,7 +289,7 @@ def getCapturesForKingPiece(theGame,
 
         moveList.extend(result)
 
-    if len(moveList) is 0:
+    if len(moveList) == 0:
         return moveList
 
     # step #5: for each landing square, go to step #1
@@ -317,6 +322,7 @@ def getCapturesForKingPiece(theGame,
             finalMoves.append(board)
     return finalMoves
 
+
 def getLastMoveInEachDirection(theGame,
                                pieceLocation,
                                skipDelta=None):
@@ -342,6 +348,7 @@ def getLastMoveInEachDirection(theGame,
             moveList.append(lastBoard)
     return moveList
 
+
 def getDirectionFromDelta(delta):
     """ Gets a direction from x/y delta pair """
     if delta == (1, 1):
@@ -355,6 +362,7 @@ def getDirectionFromDelta(delta):
     else:
         error_template = "Unexpected delta value of: {0}"
         raise ValueError(error_template.format(delta))
+
 
 def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
     """Calls getNoncaptureMovesForPiece() or getNoncaptureMovesForRegularPiece()
@@ -378,6 +386,7 @@ def getNoncaptureMovesForPiece(theGame, pieceLocation, playerAToPlay):
                                                           pieceLocation))
     return moveList
 
+
 def getAllNoncaptureMovesForKingPiece(theGame,
                                       pieceLocation,
                                       deltaPairs=((-1, -1),
@@ -396,6 +405,7 @@ def getAllNoncaptureMovesForKingPiece(theGame,
         except ValueError:
             continue
     return moveList
+
 
 def getDiagonalNonCaptureMovesForKing(theGame,
                                       startingLocation,
@@ -419,6 +429,7 @@ def getDiagonalNonCaptureMovesForKing(theGame,
         newPiece = getCoordinateHelper(newPiece.get_x_board() + directionX,
                                        newPiece.get_y_board() + directionY)
     return resultingMoves
+
 
 def getNoncaptureMovesForRegularPiece(theGame, pieceLocation):
     """ This returns a GameNode for every legal move of a regular piece """
@@ -449,6 +460,7 @@ def getNoncaptureMovesForRegularPiece(theGame, pieceLocation):
                                       pieceDestinationRight,
                                       pieceLocation))
     return moveList
+
 
 def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
     """ This recursively finds all available captures for a single piece and
@@ -485,6 +497,7 @@ def getCapturesForRegularPiece(theGame, pieceLocation, playerAToPlay):
 
     return captureList
 
+
 def filterForFewestOpposingPieces(boards, playerAToPlay):
     """ Filters boards to only the moves with fewest opposing pieces, because
     a player must capture as many pieces as possible """
@@ -500,15 +513,13 @@ def filterForFewestOpposingPieces(boards, playerAToPlay):
 
 def removeBoardDuplicates(boards):
     """ Removes duplicates from list of boards """
-    uniqueList = []
-    for board in boards:
-        if board not in uniqueList:
-            uniqueList.append(board)
-    return uniqueList
+    return list(set(boards))
+
 
 def destinationIsEmpty(theGame, pieceDestination):
     """ Returns True or False depending on whether destination is empty """
     return bool(theGame.getState(pieceDestination) is types.EMPTY)
+
 
 def makePieceMove(theGame, pieceDestination, pieceLocation):
     """ Takes a piece location and destination and updates game state to move
@@ -520,6 +531,7 @@ def makePieceMove(theGame, pieceDestination, pieceLocation):
     moveResult.setState(pieceDestination, pieceType)
     moveResult.setState(pieceLocation, types.EMPTY)
     return moveResult
+
 
 def getTupleOfAllCoordinates():
     """ Gets a tuple of all legal Coordinates on the board """
