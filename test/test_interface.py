@@ -1,7 +1,5 @@
 """ Tests for the AI module """
 
-import unittest
-
 import pytest
 
 # pylint: disable=import-error,too-many-public-methods
@@ -186,17 +184,17 @@ class TestInterface:
         actualValue = interface.userInputCharacterFor10thAxis("6")
         assert actualValue == 6
 
-    @pytest.mark.parametrize("firstTurn, play_as, expected", [
-        (True, "a", {"board": False, "divider": False}),
-        (True, "b", {"board": True, "divider": True}),
-        (False, "a", {"board": True, "divider": True}),
-        (False, "b", {"board": True, "divider": True})
+    @pytest.mark.parametrize("firstTurn, play_as_a, expected", [
+        (True, True, {"board": False, "divider": False}),
+        (True, False, {"board": True, "divider": True}),
+        (False, True, {"board": True, "divider": True}),
+        (False, False, {"board": True, "divider": True})
     ])
-    def test_displayBoardForUser(self, firstTurn, play_as, expected):
+    def test_displayBoardForUser(self, firstTurn, play_as_a, expected):
         """ Test displayBoardForUser with various parameters """
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
-        actualValue = interface.displayBoardForUser(firstTurn, play_as, gnObject)
+        actualValue = interface.displayBoardForUser(firstTurn, play_as_a, gnObject)
         assert actualValue == expected
         
 
