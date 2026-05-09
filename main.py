@@ -1,21 +1,37 @@
-from res import types
+import argparse
 from src import ai
-from src import boardParser
-from src import coordinate
 from src import gamenode
 from src import interface
-try:
-    import debug
-    print("Using custom starting position...")
-except:
-    pass
 
-# Settings
-COMP_IS_PLAYER_A = False # User is player A (false) or player B (true)
-SEARCH_PLY = 2 # From 0 (weak random moves) to 5 (strong moves) for AI strength
-DISPLAY_EVALUATION = False # Display computer evaluation of the position
 
-def aPlayerHasWon(game):
+def get_arguments():
+    parser = argparse.ArgumentParser(
+        description="Command line interface for playing Claudius"
+    )
+
+    parser.add_argument(
+        "--search_ply",
+        type=int,
+        default=2,
+        help="Controls AI strength. From 0 (weak) to 5 (strong)",
+    )
+
+    parser.add_argument(
+        "--play_as",
+        choices=["a", "b"],
+        default="a",
+    )
+
+    parser.add_argument(
+        "--display_score",
+        type=bool,
+        default=False,
+        help="Display AI's score for each position, can be +/-"
+    )
+
+    return parser.parse_args()
+
+def checkIfAnyPlayerWon(game):
     """ Check game state to see if a player has won """
     game.playerAMoveCount = len(ai.getAllMovesForPlayer(game, True))
     game.playerBMoveCount = len(ai.getAllMovesForPlayer(game, False))
@@ -30,47 +46,39 @@ def aPlayerHasWon(game):
 
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
-    try:
-        game = boardParser.parseBoardInput(debug.customPosition)
-    except NameError:
-        game = gamenode.GameNode()
-        game.createStartingPosition()
+    args = get_arguments()
+    game = gamenode.GameNode()
+    game.createStartingPosition()
 
     firstTurn = True
+    computersTurn = True
 
-    if COMP_IS_PLAYER_A:
-        computersTurn = True
-    else:
+    if args.play_as == "a":
         computersTurn = False
 
     while(True):
-        if not firstTurn:
-            game.print_board()
-            print("--------------------------------")
-        elif firstTurn and COMP_IS_PLAYER_A:
-            game.print_board()
-            print("--------------------------------")
+        interface.displayBoardForUser(firstTurn, args.play_as, game)
 
-        if aPlayerHasWon(game):
+        if checkIfAnyPlayerWon(game):
             break
 
         if computersTurn:
-            if SEARCH_PLY == 0:
-                game = ai.randomSearch(game, COMP_IS_PLAYER_A)
+            if args.search_ply == 0:
+                game = ai.randomSearch(game, args.play_as == "b")
             else:
                 game = ai.iterativeDeepeningSearch(game,
-                                                   COMP_IS_PLAYER_A,
-                                                   SEARCH_PLY)
-            if DISPLAY_EVALUATION:
+                                                   args.play_as == "b",
+                                                   args.search_ply)
+            if args.display_score:
                 print("Computer evaluation: {0}".format(game.score))
             computersTurn = False
 
         game.print_board()
 
-        if aPlayerHasWon(game):
+        if checkIfAnyPlayerWon(game):
             break
 
-        legalMoves = ai.getAllMovesForPlayer(game, not COMP_IS_PLAYER_A)
+        legalMoves = ai.getAllMovesForPlayer(game, args.play_as == "a")
         while(True):
             userInput = input('Enter a move: ')
             if userInput == 'm' or userInput == 'moves':
@@ -81,7 +89,7 @@ if __name__ == '__main__':
                 continue
             result = interface.getPositionFromListOfMoves(legalMoves,
                                                           str(userInput),
-                                                          COMP_IS_PLAYER_A)
+                                                          args.play_as == "b")
             if len(result) != 1:
                 print("Unknown or invalid move, try again")
                 continue
