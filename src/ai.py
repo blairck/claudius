@@ -152,8 +152,11 @@ def _evaluationFunction(theGame):
                     "edgePieces":2,
                     "midPieces":4}
 
-    for x in range(0, 10, 2):
-        for y in range(0, 10, 2):
+    for x in range(0, 10):
+        for y in range(0, 10):
+            if theGame.gameState[x][y] in (types.EMPTY, types.OFF_BOARD):
+                continue
+
             # attribute "regularPieces"
             if theGame.gameState[x][y] == types.PLAYER_A_REGULAR:
                 attributeCount["regularPieces"] += 1
