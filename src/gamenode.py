@@ -32,8 +32,8 @@ class GameNode(object):
         return hash(str(self.gameState))
 
     def __eq__(self, other):
-        for i in range(0, 10):
-            for j in range(0, 10):
+        for i in range(0, 10, 2):
+            for j in range(0, 10, 2):
                 if self.gameState[i][j] != other.gameState[i][j]:
                     return False
         return True
@@ -113,8 +113,8 @@ class GameNode(object):
     def countPlayerPieces(self, piecesToCount):
         """ Counts all pieces in list of piecesToCount"""
         count = 0
-        for i in range(0, 10):
-            for j in range(0, 10):
+        for i in range(0, 10, 2):
+            for j in range(0, 10, 2):
                 if self.gameState[i][j] in piecesToCount:
                     count += 1
         return count
