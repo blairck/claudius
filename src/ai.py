@@ -9,15 +9,20 @@ from src import gamenode
 from src import rules
 
 
-def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
+def getPlayerMove(playerToPlay,
+                  game,
+                  searchPly,
+                  weights):
     """ Searches at steadily increasing ply and breaks if a draw or end
     state is found, otherwise searches to searchPly (inclusive). """
+    playerAToPlay = _getBoolFromActivePlayer(playerToPlay)
+
     if searchPly == 0:
-        return _randomSearch(theGame, playerAToPlay)
+        return _randomSearch(game, playerAToPlay)
     bestMove = None
     plyRange = range(1, searchPly + 1)
     for ply in plyRange:
-        bestMove = _findBestMove(theGame, playerAToPlay, ply)
+        bestMove = _findBestMove(game, playerAToPlay, ply, weights)
         if (bestMove is None
                 or bestMove.score < -2999
                 or bestMove.score > 2999):
@@ -27,7 +32,7 @@ def iterativeDeepeningSearch(theGame, playerAToPlay, searchPly):
 
 @cache
 def getAllMovesForPlayer(theGame, playerAToPlay):
-    """playerAToPlay == True means it's the player A's turn. Otherwise B"""
+    """playerToPlay == 'a' means it's the player A's turn. Otherwise B"""
     moves = []
     for location in _getTupleOfAllCoordinates():
         moves.extend(_getCapturesForPiece(theGame,
@@ -45,6 +50,13 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
     return moves
 
 
+def _getBoolFromActivePlayer(playerPlays):
+    result = True
+    if playerPlays == "b":
+        result = False
+    return result
+
+
 def _randomSearch(theGame, playerAToPlay):
     """ Randomly pick a move from player's legal moves """
     moves = getAllMovesForPlayer(theGame, playerAToPlay)
@@ -56,6 +68,7 @@ def _randomSearch(theGame, playerAToPlay):
 def _findBestMove(theGame,
                   playerAToPlay,
                   searchPly,
+                  weights,
                   minimum=-10000,
                   maximum=10000,
                   firstCall=True):
@@ -67,7 +80,7 @@ def _findBestMove(theGame,
         return 0
 
     for move in allMoves:
-        move.score = _evaluationFunction(move)
+        move.score = _evaluationFunction(move, weights)
         move.playerAMoveCount = len(getAllMovesForPlayer(move, True))
         move.playerBMoveCount = len(getAllMovesForPlayer(move, False))
         move.determineWinningState()
@@ -81,6 +94,7 @@ def _findBestMove(theGame,
                 result = _findBestMove(move,
                                       not playerAToPlay,
                                       searchPly,
+                                      weights,
                                       minimum,
                                       maximum,
                                       False)
@@ -95,6 +109,7 @@ def _findBestMove(theGame,
                 result = _findBestMove(move,
                                       not playerAToPlay,
                                       searchPly,
+                                      weights,
                                       minimum,
                                       maximum,
                                       False)
@@ -119,7 +134,7 @@ def _getHighestOrLowestScoreMove(moves, playerAToPlay):
 
 
 @cache
-def _evaluationFunction(theGame):
+def _evaluationFunction(theGame, weights):
     # This evaluation uses attributes that are applicable to both players. Then
     # it adds up the occurrences for A, subtracts the occurrences for B, and
     # multiplies by weight. All attribute/weight products are then added up and
@@ -144,13 +159,6 @@ def _evaluationFunction(theGame):
                       "flankPieces":0,
                       "edgePieces":0,
                       "midPieces":0}
-
-    weightValues = {"regularPieces":10,
-                    "kingPieces":50,
-                    "centerPieces":5,
-                    "flankPieces":3,
-                    "edgePieces":2,
-                    "midPieces":4}
 
     for x in range(0, 10):
         for y in range(0, 10):
@@ -210,12 +218,12 @@ def _evaluationFunction(theGame):
                 attributeCount["midPieces"] -= 1
 
     return reduce(lambda x, y: x + y,
-                  [weightValues["regularPieces"] * attributeCount["regularPieces"],
-                   weightValues["kingPieces"] * attributeCount["kingPieces"],
-                   weightValues["centerPieces"] * attributeCount["centerPieces"],
-                   weightValues["flankPieces"] * attributeCount["flankPieces"],
-                   weightValues["edgePieces"] * attributeCount["edgePieces"],
-                   weightValues["midPieces"] * attributeCount["midPieces"]])
+                  [weights.regularPieces * attributeCount["regularPieces"],
+                   weights.kingPieces * attributeCount["kingPieces"],
+                   weights.centerPieces * attributeCount["centerPieces"],
+                   weights.flankPieces * attributeCount["flankPieces"],
+                   weights.edgePieces * attributeCount["edgePieces"],
+                   weights.midPieces * attributeCount["midPieces"]])
 
 
 def _getCapturesForPiece(theGame, pieceLocation, playerAToPlay):
