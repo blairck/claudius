@@ -3,12 +3,12 @@
 import unittest
 
 # pylint: disable=import-error,too-many-public-methods
-import helper
+from test import helper
 from src import ai
 from src import boardParser
 from src import coordinate
 from src import gamenode
-from res import types
+from src import types
 
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
@@ -523,8 +523,7 @@ class TestAI(unittest.TestCase):
 
         # When
         expectedResult = 13
-        ai._evaluationFunction(board)
-        actualResult = board.score
+        actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
         self.assertEqual(expectedResult, actualResult)
@@ -537,8 +536,7 @@ class TestAI(unittest.TestCase):
 
         # When
         expectedResult = -1
-        ai._evaluationFunction(board)
-        actualResult = board.score
+        actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
         self.assertEqual(expectedResult, actualResult)
@@ -551,8 +549,7 @@ class TestAI(unittest.TestCase):
 
         # When
         expectedResult = 59
-        ai._evaluationFunction(board)
-        actualResult = board.score
+        actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
         self.assertEqual(expectedResult, actualResult)

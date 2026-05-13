@@ -3,7 +3,7 @@
 import unittest
 
 from test import helper
-from res import types
+from src import types
 from src import coordinate
 from src import gamenode
 from src import boardParser

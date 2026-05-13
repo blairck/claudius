@@ -8,7 +8,7 @@ from src import boardParser
 from src import coordinate
 from src import gamenode
 from src import interface
-from res import types
+from src import types
 from test import helper
 
 class TestInterface:

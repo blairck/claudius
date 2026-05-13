@@ -4,7 +4,7 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from main import checkIfAnyPlayerWon, DEFAULT_AI_WEIGHTS # noqa: E402
+from main import checkIfAnyPlayerWon # noqa: E402
 from src import ai, gamenode # noqa: E402
 
 MAX_POSITIONS = 10 # Number of gameplay positions to collect
@@ -35,7 +35,7 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
         game = ai.getPlayerMove("a",
                                 game,
                                 playerAPly,
-                                DEFAULT_AI_WEIGHTS)
+                                ai.DEFAULT_AI_WEIGHTS)
 
         # Player B starts their turn
         game.print_board()
@@ -46,7 +46,7 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
         game = ai.getPlayerMove("b",
                                 game,
                                 playerBPly,
-                                DEFAULT_AI_WEIGHTS)
+                                ai.DEFAULT_AI_WEIGHTS)
 
     print("Final turn count: {0}".format(turns))
 

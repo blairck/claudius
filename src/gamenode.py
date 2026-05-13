@@ -1,7 +1,7 @@
 """ The basic state of the game board """
 
-from res import types
-from res.types import getPieceAbbreviation
+from src import types
+from src.types import getPieceAbbreviation
 from src import coordinate
 
 class GameNode(object):

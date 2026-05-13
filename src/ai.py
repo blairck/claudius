@@ -1,12 +1,22 @@
 """ This module contains the AI search algorithm """
 
+from collections import namedtuple
 from functools import cache, reduce
 from random import shuffle
 
-from res import types
+from src import types
 from src import coordinate
 from src import gamenode
 from src import rules
+
+Weights = namedtuple('Weights', ["regularPieces",
+                                 "kingPieces",
+                                 "centerPieces",
+                                 "flankPieces",
+                                 "edgePieces",
+                                 "midPieces"])
+
+DEFAULT_AI_WEIGHTS = Weights(10, 50, 5, 3, 2, 4)
 
 
 def getPlayerMove(playerToPlay,

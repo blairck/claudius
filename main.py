@@ -1,17 +1,7 @@
 import argparse
-from collections import namedtuple
 from src import ai
 from src import gamenode
 from src import interface
-
-Weights = namedtuple('Weights', ["regularPieces",
-                                 "kingPieces",
-                                 "centerPieces",
-                                 "flankPieces",
-                                 "edgePieces",
-                                 "midPieces"])
-
-DEFAULT_AI_WEIGHTS = Weights(10, 50, 5, 3, 2, 4)
 
 
 def get_arguments():
@@ -98,7 +88,7 @@ if __name__ == '__main__':
             game = ai.getPlayerMove(computerPlays,
                                     game,
                                     args.search_ply,
-                                    DEFAULT_AI_WEIGHTS)
+                                    ai.DEFAULT_AI_WEIGHTS)
 
             if args.display_score:
                 print("Computer evaluation: {0}".format(game.score))
