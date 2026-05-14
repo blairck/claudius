@@ -62,7 +62,7 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
 
 def _getBoolFromActivePlayer(playerPlays):
     result = True
-    if playerPlays == "b":
+    if playerPlays == types.PLAYER_B_NAME:
         result = False
     return result
 

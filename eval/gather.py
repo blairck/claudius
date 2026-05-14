@@ -2,6 +2,8 @@
 import os
 import sys
 
+from src.types import PLAYER_A_NAME, PLAYER_B_NAME
+
 sys.path.append(os.getcwd())
 
 from main import checkIfAnyPlayerWon # noqa: E402
@@ -32,7 +34,7 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
         if checkIfAnyPlayerWon(game):
             break
 
-        game = ai.getPlayerMove("a",
+        game = ai.getPlayerMove(PLAYER_A_NAME,
                                 game,
                                 playerAPly,
                                 ai.DEFAULT_AI_WEIGHTS)
@@ -43,7 +45,7 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
         if checkIfAnyPlayerWon(game):
             break
 
-        game = ai.getPlayerMove("b",
+        game = ai.getPlayerMove(PLAYER_B_NAME,
                                 game,
                                 playerBPly,
                                 ai.DEFAULT_AI_WEIGHTS)

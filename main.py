@@ -2,6 +2,7 @@ import argparse
 from src import ai
 from src import gamenode
 from src import interface
+from src.types import PLAYER_A_NAME, PLAYER_B_NAME
 
 
 def get_arguments():
@@ -32,18 +33,6 @@ def get_arguments():
 
     return parser.parse_args()
 
-def checkIfAnyPlayerWon(game):
-    """ Check game state to see if a player has won """
-    game.playerAMoveCount = len(ai.getAllMovesForPlayer(game, True))
-    game.playerBMoveCount = len(ai.getAllMovesForPlayer(game, False))
-
-    if game.playerAWins():
-        print("Player A wins!")
-        return True
-    elif game.playerBWins():
-        print("Player B wins!")
-        return True
-    return False
 
 def getMoveFromUserInput(legalMoves):
     while True:
@@ -65,23 +54,24 @@ def getMoveFromUserInput(legalMoves):
 if __name__ == '__main__':
     """ Main game loop. Play alternates between user and computer. """
     args = get_arguments()
+
     game = gamenode.GameNode()
     game.createStartingPosition()
 
     firstTurn = True
     computersTurn = True
 
-    computerPlays = "a"
-    humanPlays = "b"
+    computerPlays = PLAYER_A_NAME
+    humanPlays = PLAYER_B_NAME
     if args.play_as == "a":
         computersTurn = False
-        computerPlays = "b"
-        humanPlays = "a"
+        computerPlays = PLAYER_B_NAME
+        humanPlays = PLAYER_A_NAME
 
     while(True):
         interface.displayBoardForUser(firstTurn, computerPlays, game)
 
-        if checkIfAnyPlayerWon(game):
+        if interface.checkForEndState(game):
             break
 
         if computersTurn:
@@ -95,7 +85,7 @@ if __name__ == '__main__':
 
         game.print_board()
 
-        if checkIfAnyPlayerWon(game):
+        if interface.checkForEndState(game):
             break
 
         legalMoves = ai.getAllMovesForPlayer(game, args.play_as == "a")

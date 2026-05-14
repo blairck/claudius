@@ -4,6 +4,8 @@ PLAYER_A_REGULAR = 2
 PLAYER_A_KING = 3
 PLAYER_B_REGULAR = 4
 PLAYER_B_KING = 5
+PLAYER_A_NAME = "ALPHA"
+PLAYER_B_NAME = "BETA"
 
 def getPieceAbbreviation(intValueAsString):
     if int(intValueAsString)==OFF_BOARD:
