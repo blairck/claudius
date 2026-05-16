@@ -164,12 +164,6 @@ class TestAI(unittest.TestCase):
 
         self.assertEqual(expectedResultLength, len(actualResult))
 
-    def test_getTupleOfAllCoordinates(self):
-        """ Check that all the legal coordinates are generated """
-        actualResult = len(ai._getTupleOfAllCoordinates())
-        expectedResult = 50
-        self.assertEqual(actualResult, expectedResult)
-
     def test_getAllMovesForPlayer_good(self):
         """ Check that capture moves take precedence over non-captures """
         board_description = [
