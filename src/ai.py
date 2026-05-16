@@ -4,7 +4,7 @@ from collections import namedtuple
 from functools import cache, reduce
 from random import shuffle
 
-from src import types
+from src import helper, types
 from src import coordinate
 from src import gamenode
 from src import rules
@@ -44,7 +44,7 @@ def getPlayerMove(playerToPlay,
 def getAllMovesForPlayer(theGame, playerAToPlay):
     """playerToPlay == 'a' means it's the player A's turn. Otherwise B"""
     moves = []
-    for location in _getTupleOfAllCoordinates():
+    for location in helper.getTupleOfAllCoordinates():
         moves.extend(_getCapturesForPiece(theGame,
                                          location,
                                          playerAToPlay))
@@ -53,7 +53,7 @@ def getAllMovesForPlayer(theGame, playerAToPlay):
     if moves:
         return moves
 
-    for location in _getTupleOfAllCoordinates():
+    for location in helper.getTupleOfAllCoordinates():
         moves.extend(_getNoncaptureMovesForPiece(theGame,
                                                 location,
                                                 playerAToPlay))
@@ -556,60 +556,6 @@ def _makePieceMove(theGame, pieceDestination, pieceLocation):
     moveResult.setState(pieceDestination, pieceType)
     moveResult.setState(pieceLocation, types.EMPTY)
     return moveResult
-
-
-def _getTupleOfAllCoordinates():
-    """ Gets a tuple of all legal Coordinates on the board """
-    return (coordinate.Coordinate(1, 1),
-            coordinate.Coordinate(3, 1),
-            coordinate.Coordinate(5, 1),
-            coordinate.Coordinate(7, 1),
-            coordinate.Coordinate(9, 1),
-            coordinate.Coordinate(2, 2),
-            coordinate.Coordinate(4, 2),
-            coordinate.Coordinate(6, 2),
-            coordinate.Coordinate(8, 2),
-            coordinate.Coordinate(10, 2),
-            coordinate.Coordinate(1, 3),
-            coordinate.Coordinate(3, 3),
-            coordinate.Coordinate(5, 3),
-            coordinate.Coordinate(7, 3),
-            coordinate.Coordinate(9, 3),
-            coordinate.Coordinate(2, 4),
-            coordinate.Coordinate(4, 4),
-            coordinate.Coordinate(6, 4),
-            coordinate.Coordinate(8, 4),
-            coordinate.Coordinate(10, 4),
-            coordinate.Coordinate(1, 5),
-            coordinate.Coordinate(3, 5),
-            coordinate.Coordinate(5, 5),
-            coordinate.Coordinate(7, 5),
-            coordinate.Coordinate(9, 5),
-            coordinate.Coordinate(2, 6),
-            coordinate.Coordinate(4, 6),
-            coordinate.Coordinate(6, 6),
-            coordinate.Coordinate(8, 6),
-            coordinate.Coordinate(10, 6),
-            coordinate.Coordinate(1, 7),
-            coordinate.Coordinate(3, 7),
-            coordinate.Coordinate(5, 7),
-            coordinate.Coordinate(7, 7),
-            coordinate.Coordinate(9, 7),
-            coordinate.Coordinate(2, 8),
-            coordinate.Coordinate(4, 8),
-            coordinate.Coordinate(6, 8),
-            coordinate.Coordinate(8, 8),
-            coordinate.Coordinate(10, 8),
-            coordinate.Coordinate(1, 9),
-            coordinate.Coordinate(3, 9),
-            coordinate.Coordinate(5, 9),
-            coordinate.Coordinate(7, 9),
-            coordinate.Coordinate(9, 9),
-            coordinate.Coordinate(2, 10),
-            coordinate.Coordinate(4, 10),
-            coordinate.Coordinate(6, 10),
-            coordinate.Coordinate(8, 10),
-            coordinate.Coordinate(10, 10),)
 
 
 def _getCoordinateHelper(xBoard, yBoard):
