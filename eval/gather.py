@@ -1,4 +1,5 @@
 # Script to gather evaluation dataset from playing AI games against itself
+import json
 import os
 import sys
 
@@ -13,7 +14,7 @@ OUTPUT_PATH = "./positions.jsonl" # Writes positions to jsonl file according to 
 POSITION_SCHEMA = {"startGameNode": "", "matchUp": []} # position schema for 1 row of jsonl file
 SEARCH_PLY_PAIRS = [[0,2], [2,2], [0,0]] # Plys to pair when generating AI match data
 
-def getFlatGameNode(gn):
+def getFlatGameNode(gn, activePlayer=None):
     """ Returns flat game state like where every 5 characters is a board row starting
     at 1 and going up to 10: '11111111111111111114111151211144411111111141114411'
     """
@@ -21,10 +22,10 @@ def getFlatGameNode(gn):
     listOfBoardStates = []
     for coordinate in coordinateTuple:
         listOfBoardStates.append(str(gn.getState(coordinate)))
-    return "".join(listOfBoardStates)
+    return ("".join(listOfBoardStates), activePlayer)
 
-def getEvaluationDataRow(flattenedGameState):
-    return {"startGameNode": flattenedGameState} 
+def getEvaluationDataRow(flattenedGameState, activePlayer):
+    return {"startGameNode": flattenedGameState, "activePlayer": activePlayer} 
 
 def playAIvsAI(playerAPly, playerBPly, maxMoves):
     game = gamenode.GameNode()
@@ -42,7 +43,6 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
 
         # Player A starts their turn
         # game.print_board()
-
         if interface.checkForEndState(game):
             break
 
@@ -50,11 +50,10 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
                                 game,
                                 playerAPly,
                                 ai.DEFAULT_AI_WEIGHTS)
-        flatGameStatesResult.append(getFlatGameNode(game))
+        flatGameStatesResult.append(getFlatGameNode(game, PLAYER_B_NAME))
 
         # Player B starts their turn
         # game.print_board()
-
         if interface.checkForEndState(game):
             break
 
@@ -62,7 +61,8 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
                                 game,
                                 playerBPly,
                                 ai.DEFAULT_AI_WEIGHTS)
-        flatGameStatesResult.append(getFlatGameNode(game))
+        flatGameStatesResult.append(getFlatGameNode(game, PLAYER_A_NAME))
+
     return tuple(flatGameStatesResult)
     # print("Final turn count: {0}".format(turns))
 
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         print(f"Running match up: {matchUp}")
         gameStates.extend(playAIvsAI(matchUp[0], matchUp[1], MAX_MOVES_PER_GAME))
     uniqueGameStates = set(gameStates)
-    result = [getEvaluationDataRow(i) for i in uniqueGameStates]
+    result = [getEvaluationDataRow(i[0], i[1]) for i in uniqueGameStates]
     
-    with open("evaluationData.jsonl", "w", encoding="utf-8") as f:
-        f.writelines(f"{row}\n" for row in result)
+    with open("eval/startPositionData.jsonl", "w", encoding="utf-8") as f:
+        f.writelines(f"{json.dumps(row)}\n" for row in result)
