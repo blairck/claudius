@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from eval import gather, common
+from eval import common
 from src import ai
 
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
                                 ANALYSIS_SEARCH_PLY,
                                 ai.DEFAULT_AI_WEIGHTS)
         if game is not None:
-            flatGame = gather.getFlatGameNode(game)[0]
+            flatGame = common.getFlatGameNode(game)[0]
             result.append(getGroundTruthDataRow(position["startGameNode"], flatGame))
 
     with open("eval/data/evaluationData.jsonl", "w", encoding="utf-8") as f:

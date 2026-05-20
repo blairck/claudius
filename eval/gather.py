@@ -5,8 +5,9 @@ import sys
 
 sys.path.append(os.getcwd())
 
+from eval import common
 from src.types import PLAYER_A_NAME, PLAYER_B_NAME # noqa: E402
-from src import ai, gamenode, helper, interface # noqa: E402
+from src import ai, gamenode, interface # noqa: E402
 
 MAX_POSITIONS = 10 # Number of gameplay positions to collect
 MAX_MOVES_PER_GAME = 100 # Number of moves to make an individual game until ending it as a draw. Games may finish sooner
@@ -14,15 +15,6 @@ OUTPUT_PATH = "./positions.jsonl" # Writes positions to jsonl file according to 
 POSITION_SCHEMA = {"startGameNode": "", "matchUp": []} # position schema for 1 row of jsonl file
 SEARCH_PLY_PAIRS = [[0,2], [2,2], [0,0]] # Plys to pair when generating AI match data
 
-def getFlatGameNode(gn, activePlayer=None):
-    """ Returns flat game state like where every 5 characters is a board row starting
-    at 1 and going up to 10: '11111111111111111114111151211144411111111141114411'
-    """
-    coordinateTuple = helper.getTupleOfAllCoordinates()
-    listOfBoardStates = []
-    for coordinate in coordinateTuple:
-        listOfBoardStates.append(str(gn.getState(coordinate)))
-    return ("".join(listOfBoardStates), activePlayer)
 
 def getEvaluationDataRow(flattenedGameState, activePlayer):
     return {"startGameNode": flattenedGameState, "activePlayer": activePlayer} 
@@ -50,7 +42,7 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
                                 game,
                                 playerAPly,
                                 ai.DEFAULT_AI_WEIGHTS)
-        flatGameStatesResult.append(getFlatGameNode(game, PLAYER_B_NAME))
+        flatGameStatesResult.append(common.getFlatGameNode(game, PLAYER_B_NAME))
 
         # Player B starts their turn
         # game.print_board()
@@ -61,7 +53,7 @@ def playAIvsAI(playerAPly, playerBPly, maxMoves):
                                 game,
                                 playerBPly,
                                 ai.DEFAULT_AI_WEIGHTS)
-        flatGameStatesResult.append(getFlatGameNode(game, PLAYER_A_NAME))
+        flatGameStatesResult.append(common.getFlatGameNode(game, PLAYER_A_NAME))
 
     return tuple(flatGameStatesResult)
     # print("Final turn count: {0}".format(turns))

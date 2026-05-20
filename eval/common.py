@@ -20,3 +20,14 @@ def readFlatGameState(flatGameState):
         newGameNode.setState(coordinates[i], int(listGameState[i]))
 
     return newGameNode
+
+
+def getFlatGameNode(gn, activePlayer=None):
+    """ Returns flat game state like where every 5 characters is a board row starting
+    at 1 and going up to 10: '11111111111111111114111151211144411111111141114411'
+    """
+    coordinateTuple = helper.getTupleOfAllCoordinates()
+    listOfBoardStates = []
+    for coordinate in coordinateTuple:
+        listOfBoardStates.append(str(gn.getState(coordinate)))
+    return ("".join(listOfBoardStates), activePlayer)
