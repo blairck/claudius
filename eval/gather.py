@@ -77,5 +77,5 @@ if __name__ == "__main__":
     uniqueGameStates = set(gameStates)
     result = [getEvaluationDataRow(i[0], i[1]) for i in uniqueGameStates]
     
-    with open("eval/startPositionData.jsonl", "w", encoding="utf-8") as f:
+    with open("eval/data/startPositions.jsonl", "w", encoding="utf-8") as f:
         f.writelines(f"{json.dumps(row)}\n" for row in result)
