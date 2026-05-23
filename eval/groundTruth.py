@@ -10,17 +10,18 @@ from eval import common
 from src import ai
 
 
-ANALYSIS_SEARCH_PLY = 6 # How deep to analyze each position to determine ground truth
-EVAL_CASE_SCHEMA = {"startGameNode": "", "groundTruthGameNode": ""} # eval case schema
+ANALYSIS_SEARCH_PLY = 2 # How deep to analyze each position to determine ground truth
+EVAL_CASE_SCHEMA = {"startGameNode": "", "groundTruthGameNode": "", "activePlayer": ""} # eval case schema
 
 
-def getGroundTruthDataRow(flattenedGameState, groundTruthGameState):
+def getGroundTruthDataRow(flattenedGameState, groundTruthGameState, activePlayer):
     return {"startGameNode": flattenedGameState,
-            "groundTruthGameNode": groundTruthGameState}
+            "groundTruthGameNode": groundTruthGameState,
+            "activePlayer": activePlayer}
 
 
 if __name__ == "__main__":
-    positions = common.readGatherDataFile("eval/startPositionData.jsonl")
+    positions = common.readGatherDataFile("eval/data/startPositions.jsonl")
     result = []
 
     for i, position in enumerate(positions):
@@ -32,7 +33,9 @@ if __name__ == "__main__":
                                 ai.DEFAULT_AI_WEIGHTS)
         if game is not None:
             flatGame = common.getFlatGameNode(game)[0]
-            result.append(getGroundTruthDataRow(position["startGameNode"], flatGame))
+            result.append(getGroundTruthDataRow(position["startGameNode"],
+                                                flatGame,
+                                                position["activePlayer"]))
 
     with open("eval/data/evaluationData.jsonl", "w", encoding="utf-8") as f:
         f.writelines(f"{json.dumps(row)}\n" for row in result)
