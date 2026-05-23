@@ -16,7 +16,8 @@ Weights = namedtuple('Weights', ["regularPieces",
                                  "edgePieces",
                                  "midPieces"])
 
-DEFAULT_AI_WEIGHTS = Weights(10, 50, 5, 3, 2, 4)
+DEFAULT_AI_WEIGHTS = Weights(38, 36, 1, 16, 9, -3) # Optimized values
+# DEFAULT_AI_WEIGHTS = Weights(10, 50, 5, 3, 2, 4) # Old hand-crafted values
 
 
 def getPlayerMove(playerToPlay,
@@ -159,9 +160,6 @@ def _evaluationFunction(theGame, weights):
     # 4. Pieces in columns 3/4 & 7/8 (flank)
     # 5. Pieces in columns 1/2 & 9/10 (edge)
     # 6. Pieces in rows 4/5/6/7 (mid)
-
-    if theGame.score:
-        return theGame.score
 
     attributeCount = {"regularPieces":0,
                       "kingPieces":0,
