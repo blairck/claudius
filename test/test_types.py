@@ -3,7 +3,7 @@
 import unittest
 
 # pylint: disable=import-error
-from res import types
+from src import types
 
 class TestTypes(unittest.TestCase):
     """ Tests for the Types module """

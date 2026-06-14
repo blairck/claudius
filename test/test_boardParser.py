@@ -3,7 +3,7 @@
 import unittest
 
 # pylint: disable=import-error
-from res import types
+from src import types
 from src import coordinate
 from src import boardParser
 

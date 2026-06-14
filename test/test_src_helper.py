@@ -39,3 +39,9 @@ class TestHelper(unittest.TestCase):
         self.assertRaises(ValueError,
                           helper.checkIfCoordinateIsValid,
                           40, 30)
+    
+    def test_getTupleOfAllCoordinates(self):
+        """ Check that all the legal coordinates are generated """
+        actualResult = len(helper.getTupleOfAllCoordinates())
+        expectedResult = 50
+        self.assertEqual(actualResult, expectedResult)

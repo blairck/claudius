@@ -3,12 +3,12 @@
 import unittest
 
 # pylint: disable=import-error,too-many-public-methods
-import helper
+from test import helper
 from src import ai
 from src import boardParser
 from src import coordinate
 from src import gamenode
-from res import types
+from src import types
 
 class TestAI(unittest.TestCase):
     """ Tests for the AI module """
@@ -18,7 +18,7 @@ class TestAI(unittest.TestCase):
 
         startingPiece = coordinate.Coordinate(5, 5)
 
-        actualResult = ai.getDiagonalNonCaptureMovesForKing(board,
+        actualResult = ai._getDiagonalNonCaptureMovesForKing(board,
                                                             startingPiece,
                                                             1,
                                                             1)
@@ -32,7 +32,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(2, 8)
         playerAToPlay = True
 
-        actualResult = ai.getNoncaptureMovesForPiece(board,
+        actualResult = ai._getNoncaptureMovesForPiece(board,
                                                      pieceLocation,
                                                      playerAToPlay)
 
@@ -46,7 +46,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(7, 7)
         playerAToPlay = False
 
-        actualResult = ai.getNoncaptureMovesForPiece(board,
+        actualResult = ai._getNoncaptureMovesForPiece(board,
                                                      pieceLocation,
                                                      playerAToPlay)
 
@@ -60,7 +60,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(3, 5)
         playerAToPlay = True
 
-        actualResult = ai.getNoncaptureMovesForPiece(board,
+        actualResult = ai._getNoncaptureMovesForPiece(board,
                                                      pieceLocation,
                                                      playerAToPlay)
 
@@ -74,7 +74,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(7, 3)
         playerAToPlay = False
 
-        actualResult = ai.getNoncaptureMovesForPiece(board,
+        actualResult = ai._getNoncaptureMovesForPiece(board,
                                                      pieceLocation,
                                                      playerAToPlay)
 
@@ -88,7 +88,7 @@ class TestAI(unittest.TestCase):
         pieceLocation = coordinate.Coordinate(3, 5)
         playerAToPlay = False
 
-        actualResult = ai.getNoncaptureMovesForPiece(board,
+        actualResult = ai._getNoncaptureMovesForPiece(board,
                                                      pieceLocation,
                                                      playerAToPlay)
 
@@ -101,7 +101,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(7, 7)
 
-        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+        actualResult = ai._getAllNoncaptureMovesForKingPiece(board,
                                                             pieceLocation)
 
         expectedResultLength = 3
@@ -116,7 +116,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(7, 3)
 
-        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+        actualResult = ai._getAllNoncaptureMovesForKingPiece(board,
                                                             pieceLocation)
 
         expectedResultLength = 4
@@ -131,7 +131,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(3, 3)
 
-        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+        actualResult = ai._getAllNoncaptureMovesForKingPiece(board,
                                                             pieceLocation)
 
         expectedResultLength = 8
@@ -144,7 +144,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.multipleKings)
         pieceLocation = coordinate.Coordinate(3, 7)
 
-        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+        actualResult = ai._getAllNoncaptureMovesForKingPiece(board,
                                                             pieceLocation)
 
         expectedResultLength = 0
@@ -157,18 +157,12 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.kingCapture4)
         pieceLocation = coordinate.Coordinate(1, 1)
 
-        actualResult = ai.getAllNoncaptureMovesForKingPiece(board,
+        actualResult = ai._getAllNoncaptureMovesForKingPiece(board,
                                                             pieceLocation)
 
         expectedResultLength = 1
 
         self.assertEqual(expectedResultLength, len(actualResult))
-
-    def test_getTupleOfAllCoordinates(self):
-        """ Check that all the legal coordinates are generated """
-        actualResult = len(ai.getTupleOfAllCoordinates())
-        expectedResult = 50
-        self.assertEqual(actualResult, expectedResult)
 
     def test_getAllMovesForPlayer_good(self):
         """ Check that capture moves take precedence over non-captures """
@@ -200,7 +194,7 @@ class TestAI(unittest.TestCase):
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(4, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+        actualResult = ai._getNoncaptureMovesForRegularPiece(gnObject,
                                                             pieceLocation)
         expectedResultLength = 2
         self.assertEqual(len(actualResult), expectedResultLength)
@@ -210,7 +204,7 @@ class TestAI(unittest.TestCase):
         gnObject = gamenode.GameNode()
         pieceLocation = coordinate.Coordinate(10, 4)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+        actualResult = ai._getNoncaptureMovesForRegularPiece(gnObject,
                                                             pieceLocation)
         expectedResultLength = 1
         self.assertEqual(len(actualResult), expectedResultLength)
@@ -221,7 +215,7 @@ class TestAI(unittest.TestCase):
         gnObject.createStartingPosition()
         pieceLocation = coordinate.Coordinate(1, 1)
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
-        actualResult = ai.getNoncaptureMovesForRegularPiece(gnObject,
+        actualResult = ai._getNoncaptureMovesForRegularPiece(gnObject,
                                                             pieceLocation)
         expectedResultLength = 0
         self.assertEqual(len(actualResult), expectedResultLength)
@@ -230,7 +224,7 @@ class TestAI(unittest.TestCase):
         """ Test when destination is Empty """
         gnObject = gamenode.GameNode()
         pieceDestination = coordinate.Coordinate(4, 6)
-        actualResult = ai.destinationIsEmpty(gnObject, pieceDestination)
+        actualResult = ai._destinationIsEmpty(gnObject, pieceDestination)
         expectedResult = True
         self.assertEqual(actualResult, expectedResult)
 
@@ -239,7 +233,7 @@ class TestAI(unittest.TestCase):
         gnObject = gamenode.GameNode()
         pieceDestination = coordinate.Coordinate(9, 3)
         gnObject.setState(pieceDestination, types.PLAYER_A_REGULAR)
-        actualResult = ai.destinationIsEmpty(gnObject, pieceDestination)
+        actualResult = ai._destinationIsEmpty(gnObject, pieceDestination)
         expectedResult = False
         self.assertEqual(actualResult, expectedResult)
 
@@ -252,7 +246,7 @@ class TestAI(unittest.TestCase):
         gnObject.setState(pieceLocation, types.PLAYER_A_REGULAR)
 
         # When
-        actualResult = ai.makePieceMove(gnObject,
+        actualResult = ai._makePieceMove(gnObject,
                                         pieceDestination,
                                         pieceLocation)
 
@@ -353,7 +347,7 @@ class TestAI(unittest.TestCase):
         king = coordinate.Coordinate(5, 5)
 
         # When
-        actualResult = ai.getLastMoveInEachDirection(board, king)
+        actualResult = ai._getLastMoveInEachDirection(board, king)
 
         # Then
         expectedDeltasAndKings = [((-1, -1), coordinate.Coordinate(1, 1)),
@@ -393,7 +387,7 @@ class TestAI(unittest.TestCase):
         capturingPiece = coordinate.Coordinate(3, 5)
 
         expectedLength = 2
-        movesList = ai.getCapturesForRegularPiece(board,
+        movesList = ai._getCapturesForRegularPiece(board,
                                                   capturingPiece,
                                                   True)
         actualMovesListLength = len(movesList)
@@ -436,7 +430,7 @@ class TestAI(unittest.TestCase):
         list_of_boards = [board, board,]
 
         expectedLength = 1
-        resultList = ai.removeBoardDuplicates(list_of_boards)
+        resultList = ai._removeBoardDuplicates(list_of_boards)
         self.assertEqual(expectedLength, len(resultList))
 
     def test_filterForFewestOpposingPieces(self):
@@ -470,7 +464,7 @@ class TestAI(unittest.TestCase):
         list_of_boards = [board1, board2,]
 
         expectedLength = 1
-        resultList = ai.filterForFewestOpposingPieces(list_of_boards, True)
+        resultList = ai._filterForFewestOpposingPieces(list_of_boards, True)
         resultingPiece = coordinate.Coordinate(5, 7)
         self.assertEqual(expectedLength, len(resultList))
         self.assertEqual(types.PLAYER_A_REGULAR,
@@ -480,7 +474,7 @@ class TestAI(unittest.TestCase):
         """ Test getting direction from input delta"""
         testDelta = (1, 1)
         expectedResult = 2
-        actualResult = ai.getDirectionFromDelta(testDelta)
+        actualResult = ai._getDirectionFromDelta(testDelta)
 
         self.assertEqual(expectedResult, actualResult)
 
@@ -488,7 +482,7 @@ class TestAI(unittest.TestCase):
         """ Test getting direction from input delta"""
         testDelta = (1, -1)
         expectedResult = 4
-        actualResult = ai.getDirectionFromDelta(testDelta)
+        actualResult = ai._getDirectionFromDelta(testDelta)
 
         self.assertEqual(expectedResult, actualResult)
 
@@ -496,7 +490,7 @@ class TestAI(unittest.TestCase):
         """ Test getting direction from input delta"""
         testDelta = (-1, -1)
         expectedResult = 6
-        actualResult = ai.getDirectionFromDelta(testDelta)
+        actualResult = ai._getDirectionFromDelta(testDelta)
 
         self.assertEqual(expectedResult, actualResult)
 
@@ -504,7 +498,7 @@ class TestAI(unittest.TestCase):
         """ Test getting direction from input delta"""
         testDelta = (-1, 1)
         expectedResult = 8
-        actualResult = ai.getDirectionFromDelta(testDelta)
+        actualResult = ai._getDirectionFromDelta(testDelta)
 
         self.assertEqual(expectedResult, actualResult)
 
@@ -512,7 +506,7 @@ class TestAI(unittest.TestCase):
         """ Test when delta does not exist """
 
         self.assertRaises(ValueError,
-                          ai.getDirectionFromDelta,
+                          ai._getDirectionFromDelta,
                           (1, 5))
 
     def test_evaluationFunction_simple(self):
@@ -522,9 +516,8 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
 
         # When
-        expectedResult = 13
-        ai.evaluationFunction(board)
-        actualResult = board.score
+        expectedResult = 54
+        actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
         self.assertEqual(expectedResult, actualResult)
@@ -536,9 +529,8 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.kingCapture1)
 
         # When
-        expectedResult = -1
-        ai.evaluationFunction(board)
-        actualResult = board.score
+        expectedResult = -7
+        actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
         self.assertEqual(expectedResult, actualResult)
@@ -550,9 +542,8 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.oneKing)
 
         # When
-        expectedResult = 59
-        ai.evaluationFunction(board)
-        actualResult = board.score
+        expectedResult = 34
+        actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
         self.assertEqual(expectedResult, actualResult)

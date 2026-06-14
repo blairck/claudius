@@ -1,8 +1,9 @@
 """ This module contains the interface for playing the game """
 
 # pylint: disable=import-error
-from res import types
+from src import ai
 from src import coordinate
+from src import types
 
 def getPositionFromListOfMoves(theMoves, userInput, userIsPlayerB):
     """ Gets a position with userInput from a list of legal moves (theMoves).
@@ -79,3 +80,21 @@ def userInputCharacterFor10thAxis(userInputCharacter):
     if userInputCharacter == "0":
         return 10
     return int(userInputCharacter)
+
+def displayBoardForUser(firstTurn, computerPlays, game):
+    if firstTurn and computerPlays == types.PLAYER_B_NAME:
+        return {"board": False, "divider": False}
+    game.print_board()
+    print("--------------------------------")
+    return {"board": True, "divider": True}
+
+def checkForEndState(game):
+    """ Check game state to see if a player has won """
+    game.playerAMoveCount = len(ai.getAllMovesForPlayer(game, True))
+    game.playerBMoveCount = len(ai.getAllMovesForPlayer(game, False))
+
+    if game.playerAWins():
+        return {"whichPlayerWon": types.PLAYER_A_NAME}
+    elif game.playerBWins():
+        return {"whichPlayerWon": types.PLAYER_B_NAME}
+    return None

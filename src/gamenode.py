@@ -1,7 +1,7 @@
 """ The basic state of the game board """
 
-from res import types
-from res.types import getPieceAbbreviation
+from src import types
+from src.types import getPieceAbbreviation
 from src import coordinate
 
 class GameNode(object):
@@ -28,10 +28,13 @@ class GameNode(object):
         self.playerAMoveCount = None
         self.playerBMoveCount = None
 
+    def __hash__(self):
+        return hash(str(self.gameState))
+
     def __eq__(self, other):
-        for i in range(0, 10):
-            for j in range(0, 10):
-                if self.gameState[i][j] != other.gameState[i][j]:
+        for x in range(0, 10):
+            for y in range(0, 10):
+                if self.gameState[x][y] != other.gameState[x][y]:
                     return False
         return True
 
@@ -110,9 +113,9 @@ class GameNode(object):
     def countPlayerPieces(self, piecesToCount):
         """ Counts all pieces in list of piecesToCount"""
         count = 0
-        for i in range(0, 10):
-            for j in range(0, 10):
-                if self.gameState[i][j] in piecesToCount:
+        for x in range(0, 10):
+            for y in range(0, 10):
+                if self.gameState[x][y] in piecesToCount:
                     count += 1
         return count
 

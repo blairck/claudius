@@ -3,11 +3,11 @@
 import unittest
 
 # pylint: disable=import-error
-import helper
-from res import types
+from src import types
 from src import coordinate
 from src import rules
 from src import boardParser
+from test import helper
 
 # pylint: disable=too-many-public-methods
 class TestRules(unittest.TestCase):

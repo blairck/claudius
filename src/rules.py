@@ -1,7 +1,7 @@
 """ This module contains rules to the game."""
 
 # pylint: disable=import-error
-from res import types
+from src import types
 from src import coordinate
 
 def findXDeltaFromDirection(direction):
