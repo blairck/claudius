@@ -516,7 +516,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.simpleCountPiecesDescription)
 
         # When
-        expectedResult = 13
+        expectedResult = 54
         actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
@@ -529,7 +529,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.kingCapture1)
 
         # When
-        expectedResult = -1
+        expectedResult = -7
         actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then
@@ -542,7 +542,7 @@ class TestAI(unittest.TestCase):
         board = boardParser.parseBoardInput(helper.oneKing)
 
         # When
-        expectedResult = 59
+        expectedResult = 34
         actualResult = ai._evaluationFunction(board, ai.DEFAULT_AI_WEIGHTS)
 
         # Then

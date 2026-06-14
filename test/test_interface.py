@@ -184,17 +184,17 @@ class TestInterface:
         actualValue = interface.userInputCharacterFor10thAxis("6")
         assert actualValue == 6
 
-    @pytest.mark.parametrize("firstTurn, play_as_a, expected", [
-        (True, True, {"board": False, "divider": False}),
-        (True, False, {"board": True, "divider": True}),
-        (False, True, {"board": True, "divider": True}),
-        (False, False, {"board": True, "divider": True})
+    @pytest.mark.parametrize("firstTurn, computerPlays, expected", [
+        (True, types.PLAYER_B_NAME, {"board": False, "divider": False}),
+        (True, types.PLAYER_A_NAME, {"board": True, "divider": True}),
+        (False, types.PLAYER_B_NAME, {"board": True, "divider": True}),
+        (False, types.PLAYER_A_NAME, {"board": True, "divider": True})
     ])
-    def test_displayBoardForUser(self, firstTurn, play_as_a, expected):
+    def test_displayBoardForUser(self, firstTurn, computerPlays, expected):
         """ Test displayBoardForUser with various parameters """
         gnObject = gamenode.GameNode()
         gnObject.createStartingPosition()
-        actualValue = interface.displayBoardForUser(firstTurn, play_as_a, gnObject)
+        actualValue = interface.displayBoardForUser(firstTurn, computerPlays, gnObject)
         assert actualValue == expected
         
 

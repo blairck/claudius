@@ -81,8 +81,8 @@ def userInputCharacterFor10thAxis(userInputCharacter):
         return 10
     return int(userInputCharacter)
 
-def displayBoardForUser(firstTurn, play_as_a, game):
-    if firstTurn and play_as_a:
+def displayBoardForUser(firstTurn, computerPlays, game):
+    if firstTurn and computerPlays == types.PLAYER_B_NAME:
         return {"board": False, "divider": False}
     game.print_board()
     print("--------------------------------")

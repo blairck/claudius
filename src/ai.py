@@ -1,7 +1,7 @@
 """ This module contains the AI search algorithm """
 
 from collections import namedtuple
-from functools import reduce, lru_cache
+from functools import reduce
 from random import shuffle
 
 from src import helper, types
@@ -41,9 +41,8 @@ def getPlayerMove(playerToPlay,
     return bestMove
 
 
-@lru_cache(maxsize=1024)
 def getAllMovesForPlayer(theGame, playerAToPlay):
-    """playerToPlay == 'a' means it's the player A's turn. Otherwise B"""
+    """playerAToPlay is True for player A's turn, otherwise player B."""
     moves = []
     for location in helper.getTupleOfAllCoordinates():
         moves.extend(_getCapturesForPiece(theGame,
@@ -75,7 +74,6 @@ def _randomSearch(theGame, playerAToPlay):
     return moves[0]
 
 
-@lru_cache(maxsize=1024)
 def _findBestMove(theGame,
                   playerAToPlay,
                   searchPly,
@@ -144,7 +142,6 @@ def _getHighestOrLowestScoreMove(moves, playerAToPlay):
         return min(moves, key=lambda x: x.score)
 
 
-@lru_cache(maxsize=1024)
 def _evaluationFunction(theGame, weights):
     # This evaluation uses attributes that are applicable to both players. Then
     # it adds up the occurrences for A, subtracts the occurrences for B, and

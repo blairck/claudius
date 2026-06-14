@@ -26,7 +26,7 @@ def get_arguments():
 
     parser.add_argument(
         "--display_score",
-        type=bool,
+        action="store_true",
         default=False,
         help="Display AI's score for each position, can be +/-"
     )
@@ -34,7 +34,7 @@ def get_arguments():
     return parser.parse_args()
 
 
-def getMoveFromUserInput(legalMoves):
+def getMoveFromUserInput(legalMoves, argsPlayAs):
     while True:
         userInput = input('Enter a move: ')
         if userInput == 'm' or userInput == 'moves':
@@ -45,7 +45,7 @@ def getMoveFromUserInput(legalMoves):
             continue
         result = interface.getPositionFromListOfMoves(legalMoves,
                                                         str(userInput),
-                                                        args.play_as == "b")
+                                                        argsPlayAs == "b")
         if len(result) != 1:
             print("Unknown or invalid move, try again")
             continue
@@ -89,7 +89,7 @@ if __name__ == '__main__':
             break
 
         legalMoves = ai.getAllMovesForPlayer(game, args.play_as == "a")
-        game = getMoveFromUserInput(legalMoves)
+        game = getMoveFromUserInput(legalMoves, args.play_as)
 
         computersTurn = True
         firstTurn = False

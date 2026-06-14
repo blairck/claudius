@@ -145,6 +145,7 @@ def getMaxScoreMoves(moves):
             maxScore = move.score
         elif move.score > maxScore:
             maxMoves = [move]
+            maxScore = move.score
         elif move.score == maxScore:
             maxMoves.append(move)
     
